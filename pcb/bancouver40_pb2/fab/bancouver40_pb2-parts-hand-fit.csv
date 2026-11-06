@@ -1,0 +1,7 @@
+Designator,Value,Manufacturer Part Number,LCSC Part #,Why by hand
+U2,PocketBeagle 2 Industrial,100003007 (BeagleBoard PocketBeagle 2 Industrial),,PocketBeagle 2 Industrial on 2x 2x18 male headers (fitted from below)
+"SW1,SW2,SW3,SW4,SW5,SW6,SW7,SW8,SW9,SW10,SW11,SW12,SW13,SW14,SW15,SW16,SW17,SW18,SW19,SW20,SW21,SW22,SW23,SW24,SW25,SW26,SW27,SW28,SW29,SW30,SW31,SW32,SW33,SW34,SW35,SW36,SW37,SW38,SW39,SW40,SW41,SW42,SW43",Choc_v1,"CPG135001D01 (Kailh Choc v1, hand-soldered)",,"Kailh Choc v1 key switch, soldered by hand"
+J5,LiPo 1S,B2B-PH-K-S(LF)(SN),C131337,through-hole JST-PH battery connector
+SW44,SK22D02G4,SK22D02G4,C22435630,through-hole slide switch
+J10,Line out,PJ-320A-3P DIP,C17701689,through-hole 3.5 mm jack
+(U2 headers),"2x 2x18 male pin header, 2.54 mm",any 2x18 2.54 mm male header (x2),,"inserted from below into the U2 holes, plastic under the board; trim the pins so they do not bottom out in the PocketBeagle sockets"

@@ -1,112 +1,46 @@
-"Refs","Value","Footprint","Qty","DNP"
-"B1","SW_Push","Button_Switch_SMD:SW_SPST_SKQG_WithoutStem","1",""
-"C1","22pF","Capacitor_SMD:C_0402_1005Metric","1",""
-"C2","22pF","Capacitor_SMD:C_0402_1005Metric","1",""
-"C3","1uF","Capacitor_SMD:C_0402_1005Metric","1",""
-"C4","0.1uF","Capacitor_SMD:C_0402_1005Metric","1",""
-"C5","0.1uF","Capacitor_SMD:C_0402_1005Metric","1",""
-"C6","0.1uF","Capacitor_SMD:C_0402_1005Metric","1",""
-"C7","10uF","Capacitor_SMD:C_0402_1005Metric","1",""
-"C8","4.7uF 10V","Capacitor_SMD:C_0805_2012Metric","1",""
-"C9","1uF 50V","Capacitor_SMD:C_0805_2012Metric","1",""
-"C10","220nF","Capacitor_SMD:C_0603_1608Metric","1",""
-"D1","D_Small","Diode_SMD:D_SOD-323","1",""
-"D2","D_Small","Diode_SMD:D_SOD-323","1",""
-"D3","D_Small","Diode_SMD:D_SOD-323","1",""
-"D4","D_Small","Diode_SMD:D_SOD-323","1",""
-"D5","D_Small","Diode_SMD:D_SOD-323","1",""
-"D6","D_Small","Diode_SMD:D_SOD-323","1",""
-"D7","D_Small","Diode_SMD:D_SOD-323","1",""
-"D8","D_Small","Diode_SMD:D_SOD-323","1",""
-"D9","D_Small","Diode_SMD:D_SOD-323","1",""
-"D10","D_Small","Diode_SMD:D_SOD-323","1",""
-"D11","D_Small","Diode_SMD:D_SOD-323","1",""
-"D12","D_Small","Diode_SMD:D_SOD-323","1",""
-"D13","D_Small","Diode_SMD:D_SOD-323","1",""
-"D14","D_Small","Diode_SMD:D_SOD-323","1",""
-"D15","D_Small","Diode_SMD:D_SOD-323","1",""
-"D16","D_Small","Diode_SMD:D_SOD-323","1",""
-"D17","D_Small","Diode_SMD:D_SOD-323","1",""
-"D18","D_Small","Diode_SMD:D_SOD-323","1",""
-"D19","D_Small","Diode_SMD:D_SOD-323","1",""
-"D20","D_Small","Diode_SMD:D_SOD-323","1",""
-"D21","D_Small","Diode_SMD:D_SOD-323","1",""
-"D22","D_Small","Diode_SMD:D_SOD-323","1",""
-"D23","D_Small","Diode_SMD:D_SOD-323","1",""
-"D24","D_Small","Diode_SMD:D_SOD-323","1",""
-"D25","D_Small","Diode_SMD:D_SOD-323","1",""
-"D26","D_Small","Diode_SMD:D_SOD-323","1",""
-"D27","D_Small","Diode_SMD:D_SOD-323","1",""
-"D28","D_Small","Diode_SMD:D_SOD-323","1",""
-"D29","D_Small","Diode_SMD:D_SOD-323","1",""
-"D30","D_Small","Diode_SMD:D_SOD-323","1",""
-"D31","D_Small","Diode_SMD:D_SOD-323","1",""
-"D32","D_Small","Diode_SMD:D_SOD-323","1",""
-"D33","D_Small","Diode_SMD:D_SOD-323","1",""
-"D34","D_Small","Diode_SMD:D_SOD-323","1",""
-"D35","D_Small","Diode_SMD:D_SOD-323","1",""
-"D36","D_Small","Diode_SMD:D_SOD-323","1",""
-"D37","D_Small","Diode_SMD:D_SOD-323","1",""
-"D38","D_Small","Diode_SMD:D_SOD-323","1",""
-"D39","D_Small","Diode_SMD:D_SOD-323","1",""
-"D40","D_Small","Diode_SMD:D_SOD-323","1",""
-"D41","MBR0540","Diode_SMD:D_SOD-123","1",""
-"F1","500mA","Fuse:Fuse_1206_3216Metric","1",""
-"H1","MountingHole","MountingHole:MountingHole_2.2mm_M2_ISO7380","1",""
-"H2","MountingHole","MountingHole:MountingHole_2.2mm_M2_ISO7380","1",""
-"H3","MountingHole","MountingHole:MountingHole_2.2mm_M2_ISO7380","1",""
-"H4","MountingHole","MountingHole:MountingHole_2.2mm_M2_ISO7380","1",""
-"H5","MountingHole","MountingHole:MountingHole_2.2mm_M2_ISO7380","1",""
-"H6","MountingHole","MountingHole:MountingHole_2.2mm_M2_ISO7380","1",""
-"J3","F32Q-1A7H1-11040 (40p 0.5mm FPC, top contact)","Connector_FFC-FPC:Amphenol_F32Q-1A7x1-11040_1x40-1MP_P0.5mm_Horizontal","1",""
-"L1","22uH","Inductor_SMD:L_Bourns-SRN4018","1",""
-"R1","10k","Resistor_SMD:R_0402_1005Metric","1",""
-"R4","22R","Resistor_SMD:R_0402_1005Metric","1",""
-"R5","22R","Resistor_SMD:R_0402_1005Metric","1",""
-"R6","10k","Resistor_SMD:R_0402_1005Metric","1",""
-"R7","5.1R 1%","Resistor_SMD:R_0603_1608Metric","1",""
-"R8","100k","Resistor_SMD:R_0603_1608Metric","1",""
-"SW1","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW2","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW3","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW4","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW5","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW6","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW7","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW8","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW9","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW10","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW11","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW12","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW13","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW14","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW15","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW16","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW17","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW18","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW19","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW20","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW21","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW22","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW23","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW24","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW25","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW26","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW27","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW28","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW29","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW30","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW31","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW32","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW33","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW34","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW35","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW36","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW37","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW38","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW39","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"SW40","SW_Push","keyswitches:Kailh_socket_PG1350","1",""
-"U1","ATmega32U4-M","Package_DFN_QFN:QFN-44-1EP_7x7mm_P0.5mm_EP5.2x5.2mm","1",""
-"U2","PocketBeagle 2","Module:BeagleBoard_PocketBeagle","1",""
-"U3","TPS61165DBV","Package_TO_SOT_SMD:SOT-23-6","1",""
-"Y1","16MHz","Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm","1",""
+Comment,Designator,Footprint,Manufacturer Part Number,LCSC Part #,Quantity
+4.7uF 25V,C1,C_0805_2012Metric,CL21A475KAQNNNE,C1779,1
+1uF 50V,C2,C_0805_2012Metric,CL21B105KBFNNNE,C28323,1
+220nF,C3,C_0603_1608Metric,CL10B224KA8NNNC,C21120,1
+100nF,"C10,C12,C14,C16,C18,C27,C31,C40,C41,C42,C44,C46,C49,C52,C60,C61,C62,C63,C64,C65",C_0402_1005Metric,CL05B104KO5NNNC,C1525,20
+10uF,"C11,C13,C20,C21,C43,C45,C47,C48,C50,C51,C55,C58,C59,C66",C_0603_1608Metric,CL10A106KP8NNNC,C19702,14
+100uF,"C15,C17,C56,C57",C_1206_3216Metric,CL31A107MQHNNNE,C15008,4
+22uF,"C22,C23,C24,C25,C26,C28,C29",C_0805_2012Metric,CL21A226MAQNNNE,C45783,7
+1uF,"C30,C53,C67",C_0402_1005Metric,CL05A105KA5NQNC,C52923,3
+10nF,C54,C_0402_1005Metric,CL05B103KB5NNNC,C15195,1
+B5819W,D1,D_SOD-123,B5819W SL,C8598,1
+red CHG,D2,LED_0603_1608Metric,KT-0603R,C2286,1
+green PWR,D3,LED_0603_1608Metric,XL-1608UGC-04,C965804,1
+yellow BOOT,D4,LED_0603_1608Metric,NCD0603Y2,C89811,1
+F32Q-1A7H1-11040,J3,Amphenol_F32Q-1A7x1-11040_1x40-1MP_P0.5mm_Horizontal,F32Q-1A7H1-11040,C3168061,1
+USB-C 6P,J6,USB_C_Receptacle_6P_ShouHan,TYPE-C 6P,C456012,1
+USB-A,"J7,J8",USB_A_GCT_USB1046,USB1046-GF-0190-L-B-A,C6307429,2
+Headset (CTIA),J9,Jack_3.5mm_PJ-327A_5JJ,PJ-327A 5JJ,C668605,1
+22uH,L1,L_Changjiang_FNR4030S,FNR4030S220MT,C167883,1
+1uH,L2,L_Sunlord_MWSA0603S,MWSA0603S-1R0MT,C112125,1
+AO3401A,Q1,SOT-23,AO3401A,C15127,1
+AO3400A,Q2,SOT-23,AO3400A,C20917,1
+5.1R 1%,R1,R_0603_1608Metric,0603WAF510KT5E,C25197,1
+100k,"R2,R26,R53",R_0402_1005Metric,0402WGF1003TCE,C25741,3
+2.7k 1%,R10,R_0603_1608Metric,0603WAF2701T5E,C13167,1
+10k,"R11,R12,R13,R27,R47,R48",R_0402_1005Metric,0402WGF1002TCE,C25744,6
+5.1k,"R20,R21",R_0402_1005Metric,0402WGF5101TCE,C25905,2
+2R,R22,R_0603_1608Metric,0603WAF200KT5E,C22977,1
+0.5R,R23,R_0603_1608Metric,FRL0603JR500TS,C2930046,1
+1k,"R24,R25,R30,R33,R51",R_0402_1005Metric,0402WGF1001TCE,C11702,5
+1M,"R28,R31,R32",R_0402_1005Metric,0402WGF1004TCE,C26083,3
+470k,R29,R_0402_1005Metric,0402WGF4703TCE,C25790,1
+33R,"R40,R41,R42,R43,R44,R60,R61",R_0402_1005Metric,0402WGF330JTCE,C25105,7
+2.2k,"R45,R46,R52",R_0402_1005Metric,0402WGF2201TCE,C25879,3
+47k,"R49,R50",R_0402_1005Metric,0402WGF4702TCE,C25792,2
+4x10k,"RN1,RN2,RN3,RN4,RN5,RN6,RN7,RN8,RN9,RN10,RN11,RN12",R_Array_Convex_4x0603,4D03WGJ0103T5E,C29718,12
+TPS61165DBVR,U3,SOT-23-6,TPS61165DBVR,C58756,1
+FE1.1s,U4,SSOP-28_3.9x9.9mm_P0.635mm,FE1.1S-BSOP28BCN,C9359,1
+TPS2051BDBVR,"U5,U6",SOT-23-5,TPS2051BDBVR,C24593,2
+USBLC6-2SC6,"U7,U8",SOT-23-6,USBLC6-2SC6,C2687116,2
+IP5306,U9,SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm,IP5306,C181692,1
+74HC165,"U10,U11,U12,U13,U14,U15",TSSOP-16_4.4x5mm_P0.65mm,"74HC165PW,118",C80696,6
+TPS73633DBVR,U16,SOT-23-5,TPS73633DBVR,C28038,1
+ES8388,U17,QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm,ES8388,C365736,1
+12.288MHz,X1,Oscillator_SMD_Abracon_ASE-4Pin_3.2x2.5mm,OT2EL4C4JI-111OLP-12.288M,C5203546,1
+12MHz,Y1,Crystal_SMD_3225-4Pin_3.2x2.5mm,TAXM12M4RLBDDT2T,C133334,1
