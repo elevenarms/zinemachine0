@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d0e10">
+<link rel="icon" href="data:,">
+<title>Zine Machine in AR, actual size</title>
+<meta name="description" content="See the Zine Machine, a 40% keyboard with a Linux computer inside, at actual size in AR on iPhone, iPad and Android.">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.4.0/dist/model-viewer.min.js"></script>
+<style>
+  :root { --bg: #0d0e10; --panel: #17191d; --line: #2a2d33; --text: #f1f2f4; --dim: #9aa0a8; --accent: #FF6A13; --lid: #FF8C1A; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.4 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+    -webkit-text-size-adjust: 100%; }
+  main { max-width: 760px; margin: 0 auto; padding: env(safe-area-inset-top) 16px calc(24px + env(safe-area-inset-bottom)); }
+  header { padding: 18px 2px 10px; }
+  h1 { font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; }
+  .sub { color: var(--dim); margin: 4px 0 0; font-size: 0.95rem; }
+  .viewer { position: relative; border-radius: 18px; overflow: hidden; background: radial-gradient(120% 90% at 50% 30%, #23262c, #121317); border: 1px solid var(--line); }
+  model-viewer { width: 100%; height: min(62vh, 520px); min-height: 300px; display: block; --poster-color: transparent; --progress-bar-color: var(--lid); }
+  model-viewer::part(default-ar-button) { display: none; }
+  .badge { position: absolute; left: 12px; bottom: 12px; padding: 6px 10px; border-radius: 999px; background: rgba(0,0,0,.55);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); font-size: 0.8rem; color: #dfe2e6; pointer-events: none; }
+  .ar-btn { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; margin: 14px 0 6px;
+    min-height: 64px; padding: 16px 20px; border: 0; border-radius: 16px; cursor: pointer; text-decoration: none;
+    background: var(--accent); color: #111; font: 700 1.2rem/1.1 inherit; font-family: inherit;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.15) inset, 0 10px 30px -10px var(--accent); -webkit-tap-highlight-color: transparent; }
+  .ar-btn:active { transform: scale(0.985); }
+  .ar-btn img, .ar-btn svg { width: 30px; height: 30px; flex: none; }
+  .ar-btn.light { color: #fff; }
+  .hint { color: var(--dim); font-size: 0.9rem; text-align: center; margin: 4px 0 18px; }
+  .hint.warn { color: #ffcf8a; }
+  section { margin: 18px 0; }
+  h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dim); margin: 0 0 10px; font-weight: 600; }
+  .modes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  @media (max-width: 420px) { .modes { grid-template-columns: repeat(2, 1fr); } }
+  .modes button { min-height: 48px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--text);
+    font: 600 0.95rem inherit; font-family: inherit; cursor: pointer; }
+  .modes button[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); gap: 10px; }
+  .swatches button { aspect-ratio: 1; min-height: 48px; border-radius: 50%; border: 2px solid transparent; padding: 0; cursor: pointer;
+    background: transparent; position: relative; }
+  .swatches button span { position: absolute; inset: 4px; border-radius: 50%; }
+  .swatches button[aria-pressed="true"] { border-color: #fff; }
+  .combo-name { margin-top: 10px; font-size: 0.95rem; }
+  .dims { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; }
+  .dims div { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 4px; }
+  .dims b { display: block; font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+  .dims small { color: var(--dim); }
+  .note { color: var(--dim); font-size: 0.85rem; margin: 8px 0 0; }
+  footer { color: var(--dim); font-size: 0.8rem; margin-top: 26px; border-top: 1px solid var(--line); padding-top: 12px; }
+  footer a { color: var(--dim); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Zine Machine</h1>
+    <p class="sub">A 40% keyboard with a Linux computer inside, under a translucent slide-on lid that turns into a cradle.</p>
+  </header>
+
+  <div class="viewer">
+    <model-viewer id="mv" alt="3D model of the Zine Machine" camera-controls touch-action="pan-y"
+      ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" ar-placement="floor"
+      shadow-intensity="1" shadow-softness="0.8" exposure="1.05" environment-image="neutral"
+      camera-orbit="-25deg 62deg auto" field-of-view="24deg" interaction-prompt="none" loading="eager">
+    </model-viewer>
+    <div class="badge" id="badge">Actual size: 175 × 131 × 23 mm</div>
+  </div>
+
+  <a id="arLink" class="ar-btn" rel="ar" href="#" role="button">
+    <img alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111' stroke-width='2' stroke-linejoin='round'%3E%3Cpath d='M12 2 3 7v10l9 5 9-5V7z'/%3E%3Cpath d='M3 7l9 5 9-5M12 12v10'/%3E%3C/svg%3E">
+    <span>View actual size in AR</span>
+  </a>
+  <p class="hint" id="hint">Tap the button, point your camera at a table, and the Zine Machine appears at true 1:1 size (pinch-to-resize is locked).</p>
+
+  <section>
+    <h2>Mode</h2>
+    <div class="modes" id="modes" role="group" aria-label="Mode"></div>
+  </section>
+
+  <section>
+    <h2>Colourway</h2>
+    <div class="swatches" id="swatches" role="group" aria-label="Colourway"></div>
+    <div class="combo-name" id="comboName"></div>
+  </section>
+
+  <section>
+    <h2>Dimensions</h2>
+    <div class="dims">
+      <div><b>175</b><small>mm wide</small></div>
+      <div><b>131</b><small>mm deep</small></div>
+      <div><b>23</b><small>mm tall</small></div>
+    </div>
+    <p class="note" id="modeSize"></p>
+  </section>
+
+  <footer>
+    Design work in progress, not yet built. Models exported from the FreeCAD design at 1:1 in metres.
+    <a href="../site/">3D design viewer</a> · <a href="https://github.com/elevenarms/zinemachine0">GitHub</a>
+  </footer>
+</main>
+
+<script type="module">
+const MODES = [
+  ['cover', 'Cover on'], ['open', 'Cover off'], ['beside', 'Lid beside'], ['cradle', 'Cradle'] ];
+const mv = document.getElementById('mv');
+const arLink = document.getElementById('arLink');
+const hint = document.getElementById('hint');
+const base = new URL('assets/', location.href);
+const man = await (await fetch(new URL('manifest.json', base))).json();
+const combos = Object.keys(man.combos);
+const qs = new URLSearchParams(location.search);
+let mode = MODES.some(m => m[0] === qs.get('mode')) ? qs.get('mode') : 'cover';
+let combo = combos.includes(qs.get('color')) ? qs.get('color') : combos[0];
+
+// AR Quick Look (iPhone/iPad Safari): a native <a rel="ar"> link with an <img> child.
+const quickLook = document.createElement('a').relList.supports('ar');
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+function luminance(hex) {
+  const c = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255);
+  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+}
+
+function update(push = true) {
+  const f = man.files[`${mode}_${combo}`];
+  mv.src = new URL(f.glb, base).href;
+  mv.iosSrc = new URL(f.usdz, base).href;
+  if (quickLook) arLink.href = new URL(f.usdz, base).href + '#allowsContentScaling=0';
+  const c = man.combos[combo];
+  document.documentElement.style.setProperty('--accent', c.tray);
+  document.documentElement.style.setProperty('--lid', c.lid);
+  arLink.classList.toggle('light', luminance(c.tray) < 0.35);
+  arLink.querySelector('img').src = arLink.querySelector('img').src.replace(/stroke='%23[0-9a-f]+'/i,
+    `stroke='%23${luminance(c.tray) < 0.35 ? 'fff' : '111'}'`);
+  document.getElementById('comboName').textContent = c.label;
+  for (const b of document.querySelectorAll('#modes button')) b.setAttribute('aria-pressed', b.dataset.mode === mode);
+  for (const b of document.querySelectorAll('#swatches button')) b.setAttribute('aria-pressed', b.dataset.combo === combo);
+  const [w, d, h] = man.size_mm[mode];
+  const label = MODES.find(m => m[0] === mode)[1];
+  document.getElementById('badge').textContent = `${label}: ${w.toFixed(1)} × ${d.toFixed(1)} × ${h.toFixed(1)} mm`;
+  document.getElementById('modeSize').textContent =
+    `Body 175.2 × 131.2 mm. Measured envelope of this view (${label.toLowerCase()}, incl. slide rails and lid): ` +
+    `${w.toFixed(1)} × ${d.toFixed(1)} × ${h.toFixed(1)} mm, W × D × H.`;
+  if (push) history.replaceState(null, '', `?mode=${mode}&color=${combo}`);
+}
+
+const modesEl = document.getElementById('modes');
+for (const [k, label] of MODES) {
+  const b = document.createElement('button'); b.type = 'button'; b.dataset.mode = k; b.textContent = label;
+  b.onclick = () => { mode = k; update(); }; modesEl.appendChild(b);
+}
+const sw = document.getElementById('swatches');
+for (const k of combos) {
+  const c = man.combos[k];
+  const b = document.createElement('button'); b.type = 'button'; b.dataset.combo = k; b.title = c.label;
+  b.setAttribute('aria-label', c.label);
+  const s = document.createElement('span');
+  s.style.background = `linear-gradient(135deg, ${c.tray} 0 50%, ${c.lid} 50% 100%)`;
+  b.appendChild(s); b.onclick = () => { combo = k; update(); }; sw.appendChild(b);
+}
+
+arLink.addEventListener('click', e => {
+  if (quickLook) return;                       // Safari opens AR Quick Look from the rel="ar" link itself
+  e.preventDefault();
+  if (mv.canActivateAR) mv.activateAR();
+  else {
+    hint.classList.add('warn');
+    hint.textContent = isIOS
+      ? 'AR Quick Look needs Safari on iPhone or iPad (iOS 12+). Open this page in Safari.'
+      : 'AR needs a phone or tablet: open this page in Safari on iPhone/iPad, or Chrome on Android.';
+  }
+});
+mv.addEventListener('error', e => console.warn('model-viewer error', e.detail));
+update(false);
+</script>
+</body>
+</html>

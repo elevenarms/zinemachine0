@@ -1,0 +1,349 @@
+{
+ "combos": {
+  "tangerine": {
+   "label": "Bright orange / neon orange",
+   "tray": "#FF6A13",
+   "lid": "#FF8C1A"
+  },
+  "grape": {
+   "label": "Deep purple / atomic purple",
+   "tray": "#3B1260",
+   "lid": "#8A4FFF"
+  },
+  "bubblegum": {
+   "label": "Bubblegum",
+   "tray": "#FF3EA5",
+   "lid": "#FF7AD9"
+  },
+  "lime": {
+   "label": "Lime",
+   "tray": "#6CC417",
+   "lid": "#B8FF3C"
+  },
+  "bondi": {
+   "label": "Bondi",
+   "tray": "#00869E",
+   "lid": "#00D5F0"
+  },
+  "strawberry": {
+   "label": "Strawberry",
+   "tray": "#C8102E",
+   "lid": "#FF4060"
+  },
+  "chrome": {
+   "label": "Chrome / ice",
+   "tray": "#B9BEC6",
+   "lid": "#D6F3FF"
+  },
+  "midnight": {
+   "label": "Midnight / smoke",
+   "tray": "#141414",
+   "lid": "#5A5A66"
+  },
+  "sienna": {
+   "label": "Sienna / amber",
+   "tray": "#A0522D",
+   "lid": "#FFA640"
+  },
+  "terracotta": {
+   "label": "Terracotta / coral",
+   "tray": "#C2603E",
+   "lid": "#FF8F6B"
+  },
+  "olive": {
+   "label": "Olive / chartreuse",
+   "tray": "#5A6B2E",
+   "lid": "#B5E853"
+  },
+  "sand": {
+   "label": "Sand / honey",
+   "tray": "#C8B48A",
+   "lid": "#FFD24D"
+  },
+  "walnut": {
+   "label": "Walnut / root beer",
+   "tray": "#5A3A22",
+   "lid": "#D98A3D"
+  },
+  "forest": {
+   "label": "Forest / emerald",
+   "tray": "#2E4F35",
+   "lid": "#3DDC84"
+  },
+  "slate": {
+   "label": "Slate / sea glass",
+   "tray": "#5E6670",
+   "lid": "#6FE3D6"
+  }
+ },
+ "modes": [
+  "cover",
+  "open",
+  "beside",
+  "cradle"
+ ],
+ "size_mm": {
+  "cover": [
+   181.8,
+   133.0,
+   23.2
+  ],
+  "open": [
+   178.2,
+   131.2,
+   21.1
+  ],
+  "beside": [
+   390.3,
+   158.3,
+   22.7
+  ],
+  "cradle": [
+   181.8,
+   134.2,
+   36.5
+  ]
+ },
+ "files": {
+  "cover_tangerine": {
+   "glb": "cover_tangerine.glb",
+   "usdz": "cover_tangerine.usdz"
+  },
+  "cover_grape": {
+   "glb": "cover_grape.glb",
+   "usdz": "cover_grape.usdz"
+  },
+  "cover_bubblegum": {
+   "glb": "cover_bubblegum.glb",
+   "usdz": "cover_bubblegum.usdz"
+  },
+  "cover_lime": {
+   "glb": "cover_lime.glb",
+   "usdz": "cover_lime.usdz"
+  },
+  "cover_bondi": {
+   "glb": "cover_bondi.glb",
+   "usdz": "cover_bondi.usdz"
+  },
+  "cover_strawberry": {
+   "glb": "cover_strawberry.glb",
+   "usdz": "cover_strawberry.usdz"
+  },
+  "cover_chrome": {
+   "glb": "cover_chrome.glb",
+   "usdz": "cover_chrome.usdz"
+  },
+  "cover_midnight": {
+   "glb": "cover_midnight.glb",
+   "usdz": "cover_midnight.usdz"
+  },
+  "cover_sienna": {
+   "glb": "cover_sienna.glb",
+   "usdz": "cover_sienna.usdz"
+  },
+  "cover_terracotta": {
+   "glb": "cover_terracotta.glb",
+   "usdz": "cover_terracotta.usdz"
+  },
+  "cover_olive": {
+   "glb": "cover_olive.glb",
+   "usdz": "cover_olive.usdz"
+  },
+  "cover_sand": {
+   "glb": "cover_sand.glb",
+   "usdz": "cover_sand.usdz"
+  },
+  "cover_walnut": {
+   "glb": "cover_walnut.glb",
+   "usdz": "cover_walnut.usdz"
+  },
+  "cover_forest": {
+   "glb": "cover_forest.glb",
+   "usdz": "cover_forest.usdz"
+  },
+  "cover_slate": {
+   "glb": "cover_slate.glb",
+   "usdz": "cover_slate.usdz"
+  },
+  "open_tangerine": {
+   "glb": "open_tangerine.glb",
+   "usdz": "open_tangerine.usdz"
+  },
+  "open_grape": {
+   "glb": "open_grape.glb",
+   "usdz": "open_grape.usdz"
+  },
+  "open_bubblegum": {
+   "glb": "open_bubblegum.glb",
+   "usdz": "open_bubblegum.usdz"
+  },
+  "open_lime": {
+   "glb": "open_lime.glb",
+   "usdz": "open_lime.usdz"
+  },
+  "open_bondi": {
+   "glb": "open_bondi.glb",
+   "usdz": "open_bondi.usdz"
+  },
+  "open_strawberry": {
+   "glb": "open_strawberry.glb",
+   "usdz": "open_strawberry.usdz"
+  },
+  "open_chrome": {
+   "glb": "open_chrome.glb",
+   "usdz": "open_chrome.usdz"
+  },
+  "open_midnight": {
+   "glb": "open_midnight.glb",
+   "usdz": "open_midnight.usdz"
+  },
+  "open_sienna": {
+   "glb": "open_sienna.glb",
+   "usdz": "open_sienna.usdz"
+  },
+  "open_terracotta": {
+   "glb": "open_terracotta.glb",
+   "usdz": "open_terracotta.usdz"
+  },
+  "open_olive": {
+   "glb": "open_olive.glb",
+   "usdz": "open_olive.usdz"
+  },
+  "open_sand": {
+   "glb": "open_sand.glb",
+   "usdz": "open_sand.usdz"
+  },
+  "open_walnut": {
+   "glb": "open_walnut.glb",
+   "usdz": "open_walnut.usdz"
+  },
+  "open_forest": {
+   "glb": "open_forest.glb",
+   "usdz": "open_forest.usdz"
+  },
+  "open_slate": {
+   "glb": "open_slate.glb",
+   "usdz": "open_slate.usdz"
+  },
+  "beside_tangerine": {
+   "glb": "beside_tangerine.glb",
+   "usdz": "beside_tangerine.usdz"
+  },
+  "beside_grape": {
+   "glb": "beside_grape.glb",
+   "usdz": "beside_grape.usdz"
+  },
+  "beside_bubblegum": {
+   "glb": "beside_bubblegum.glb",
+   "usdz": "beside_bubblegum.usdz"
+  },
+  "beside_lime": {
+   "glb": "beside_lime.glb",
+   "usdz": "beside_lime.usdz"
+  },
+  "beside_bondi": {
+   "glb": "beside_bondi.glb",
+   "usdz": "beside_bondi.usdz"
+  },
+  "beside_strawberry": {
+   "glb": "beside_strawberry.glb",
+   "usdz": "beside_strawberry.usdz"
+  },
+  "beside_chrome": {
+   "glb": "beside_chrome.glb",
+   "usdz": "beside_chrome.usdz"
+  },
+  "beside_midnight": {
+   "glb": "beside_midnight.glb",
+   "usdz": "beside_midnight.usdz"
+  },
+  "beside_sienna": {
+   "glb": "beside_sienna.glb",
+   "usdz": "beside_sienna.usdz"
+  },
+  "beside_terracotta": {
+   "glb": "beside_terracotta.glb",
+   "usdz": "beside_terracotta.usdz"
+  },
+  "beside_olive": {
+   "glb": "beside_olive.glb",
+   "usdz": "beside_olive.usdz"
+  },
+  "beside_sand": {
+   "glb": "beside_sand.glb",
+   "usdz": "beside_sand.usdz"
+  },
+  "beside_walnut": {
+   "glb": "beside_walnut.glb",
+   "usdz": "beside_walnut.usdz"
+  },
+  "beside_forest": {
+   "glb": "beside_forest.glb",
+   "usdz": "beside_forest.usdz"
+  },
+  "beside_slate": {
+   "glb": "beside_slate.glb",
+   "usdz": "beside_slate.usdz"
+  },
+  "cradle_tangerine": {
+   "glb": "cradle_tangerine.glb",
+   "usdz": "cradle_tangerine.usdz"
+  },
+  "cradle_grape": {
+   "glb": "cradle_grape.glb",
+   "usdz": "cradle_grape.usdz"
+  },
+  "cradle_bubblegum": {
+   "glb": "cradle_bubblegum.glb",
+   "usdz": "cradle_bubblegum.usdz"
+  },
+  "cradle_lime": {
+   "glb": "cradle_lime.glb",
+   "usdz": "cradle_lime.usdz"
+  },
+  "cradle_bondi": {
+   "glb": "cradle_bondi.glb",
+   "usdz": "cradle_bondi.usdz"
+  },
+  "cradle_strawberry": {
+   "glb": "cradle_strawberry.glb",
+   "usdz": "cradle_strawberry.usdz"
+  },
+  "cradle_chrome": {
+   "glb": "cradle_chrome.glb",
+   "usdz": "cradle_chrome.usdz"
+  },
+  "cradle_midnight": {
+   "glb": "cradle_midnight.glb",
+   "usdz": "cradle_midnight.usdz"
+  },
+  "cradle_sienna": {
+   "glb": "cradle_sienna.glb",
+   "usdz": "cradle_sienna.usdz"
+  },
+  "cradle_terracotta": {
+   "glb": "cradle_terracotta.glb",
+   "usdz": "cradle_terracotta.usdz"
+  },
+  "cradle_olive": {
+   "glb": "cradle_olive.glb",
+   "usdz": "cradle_olive.usdz"
+  },
+  "cradle_sand": {
+   "glb": "cradle_sand.glb",
+   "usdz": "cradle_sand.usdz"
+  },
+  "cradle_walnut": {
+   "glb": "cradle_walnut.glb",
+   "usdz": "cradle_walnut.usdz"
+  },
+  "cradle_forest": {
+   "glb": "cradle_forest.glb",
+   "usdz": "cradle_forest.usdz"
+  },
+  "cradle_slate": {
+   "glb": "cradle_slate.glb",
+   "usdz": "cradle_slate.usdz"
+  }
+ }
+}
