@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zine Machine v3 · expert additions</title>
+<link rel="icon" href="data:,">
+<style>:root{
+  color-scheme:light;
+  --bg:#f6f5f1;--card:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--ink3:#8a8984;--rule:#e2e0d9;--hl:#fff6d6;
+  --acc:#2a78d6;--crit:#c0262d;--good:#1a7f37;--warn:#b26b00;
+  --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#6250d6;
+  --v:#1a7f37;--a:#2a78d6;--e:#b26b00;--x:#8a8984;
+}
+@media (prefers-color-scheme:dark){:root{
+  color-scheme:dark;
+  --bg:#121211;--card:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--ink3:#8d8c85;--rule:#2f2e2b;--hl:#2d2a1c;
+  --acc:#3987e5;--crit:#ff6b6b;--good:#4cc76a;--warn:#e0a03a;
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#9085e9;
+  --v:#4cc76a;--a:#5b9ee9;--e:#e0a03a;
+}}
+*{box-sizing:border-box}
+
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Inter,Roboto,sans-serif}
+a{color:var(--acc)}
+header.top{padding:48px 0 24px;border-bottom:1px solid var(--rule)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+h1{font:600 40px/1.1 ui-serif,Georgia,"Iowan Old Style",serif;margin:0 0 6px;letter-spacing:-.01em}
+h2{font:600 26px/1.2 ui-serif,Georgia,serif;margin:56px 0 10px;padding-top:12px;border-top:2px solid var(--ink)}
+h3{font-size:17px;margin:28px 0 8px}
+.sub{color:var(--ink2);font-size:16px;max-width:900px}
+nav.toc{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+nav.toc .wrap{display:flex;gap:18px;overflow-x:auto;padding-top:10px;padding-bottom:10px;font-size:13px;white-space:nowrap}
+nav.toc a{text-decoration:none;color:var(--ink2)} nav.toc a:hover{color:var(--ink)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:18px 20px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+@media(max-width:900px){.tiles{grid-template-columns:1fr 1fr}}
+.tile{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:14px 16px}
+.tl{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink2)}
+.tv{font:600 34px/1.15 ui-serif,Georgia,serif;margin:4px 0}.tv span{font-size:15px;color:var(--ink2);font-family:ui-sans-serif,sans-serif;font-weight:400}
+.ts{font-size:12.5px;color:var(--ink2)}
+.callout{border-left:4px solid var(--warn);background:var(--card);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.callout.crit{border-color:var(--crit)} .callout.info{border-color:var(--acc)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;background:var(--card)}
+th,td{padding:7px 9px;border-bottom:1px solid var(--rule);vertical-align:top;text-align:left}
+th{font-weight:600;font-size:12px;color:var(--ink2);background:var(--card)}
+td.n,th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.hl,th.hl{background:var(--hl)}
+td.brk{box-shadow:inset 3px 0 0 var(--good)}
+td.grp{font-weight:600;color:var(--ink2);white-space:nowrap}
+td.src{font-size:12px;color:var(--ink2);max-width:260px}
+tr.opt td{opacity:.85;font-style:italic} tr.nre td:nth-child(2){color:var(--ink2)}
+tfoot td{border-top:2px solid var(--ink);font-size:14px}
+.note{font-size:12px;color:var(--ink2)}
+.risk{font-size:12px;color:var(--crit);margin-top:2px}
+.scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:10px}
+.tag{display:inline-block;font:600 10px/1 ui-monospace,Menlo,monospace;padding:2px 4px;border-radius:3px;color:#fff;vertical-align:1px}
+.t-V{background:var(--v)}.t-A{background:var(--a)}.t-E{background:var(--e)}.t-X{background:var(--x)}.t-S{background:#7a5bbf}
+.controls{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin:12px 0;font-size:14px}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:7px;overflow:hidden}
+.seg button{border:0;background:var(--card);color:var(--ink);padding:6px 12px;font:inherit;cursor:pointer;border-right:1px solid var(--rule)}
+.seg button:last-child{border-right:0}.seg button.on{background:var(--ink);color:var(--bg)}
+.btn{border:1px solid var(--rule);background:var(--card);color:var(--ink);padding:8px 12px;border-radius:7px;font:inherit;font-size:13.5px;cursor:pointer}
+.btn:hover{border-color:var(--ink2)} .btn.pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:12px;font:12px/1.45 ui-monospace,Menlo,monospace;overflow:auto;max-height:260px}
+svg{width:100%;height:auto;display:block}
+svg .grid{stroke:var(--rule);stroke-width:1} svg .ax{fill:var(--ink2);font-size:11px} svg .lg{fill:var(--ink);font-size:12px}
+svg .tn{fill:var(--ink);font-size:12px} svg .ph{fill:var(--ink);font-size:12px;font-weight:700}
+svg .phase{fill:var(--rule);opacity:.55} svg .today{stroke:var(--crit);stroke-width:1.5;stroke-dasharray:4 3}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--ink2);margin:8px 0}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.legend i.cp{background:transparent;border:2px solid var(--crit)}
+figure{margin:0}figure img{width:100%;border-radius:10px;border:1px solid var(--rule);background:#fff}
+figcaption{font-size:12.5px;color:var(--ink2);margin-top:6px}
+ul.tight li{margin:3px 0} ol li{margin:4px 0}
+.phasecard h3{margin-top:0}.phasecard .meta{font-size:12.5px;color:var(--ink2);margin-bottom:6px}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;font-size:13.5px}.kv b{color:var(--ink2);font-weight:600}
+.sources li{font-size:13px;margin:3px 0;word-break:break-word}
+footer{margin:60px 0 40px;color:var(--ink3);font-size:12.5px}
+@media print{nav.toc{display:none}th{position:static}h2{break-before:page}}
+nav.site{background:var(--ink);color:var(--bg)}
+nav.site .wrap{display:flex;gap:4px;align-items:center;overflow-x:auto;white-space:nowrap;padding-top:8px;padding-bottom:8px;font-size:13.5px}
+nav.site .brand{font-weight:700;margin-right:14px;letter-spacing:.02em}
+nav.site a{color:var(--bg);text-decoration:none;padding:5px 10px;border-radius:6px;opacity:.78}
+nav.site a:hover{opacity:1;background:color-mix(in srgb,var(--bg) 14%,transparent)}
+nav.site a[aria-current=page]{opacity:1;background:var(--bg);color:var(--ink);font-weight:600}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin:8px 0 12px}
+@media(max-width:700px){.form{grid-template-columns:1fr}}
+label.frow{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;border-bottom:1px dotted var(--rule);padding:3px 0}
+label.frow input{width:84px;text-align:right}
+input[type=number],select{background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:5px;padding:3px 5px;font:inherit}
+.out{border-top:1px solid var(--rule);padding-top:10px}
+.ok{color:#fff;background:var(--good);font:600 11px ui-sans-serif,sans-serif;padding:2px 6px;border-radius:4px}
+.bad{color:#fff;background:var(--crit);font:600 11px ui-sans-serif,sans-serif;padding:2px 6px;border-radius:4px}
+.bar{display:grid;grid-template-columns:minmax(150px,1.6fr) 2fr 48px;gap:8px;align-items:center;font-size:12px;margin:4px 0}
+.bar i{display:block;height:10px;border-radius:2px;background:var(--acc)}.bar b{text-align:right;font-variant-numeric:tabular-nums}
+label.chk{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--rule);font-size:13.5px}label.chk input{margin-top:3px}
+.controls label{display:inline-flex;gap:6px;align-items:center}
+</style></head>
+<body>
+<nav class="site" aria-label="Zine Machine sourcing pages"><div class="wrap">
+  <span class="brand">Zine Machine v3 · realization</span>
+  <a href="index.html" data-page="index">Overview</a>
+  <a href="flow.html" data-page="flow">Material flow</a>
+  <a href="proto10.html" data-page="proto10">10-day proto</a>
+  <a href="gates.html" data-page="gates">Release gates</a>
+  <a href="automation.html" data-page="automation">AI execution</a>
+  <a href="expert.html" data-page="expert" aria-current="page">Expert adds</a>
+</div></nav>
+<header class="top"><div class="wrap">
+  <div class="tl">Zine Machine v3 · what a leading expert would add · 7 November 2026</div>
+  <h1>What a seasoned hardware-operations lead would add</h1>
+  <p class="sub">The brief covers cost, sourcing, flow, a fast prototype, gates and automation. A senior hardware-ops, quality and compliance lead would add the items below. Most of them are working tools on this page, set up for the v3 design. Tags:
+  <span class="tag t-V">V</span> verified live 2026-11-07 · <span class="tag t-A">A</span> repo · <span class="tag t-S">S</span> snippet · <span class="tag t-E">E</span> estimate. Each standard is named so you can check it; this page doesn't reproduce paid standards.</p>
+</div></header>
+<nav class="toc"><div class="wrap">
+  <a href="#index">Index</a><a href="#test">Test strategy</a><a href="#stack">Tolerance stack</a><a href="#aql">AQL</a><a href="#fai">FAI / PPAP-lite</a><a href="#trace">Traceability</a><a href="#comp">Compliance matrix</a><a href="#cyber">Cyber / software</a><a href="#ip">IP</a><a href="#life">Second source &amp; EOL</a><a href="#should">Should-cost</a><a href="#score">Supplier scorecard</a><a href="#warranty">Warranty / RMA</a><a href="#hedge">Demand hedge</a><a href="#carbon">Carbon</a><a href="#repair">Repairability</a>
+</div></nav>
+<main class="wrap">
+
+<section id="index">
+  <h2>The additions, ranked by how much risk they retire</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>#</th><th>Addition</th><th>Why it matters here</th><th>Where</th></tr></thead><tbody>
+    <tr><td>1</td><td><b>Test strategy and DFT</b> (AOI, flying probe vs ICT vs functional EOL)</td><td>127 SMD parts, a 0.4 mm QFN codec and a hub. Without a defined EOL test, "validated" means nothing and field returns cost $40+ each.</td><td><a href="#test">tool</a></td></tr>
+    <tr><td>2</td><td><b>CTQs and tolerance stack-up</b></td><td>The slide-on lid has 0.2 mm clearances and 0.5–0.6 mm air gaps over the caps and display. Print tolerance alone (±0.2 mm on JLC 8001 resin <span class="tag t-V">V</span>) uses that up.</td><td><a href="#stack">calculator</a></td></tr>
+    <tr><td>3</td><td><b>AQL sampling</b> (ANSI/ASQ Z1.4)</td><td>Incoming panels, cells and moulded lids need an accept/reject rule that isn't "looks fine".</td><td><a href="#aql">calculator</a></td></tr>
+    <tr><td>4</td><td><b>FAI and PPAP-lite</b></td><td>First articles from every new supplier and tool, measured against the CAD, before any volume is released.</td><td><a href="#fai">checklist</a></td></tr>
+    <tr><td>5</td><td><b>Serialization and the digital thread</b></td><td>Lithium recalls, RMA root cause and CRA vulnerability handling all need per-unit genealogy (cell lot, board lot, firmware hash).</td><td><a href="#trace">generator</a></td></tr>
+    <tr><td>6</td><td><b>Design-for-compliance matrix</b> (FCC 15B, ICES-003, IEC 62368-1, UN38.3, IEC 62133-2, RoHS, REACH, Prop 65, WEEE, EU Battery Reg., packaging EPR, conflict minerals, UFLPA, DOE/CEC chargers, CRA)</td><td>A Linux device with a Li-ion battery sold in the US and EU touches about 15 regimes. Most cost little if planned and a lot if found late.</td><td><a href="#comp">matrix</a></td></tr>
+    <tr><td>7</td><td><b>Cybersecurity and software lifecycle</b> (EU CRA, SBOM, secure boot, OTA)</td><td>The CRA's 24-hour vulnerability reporting has applied since 11 Sep 2026 <span class="tag t-V">V</span>, and its main obligations apply from 11 Dec 2027 <span class="tag t-V">V</span>.</td><td><a href="#cyber">plan</a></td></tr>
+    <tr><td>8</td><td><b>IP protection with overseas suppliers</b></td><td>Open-source hardware (GPL-3.0 upstream). What needs protecting is the brand, firmware keys and moulds, not the schematic.</td><td><a href="#ip">playbook</a></td></tr>
+    <tr><td>9</td><td><b>Second sourcing and lifecycle/EOL monitoring</b></td><td>PB2 is single-source and already has a PCN in the repo (<code>PCN_PocketBeagle_2_20250226.pdf</code> <span class="tag t-A">A</span>). USB1046: 74 in stock <span class="tag t-V">V</span>.</td><td><a href="#life">register</a></td></tr>
+    <tr><td>10</td><td><b>Should-cost models</b> (PCBA and moulded part)</td><td>So that every quote can be checked against a bottom-up number.</td><td><a href="#should">calculator</a></td></tr>
+    <tr><td>11</td><td><b>Supplier scorecard</b></td><td>Quality, delivery, responsiveness, cost and risk, weighted and reviewed quarterly.</td><td><a href="#score">tool</a></td></tr>
+    <tr><td>12</td><td><b>Returns/RMA and the warranty reserve</b></td><td>Sets the accrual per unit sold and the reverse-logistics flow (lithium makes returns hazmat).</td><td><a href="#warranty">calculator</a></td></tr>
+    <tr><td>13</td><td><b>Demand and forecast hedge</b> (newsvendor plus staged commitments)</td><td>Long-lead PB2 (14 wk) and panel MOQs force a buy before demand is known.</td><td><a href="#hedge">calculator</a></td></tr>
+    <tr><td>14</td><td><b>Cash flow and payment milestones</b></td><td>30/70 deposits and 50/50 tooling payments set the working capital needed.</td><td><a href="flow.html#cashsec">Material flow page</a></td></tr>
+    <tr><td>15</td><td><b>Carbon accounting method</b> (GHG Protocol Product Standard / ISO 14067 / ISO 14083)</td><td>Retailers and EU customers ask for a product carbon footprint (PCF). Transport is small; the electronics dominate.</td><td><a href="#carbon">calculator</a></td></tr>
+    <tr><td>16</td><td><b>Repairability and reverse logistics score</b></td><td>The EU Battery Regulation's user-replaceable battery rule (Art. 11, from 18 Feb 2027) and right-to-repair laws. The socketed PB2 and screwed tray are already strong.</td><td><a href="#repair">scorer</a></td></tr>
+    <tr><td>17</td><td><b>Insurance and recall readiness</b></td><td>Product liability (a Li-ion product), cargo insurance, and a recall plan written before the first sale.</td><td><a href="#comp">matrix</a></td></tr>
+    <tr><td>18</td><td><b>SPC on EOL test data</b> (Cpk on backlight current, charge current, rail voltages)</td><td>Catches process drift at the contract manufacturer before it becomes field failures.</td><td><a href="#test">test strategy</a></td></tr>
+  </tbody></table></div>
+</section>
+
+<section id="test">
+  <h2>Test strategy and design-for-test</h2>
+  <div class="grid2">
+    <div class="scroll"><table>
+      <thead><tr><th>Defect class</th><th>AOI</th><th>X-ray</th><th>Flying probe</th><th>ICT (bed of nails)</th><th>Functional EOL</th></tr></thead><tbody>
+      <tr><td>Missing / wrong / reversed part</td><td>●</td><td>○</td><td>●</td><td>●</td><td>◐</td></tr>
+      <tr><td>Bridges / opens on 0.4 mm QFN-28 (ES8388)</td><td>◐</td><td>●</td><td>◐</td><td>◐</td><td>◐</td></tr>
+      <tr><td>Wrong passive value</td><td>○</td><td>○</td><td>●</td><td>●</td><td>○</td></tr>
+      <tr><td>Hub, codec, boost, charger behaviour</td><td>○</td><td>○</td><td>○</td><td>◐</td><td>●</td></tr>
+      <tr><td>Keyswitch solder (hand / THT)</td><td>◐</td><td>○</td><td>○</td><td>○</td><td>● (165-chain walk)</td></tr>
+      <tr><td>Panel FPC seating, backlight</td><td>○</td><td>○</td><td>○</td><td>○</td><td>●</td></tr>
+      <tr><td><b>Cost / when</b></td><td>included at JLC</td><td>$1.64→$0.08/part at JLC <span class="tag t-V">V</span></td><td>no fixture; slow; proto and pilot</td><td>$5–15k fixture <span class="tag t-E">E</span>; &gt;5k units/yr</td><td>$1–3k pogo fixture <span class="tag t-E">E</span>; always</td></tr>
+    </tbody></table><p class="note">● strong · ◐ partial · ○ none</p></div>
+    <div class="card note">
+      <p><b>Recommendation for v3:</b> AOI on every board, X-ray on the ES8388 QFN and the IP5306 exposed pad for proto and pilot lots, then a sample. A pogo-pin <b>functional EOL</b> fixture on every unit. Flying probe on the first 10 boards of each new revision. ICT only if volume passes ~5k a year.</p>
+      <p><b>EOL test sequence</b> (~90 s target; the limits are what go into SPC):</p>
+      <ol class="tight">
+        <li>Rails under a programmable load: +5V_SYS 5.00 ±0.25 V, 3V3 3.30 ±0.10 V, AVDD 3.30 ±0.05 V.</li>
+        <li>Boot to a test image over USB, record PB2 serial/MAC and eMMC ID, write the device serial.</li>
+        <li>Walk the 74HC165 chain: all 43 keys open, then a fixture actuator or operator press-sequence, 43/43 seen.</li>
+        <li>USB hub: both USB-A ports enumerate a test stick; overcurrent flag trips at 0.5–1.0 A.</li>
+        <li>Audio: loopback 1 kHz tone line-out → mic; THD+N and level within limits; jack-detect toggles.</li>
+        <li>Panel: test pattern + camera or operator check; backlight current 39 mA ±10% (Cpk ≥ 1.33).</li>
+        <li>Charger: charge current into a simulated cell or the real pack; charge-LED state; switch-off drops +5V_SYS.</li>
+        <li>Flash the release image, log its SHA-256, print and apply the serial/QR label.</li>
+      </ol>
+      <p><b>DFT asks for Rev B:</b> test pads on +5V_SYS, 3V3, AVDD, KEY_CLK/SH/QH, the I2C3 bus, USB1 D±, and TP1 (M4F spare; it already exists). Keep pads ≥1.0 mm on a 2.54 mm grid where possible, all on one side.</p>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <h2>CTQs and tolerance stack-up</h2>
+  <p>Critical-to-quality dimensions come from <code>mech/cover.py</code> <span class="tag t-A">A</span>. Choose a stack and a process, then edit any row. The tool gives worst-case and RSS (statistical, ±3σ) results against the requirement. Process tolerances: JLC 8001 SLA ±0.2 mm <span class="tag t-V">V</span>; MJF ±0.3 mm <span class="tag t-E">E</span>; injection-moulded ±0.1 mm <span class="tag t-E">E</span>; PCB thickness ±10% <span class="tag t-E">E</span>.</p>
+  <div class="controls"><label>Stack <select id="stkSel"></select></label><label>Plastic process <select id="stkProc"><option value="0.2">SLA (JLC 8001) ±0.20</option><option value="0.3">MJF PA12 ±0.30</option><option value="0.1">Injection moulded ±0.10</option><option value="0.05">Moulded, tuned tool ±0.05</option></select></label></div>
+  <div class="grid2"><div class="scroll"><table id="stkTable"></table></div><div class="card" id="stkOut"></div></div>
+</section>
+
+<section id="aql">
+  <h2>AQL sampling (ANSI/ASQ Z1.4, single sampling, normal inspection)</h2>
+  <p class="note">This uses the Z1.4 code-letter table (inspection levels S-1 to III) and the Table II-A acceptance-number pattern, reconstructed for this page. <b>Check against the purchased standard before putting it in a contract.</b> Suggested defaults: panels and cells at General II, AQL 0.65 major and 2.5 minor; moulded lid cosmetics at II, AQL 1.0 major and 4.0 minor.</p>
+  <div class="controls"><label>Lot size <input id="aqlLot" type="number" value="500" min="2" style="width:90px"></label>
+    <label>Level <select id="aqlLvl"><option>S-1</option><option>S-2</option><option>S-3</option><option>S-4</option><option>I</option><option selected>II</option><option>III</option></select></label>
+    <label>AQL <select id="aqlA"><option>0.10</option><option>0.15</option><option>0.25</option><option>0.40</option><option selected>0.65</option><option>1.0</option><option>1.5</option><option>2.5</option><option>4.0</option><option>6.5</option></select></label></div>
+  <div class="card" id="aqlOut"></div>
+</section>
+
+<section id="fai">
+  <h2>FAI and PPAP-lite package (required in every PO)</h2>
+  <div class="grid2">
+    <div class="card"><b>PPAP-lite elements</b> <span class="note">(a subset of AIAG PPAP, sized for consumer hardware)</span><div id="ppap" class="chklist1"></div></div>
+    <div class="card"><b>First-article inspection, per part number</b> <span class="note">(AS9102-style: design, material, characteristics)</span><div id="faiList" class="chklist1"></div></div>
+  </div>
+</section>
+
+<section id="trace">
+  <h2>Serialization and traceability (the digital thread)</h2>
+  <div class="grid2">
+    <div class="card note">
+      <p><b>Serial format:</b> <code>ZM3-YYWW-S-NNNNN-C</code>. Product and revision, build week, site code (U = US, M = MX, C = CN, V = VN), sequence, and a mod-36 check character. It goes on a laser-etched or label QR inside the tray floor, plus a copy on the box. GS1 Digital Link is an option if retail needs it.</p>
+      <p><b>Captured per unit at EOL:</b> PB2 serial + MAC + eMMC CID; main-board panel/lot + JLC order; panel lot; cell lot + UN38.3 report ID; lid/tray tool and cavity ID + resin lot; firmware image SHA-256; every EOL measurement with limits; fixture ID + operator; timestamps. Data goes to the PLM item record (see <a href="automation.html">AI execution</a>).</p>
+      <p><b>Uses:</b> recall scoping by cell lot, RMA root cause, Cpk by fixture/site, CRA vulnerability scoping by firmware hash, warranty start date.</p>
+    </div>
+    <div class="card"><div class="controls"><label>Site <select id="trSite"><option value="U">US</option><option value="M">MX</option><option value="C" selected>CN</option><option value="V">VN</option></select></label><button class="btn pri" id="trGen">Generate example record</button></div><pre id="trOut"></pre></div>
+  </div>
+</section>
+
+<section id="comp">
+  <h2>Design-for-compliance matrix (US + EU + UK + CA)</h2>
+  <p class="note">Status, owner and gate per regime. Costs are <span class="tag t-E">E</span> unless tagged. Click "done" to track progress (saved in this browser).</p>
+  <div class="scroll"><table id="compTable"></table></div>
+</section>
+
+<section id="cyber">
+  <h2>Cybersecurity and software lifecycle</h2>
+  <div class="grid3">
+    <div class="card note"><b>EU Cyber Resilience Act</b><p>A Linux device sold in the EU is a "product with digital elements". <b>Article 14 reporting</b> (actively exploited vulnerabilities and severe incidents to ENISA/CSIRTs within 24 h, through the Single Reporting Platform) <b>has applied since 11 Sep 2026</b>, including to products already on the market. The essential requirements and conformity assessment apply from <b>11 Dec 2027</b>. Fines run up to €15M or 2.5% of turnover. <span class="tag t-V">V</span> law-firm alerts and the EC CRA page, 2026</p></div>
+    <div class="card note"><b>What to build now</b><ul class="tight"><li>An SBOM (SPDX or CycloneDX) for every image: kernel, Debian packages, M4F firmware.</li><li>A vulnerability intake: <code>security@</code> address, a <code>security.txt</code>, a CVD policy.</li><li>Signed OTA updates (e.g. RAUC or SWUpdate, A/B on the 64 GB eMMC) with a published support period.</li><li>No default passwords: per-unit credentials or first-boot setup.</li><li>AM62 secure boot exists on HS-FS parts: decide whether to use it (it fights hackability, so document the choice).</li></ul></div>
+    <div class="card note"><b>US</b><p>The FCC "Cyber Trust Mark" is voluntary. No US law equivalent to the CRA applies to this device. California SB-327 ("reasonable security", no default passwords) does apply to connected devices sold in CA. <span class="tag t-E">E</span> from statute knowledge, not re-fetched today.</p></div>
+  </div>
+</section>
+
+<section id="ip">
+  <h2>IP protection with overseas suppliers</h2>
+  <div class="grid2"><div class="card note"><ul class="tight">
+    <li><b>The design is open (GPL-3.0 upstream).</b> Protect what isn't: the brand, firmware signing keys, moulds and test fixtures, the supplier list and pricing.</li>
+    <li><b>Trademark:</b> file in China (CNIPA, first-to-file) and the US before any factory sees the brand. About $1–2k through an agent <span class="tag t-E">E</span>.</li>
+    <li><b>NNN agreement</b> in Chinese, under PRC law, with a PRC court as the forum and liquidated damages. Signed before the RFQ goes out.</li>
+    <li><b>Split the work:</b> China PCBA ships blank; images and keys are flashed at final assembly (strategy D/B) or at a controlled station with a hash log.</li>
+    <li><b>Tool ownership:</b> title, mould marking, photos, location, insurance, release-on-request clause; payment milestones tied to T1 approval.</li>
+    <li><b>Watch for "ghost shifts"</b> and clone listings: test-buy on AliExpress quarterly; the serial check-digit and cloud registration help detect clones.</li>
+  </ul></div><div class="card note"><p><b>Customs recordation:</b> once the US trademark is registered, record it with CBP (e-Recordation, $190 per class <span class="tag t-E">E</span>) so counterfeits can be stopped at the border.</p><p><b>Firmware:</b> the GPL obliges you to publish source for GPL components. Keep proprietary bits (if any) in userspace, and make sure the M4F firmware licence is compatible.</p></div></div>
+</section>
+
+<section id="life">
+  <h2>Second sourcing and lifecycle / EOL monitoring</h2>
+  <div class="scroll"><table id="lifeTable"></table></div>
+  <p class="note">Monitoring: run a weekly Nexar/Octopart lifecycle and stock query on every MPN (Nexar plans count matched parts per month: 100 on evaluation, 2,000 on Standard, no public prices <span class="tag t-V">V</span>). Subscribe to PCN feeds (DigiKey PCN, BeagleBoard). Keep "last-time-buy" triggers in the PLM.</p>
+</section>
+
+<section id="should">
+  <h2>Should-cost models</h2>
+  <div class="grid2">
+    <div class="card"><b>PCBA should-cost (per board)</b><div id="scPcbaIn" class="form"></div><div id="scPcbaOut" class="out"></div></div>
+    <div class="card"><b>Moulded part should-cost (per part)</b><div class="controls"><label>Part <select id="scPart"><option value="lid">Lid (clear PC)</option><option value="tray">Tray (ABS)</option><option value="chassis">Display chassis (ABS)</option></select></label></div><div id="scMouldIn" class="form"></div><div id="scMouldOut" class="out"></div></div>
+  </div>
+  <p class="note">All inputs are <span class="tag t-E">E</span> unless tagged; volumes come from the repo <span class="tag t-A">A</span>. Use them to sanity-check a quote: more than 30% off the should-cost means you should ask for a cost breakdown.</p>
+</section>
+
+<section id="score">
+  <h2>Supplier scorecard</h2>
+  <p class="note">Weights and scores are editable (scores 1–5). The starting scores are the analyst's estimates from public information and today's research, not audited performance. Replace them with measured OTD and PPM after the first orders.</p>
+  <div class="controls" id="scW"></div>
+  <div class="scroll"><table id="scTable"></table></div>
+</section>
+
+<section id="warranty">
+  <h2>Warranty reserve and RMA flow</h2>
+  <div class="grid2"><div class="card"><div id="wIn" class="form"></div><div id="wOut" class="out"></div></div>
+  <div class="card note"><b>RMA flow (lithium-aware)</b><ol class="tight"><li>Self-serve triage: firmware re-flash and a FAQ handle most "dead" reports. Request logs and the serial number.</li><li>If hardware is suspected, ask first for photos and the EOL record (via the serial).</li><li>Advance-replace modules where possible (PB2, panel, lid) by mail, without the battery. Most repairs are user-swappable.</li><li>Whole-unit return: prepaid label under UN3481 Section II. Swollen or damaged cells are <b>forbidden by air</b>: ground only, special packaging, or dispose locally.</li><li>Inspect, root-cause, update the FRACAS, refurbish or recycle (WEEE / Call2Recycle).</li></ol></div></div>
+</section>
+
+<section id="hedge">
+  <h2>Demand and forecast hedge</h2>
+  <div class="grid2"><div class="card"><div id="nvIn" class="form"></div><div id="nvOut" class="out"></div></div>
+  <div class="card note"><b>Staged commitments</b> (the expert's real hedge)<ul class="tight"><li>Commit early to long-lead, single-source items at the <b>P80</b> of demand (PB2: 14 wk; panels: MOQ), because running out costs far more than holding stock.</li><li>Commit to cheap, short-lead items (passives, caps, packaging) at <b>P50</b>; reorder in weeks.</li><li>Use <b>pre-orders</b> to turn demand into data and cash (see the cash curve on <a href="flow.html#cashsec">Material flow</a>).</li><li>Negotiate <b>flex windows</b> (±20% within 4 weeks) and cancellation terms with the contract manufacturer.</li><li>Delay differentiation: build trays and electronics generic; choose the lid colour last (15 colourways).</li></ul></div></div>
+</section>
+
+<section id="carbon">
+  <h2>Carbon accounting method</h2>
+  <div class="grid2"><div class="card note"><p><b>Method:</b> GHG Protocol Product Life Cycle Standard / ISO 14067 for the product carbon footprint (cradle-to-grave), ISO 14083 / GLEC v3.1 for transport, and GHG Protocol Scope 3 categories 1 (purchased goods), 4 and 9 (transport), 11 (use) and 12 (end of life) at company level.</p>
+  <p><b>Data quality:</b> start with secondary factors (estimates below); replace them with supplier-specific PCFs (BeagleBoard/Seeed, panel maker, cell maker) as they arrive. Report the uncertainty, not a single number.</p>
+  <p class="note">The transport factors come from GLEC v3.1 (air 788 g/tkm, container ship 7.27, truck 101) <span class="tag t-V">V</span>. Every manufacturing factor below is an <span class="tag t-E">E</span> placeholder from typical published LCA ranges for small electronics; they are not supplier data.</p></div>
+  <div class="card"><div id="co2In" class="form"></div><div id="co2Out" class="out"></div></div></div>
+</section>
+
+<section id="repair">
+  <h2>Repairability and reverse-logistics score</h2>
+  <p class="note">Criteria follow the structure of the French repairability index / EU repair scoring (documentation, disassembly, fasteners, tools, spare parts, software, part prices). The scores are the analyst's estimates for v3; edit them.</p>
+  <div class="grid2"><div class="scroll"><table id="repTable"></table></div><div class="card" id="repOut"></div></div>
+</section>
+<footer>Zine Machine v3 · expert additions · generated 2026-11-07. Standards named here (Z1.4, IPC-A-610, PPAP, AS9102, ISO 14067/14083, IEC 62368-1, IEC 62133-2) must be read in their current editions; this page doesn't reproduce them.</footer>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const money0 = (v, d) => '$' + (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString('en-US') : (+v).toFixed(d == null ? 2 : d));
+const money = (v, d) => (v < 0 ? '−' : '') + money0(Math.abs(v), d);
+const tag = s => `<span class="tag t-${s}">${s}</span>`;
+const f2 = v => (Math.abs(v) < 0.005 ? 0 : v).toFixed(2);
+// generic numeric form: fields [{k,label,v,step,s}] -> state object; onChange re-renders
+function form(el, fields, state, onChange) {
+  $(el).innerHTML = fields.map(f => `<label class="frow"><span>${f.label} ${f.s ? tag(f.s) : ''}</span><input type="number" step="${f.step || 'any'}" data-k="${f.k}" value="${state[f.k] != null ? state[f.k] : f.v}"></label>`).join('');
+  fields.forEach(f => { if (state[f.k] == null) state[f.k] = f.v; });
+  $(el).querySelectorAll('input').forEach(i => i.oninput = () => { state[i.dataset.k] = +i.value; onChange(); });
+}
+
+// ======================= tolerance stacks =======================
+const STACKS = {
+  rail: { name: 'Lid rail in tray groove: vertical play', req: [0.1, 0.7], unit: 'mm',
+    rows: [{ n: 'Groove height (tray, GROOVE 4.5→6.5)', nom: 2.0, sign: 1, proc: true }, { n: 'Rail height (lid; 0.2 clearance top and bottom)', nom: -1.6, sign: 1, proc: true }],
+    why: 'Too small and the lid binds when sliding; too big and it rattles and the detent feel goes vague.' },
+  width: { name: 'Lid cavity vs tray width: side fit (total)', req: [0.05, 0.9], unit: 'mm',
+    rows: [{ n: 'Lid cavity width (ci1 − ci0 = 178.6)', nom: 178.6, sign: 1, proc: true, k: 1.5 }, { n: 'Tray outer width (175.2 + 2×1.5 = 178.2)', nom: -178.2, sign: 1, proc: true, k: 1.5 }],
+    why: 'Long dimensions carry larger tolerances (×1.5 here); negative means interference.' },
+  keys: { name: 'Keycap top to lid underside (cover mode)', req: [0.2, 1.2], unit: 'mm',
+    rows: [{ n: 'Groove centre height in tray (Z_G 5.5)', nom: 5.5, sign: 1, proc: true }, { n: 'Lid: rail centre to low-roof underside (16.5 − 5.5)', nom: 11.0, sign: 1, proc: true },
+      { n: 'Lid drops onto groove floor (rail clearance)', nom: -0.2, sign: 1, tol: 0.05 }, { n: 'Tray boss top (PCB seat)', nom: -4.5, sign: 1, proc: true },
+      { n: 'PCB thickness 1.6 ±10%', nom: -1.6, sign: 1, tol: 0.16 }, { n: 'Choc v1 switch + CFX cap above PCB', nom: -9.8, sign: 1, tol: 0.25 }],
+    why: 'cover.py targets 0.6 mm nominal with the lid centred (16.5 vs cap tops 15.9). If this goes to zero, the lid presses keys in a bag.' },
+  panel: { name: 'Panel in display-chassis frame (total clearance)', req: [0.1, 1.0], unit: 'mm',
+    rows: [{ n: 'Chassis pocket length', nom: 119.4, sign: 1, proc: true, k: 1.2 }, { n: 'Panel outline 118.8 (datasheet; one snippet says 117.9)', nom: -118.8, sign: 1, tol: 0.2 }],
+    why: 'The panel outline itself is unverified. Measure one in Proto 0.' }
+};
+function renderStack() {
+  const st = STACKS[$('stkSel').value], p = +$('stkProc').value;
+  const rows = st.rows.map(r => ({ ...r, t: r.tol != null ? r.tol : p * (r.k || 1) }));
+  const nom = rows.reduce((a, r) => a + r.nom, 0), wc = rows.reduce((a, r) => a + r.t, 0), rss = Math.sqrt(rows.reduce((a, r) => a + r.t * r.t, 0));
+  $('stkTable').innerHTML = '<thead><tr><th>Contributor</th><th class="n">Nominal</th><th class="n">± Tol</th><th class="n">% of RSS²</th></tr></thead><tbody>' +
+    rows.map((r, i) => `<tr><td>${r.n}</td><td class="n">${r.nom > 0 ? '+' : ''}${r.nom.toFixed(2)}</td><td class="n"><input type="number" step="0.01" data-i="${i}" value="${r.t.toFixed(2)}" style="width:64px"></td><td class="n">${Math.round(r.t * r.t / (rss * rss) * 100)}%</td></tr>`).join('') + '</tbody>';
+  $('stkTable').querySelectorAll('input').forEach(inp => inp.onchange = () => { st.rows[+inp.dataset.i].tol = +inp.value; renderStack(); });
+  const [lo, hi] = st.req, ok = (a, b) => a >= lo && b <= hi;
+  const wcOk = ok(nom - wc, nom + wc), rsOk = ok(nom - rss, nom + rss);
+  $('stkOut').innerHTML = `<div class="tl">${st.name}</div><div class="tv">${nom.toFixed(2)} <span>mm nominal</span></div>
+    <div class="kv"><b>Requirement</b><span>${lo} … ${hi} mm</span>
+    <b>Worst case</b><span>${f2((nom - wc))} … ${f2((nom + wc))} mm ${wcOk ? '<span class="ok">PASS</span>' : '<span class="bad">FAIL</span>'}</span>
+    <b>RSS (±3σ)</b><span>${f2((nom - rss))} … ${f2((nom + rss))} mm ${rsOk ? '<span class="ok">PASS</span>' : '<span class="bad">FAIL</span>'}</span></div>
+    <p class="note">${st.why}</p><p class="note">The biggest contributor goes first on the FAI and SPC plan. If RSS passes but worst case fails, expect about 0.3% out of tolerance and gate it with a go/no-go fit gauge at EOL.</p>`;
+}
+
+// ======================= AQL (Z1.4) =======================
+const LETTERS = 'ABCDEFGHJKLMNPQR', NS = [2, 3, 5, 8, 13, 20, 32, 50, 80, 125, 200, 315, 500, 800, 1250, 2000];
+const LOTS = [[8, 'AAAAAAB'], [15, 'AAAAABC'], [25, 'AABBBCD'], [50, 'ABBCCDE'], [90, 'BBCCCEF'], [150, 'BBCDDFG'], [280, 'BCDEEGH'], [500, 'BCDEFHJ'], [1200, 'CCEFGJK'], [3200, 'CDEGHKL'], [10000, 'CDFGJLM'], [35000, 'CDFHKMN'], [150000, 'DEGJLNP'], [500000, 'DEGJMPQ'], [Infinity, 'DEHKNQR']];
+const LVLS = ['S-1', 'S-2', 'S-3', 'S-4', 'I', 'II', 'III'];
+const AQLS = [0.010, 0.015, 0.025, 0.040, 0.065, 0.10, 0.15, 0.25, 0.40, 0.65, 1.0, 1.5, 2.5, 4.0, 6.5, 10];
+const ACSEQ = { 14: 0, 17: 1, 18: 2, 19: 3, 20: 5, 21: 7, 22: 10, 23: 14, 24: 21 };
+function aqlPlan(lot, lvl, aql) {
+  const letter = LOTS.find(r => lot <= r[0])[1][LVLS.indexOf(lvl)];
+  let i = LETTERS.indexOf(letter); const j = AQLS.findIndex(a => Math.abs(a - aql) < 1e-9);
+  let s = i + j, arrow = '';
+  if (s < 14) { i = 14 - j; arrow = '↓'; } else if (s === 15) { i = 14 - j; arrow = '↑'; } else if (s === 16) { i = 17 - j; arrow = '↓'; } else if (s > 24) { i = 24 - j; arrow = '↑'; }
+  i = Math.max(0, Math.min(15, i)); s = i + j;
+  const ac = ACSEQ[s];
+  return { letter, used: LETTERS[i], n: NS[i], ac, re: ac + 1, arrow };
+}
+function renderAQL() {
+  const lot = Math.max(2, +$('aqlLot').value), p = aqlPlan(lot, $('aqlLvl').value, +$('aqlA').value);
+  const full = p.n >= lot;
+  $('aqlOut').innerHTML = `<div class="kv"><b>Code letter</b><span>${p.letter}${p.arrow ? ` → arrow ${p.arrow} → use plan ${p.used}` : ''}</span>
+    <b>Sample size</b><span><b>${full ? lot + ' (100% inspection: sample ≥ lot)' : p.n}</b></span>
+    <b>Accept (Ac) / Reject (Re)</b><span><b>${p.ac} / ${p.re}</b></span></div>
+    <p class="note">Draw ${full ? 'every unit' : p.n + ' units at random'} from the lot of ${lot}. Accept the lot with ≤ ${p.ac} nonconforming; reject with ≥ ${p.re}. Use switching rules (tightened after 2 of 5 lots rejected) as Z1.4 specifies.</p>`;
+}
+
+// ======================= checklists =======================
+const PPAP = ['Design record: released CAD/ECAD at a git tag (rev letter)', 'Engineering-change history (ECOs since the last approval)', 'DFMEA-lite on the lid, rails, battery, FPC', 'Process flow diagram from the supplier', 'PFMEA from the CM (top 10 risks, RPN or AP)', 'Control plan: CTQs, method, frequency, reaction plan', 'MSA: gauge R&R ≤ 10–30% on CTQ gauges (rail fit gauge, height gauge)', 'Dimensional results (the FAI, every characteristic)', 'Material certs: resin datasheet + CoC; RoHS/REACH declarations; UN38.3 summary', 'Initial process study: Cpk ≥ 1.33 on CTQs over 30 pcs', 'Appearance approval: lid colour/clarity vs master sample under D65, ΔE ≤ 2', 'Retained sample parts (3 per cavity), labelled', 'Part Submission Warrant signed by supplier QA'];
+const FAIL = ['Ballooned drawing from the FreeCAD model; every dimension numbered', 'Measure 100% of characteristics on piece 1 of every cavity / every panel', 'CTQ fit: lid slides on 3 different trays; slide force within limits (N, set in Proto 1)', 'Detent: audible/tactile click both modes; 500-cycle sample with no whitening', 'Rail play and keycap clearance measured (see tolerance stack)', 'Cosmetic: gate vestige ≤ 0.2 mm, no flow lines or sink on Class A faces, scratch/dig spec', 'Material and process record: resin lot, mould temp, cycle, dryer log (PC: 120 °C, 4–6 h)', 'PCBA: AOI + X-ray images, solder-paste lot, reflow profile, rotation check vs CPL', 'Electrical: full EOL test log for the first articles', 'Sign-off: QA + ME (+ EE for PCBA); nonconformances dispositioned'];
+function checklist(el, items, key) {
+  let done = {}; try { done = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) { }
+  const draw = () => {
+    const n = items.filter((_, i) => done[i]).length;
+    $(el).innerHTML = `<p class="note">${n}/${items.length} done</p>` + items.map((t, i) => `<label class="chk"><input type="checkbox" data-i="${i}" ${done[i] ? 'checked' : ''}><span>${t}</span></label>`).join('');
+    $(el).querySelectorAll('input').forEach(c => c.onchange = () => { done[c.dataset.i] = c.checked; localStorage.setItem(key, JSON.stringify(done)); draw(); });
+  };
+  draw();
+}
+
+// ======================= traceability =======================
+function check36(s) { const a = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'; let sum = 0; s.replace(/[^0-9A-Z]/g, '').split('').forEach((c, i) => sum += a.indexOf(c) * (i % 2 ? 3 : 1)); return a[sum % 36]; }
+function genTrace() {
+  const d = new Date('2026-11-07'), yy = String(d.getUTCFullYear()).slice(2), wk = String(Math.ceil(((d - new Date(Date.UTC(d.getUTCFullYear(), 0, 1))) / 864e5 + 1) / 7)).padStart(2, '0');
+  const seq = String(Math.floor(Math.random() * 99999)).padStart(5, '0'), site = $('trSite').value;
+  const base = `ZM3-${yy}${wk}-${site}-${seq}`, sn = base + '-' + check36(base);
+  const hex = n => Array.from({ length: n }, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
+  const rec = {
+    serial: sn, product: 'zine-machine', revision: 'v3-B', built: '2026-11-07T14:32:10Z', site,
+    pb2: { mpn: '100003007', serial: 'PB2I-' + hex(8).toUpperCase(), mac: '1c:ba:8c:' + hex(6).match(/../g).join(':'), emmc_cid: hex(32) },
+    mainboard: { pcba_lot: 'JLC-SMT-' + hex(6).toUpperCase(), panel_pos: 1, gerber_rev: 'v3-B@' + hex(7) },
+    display: { mpn: 'ER-TFT4.58-1', lot: 'BD2611-' + hex(4).toUpperCase() },
+    battery: { pack_lot: 'LP904070-' + hex(5).toUpperCase(), un383_report: 'UN38.3-' + hex(6).toUpperCase(), iec62133_report: 'CB-' + hex(6).toUpperCase() },
+    enclosure: { tray: { tool: 'T-TRAY-01', cavity: 1, resin_lot: 'ABS-' + hex(4) }, lid: { tool: 'T-LID-01', cavity: 1, resin_lot: 'PC-tint-bondi-' + hex(4), colorway: 'bondi' } },
+    firmware: { image: 'zm-os-2026.11.0', sha256: hex(64), m4f: 'keyscan-0.3.1', sbom: 'spdx://zm-os-2026.11.0' },
+    eol: { fixture: 'EOL-02', operator: 'op-117', result: 'PASS', cycle_s: 88,
+      meas: { v5_sys: 5.03, v3v3: 3.31, avdd: 3.30, bl_ma: 38.6, keys_seen: 43, usb_a: [true, true], audio_thdn_db: -71.2, charge_ma: 1480 } }
+  };
+  $('trOut').textContent = JSON.stringify(rec, null, 2);
+}
+
+// ======================= compliance matrix =======================
+const COMP = [
+  ['FCC Part 15 Subpart B (Class B), SDoC', 'US', 'Yes: digital device, no radio (PB2 has no radio V)', 'Test report, SDoC, US responsible party, label/manual text', 'Compliance pre-scan (EVT) → formal (DVT)', '$1.9–5k (V range)'],
+  ['ISED ICES-003 (Class B)', 'CA', 'If sold in Canada', 'Same test report usually; "CAN ICES-003(B)" label', 'DVT', '+$0.3–1k'],
+  ['EU EMC Directive (EN 55032 / EN 55035)', 'EU', 'Yes', 'Test report, DoC, technical file, CE mark', 'DVT', '$3–8k (S)'],
+  ['EU LVD 2014/35/EU', 'EU', 'No: 5 V USB-powered, below 75 V DC (the Overview page assumed LVD; GPSR covers safety)', 'Note in technical file', '—', '$0'],
+  ['EU GPSR (Reg. 2023/988) + IEC 62368-1 as the safety basis', 'EU', 'Yes, incl. an EU responsible person for online sales', 'Risk assessment, 62368-1 report/self-assessment, traceability info, EU contact on product', 'DVT', '$2–5k (E)'],
+  ['IEC 62368-1 (US retail / liability)', 'US', 'Not legally required at 5 V; retailers and insurers ask', 'CB report or test report', 'DVT', '$2–4k (E)'],
+  ['UN38.3 (transport)', 'Global', 'Yes: any shipment of Li-ion', 'Pack maker\'s UN38.3 report + test summary (49 CFR 173.185)', 'Battery selection (Proto 1)', '$0.3–1.7k/model (S), $0 if bought certified'],
+  ['IEC 62133-2 (cell/pack safety)', 'Global', 'Marketplaces (Amazon), EU via GPSR', 'CB report from the pack maker', 'Battery selection', 'buy certified'],
+  ['EU Battery Regulation 2023/1542', 'EU', 'Yes: portable battery in a product', 'Labelling, user-removable/replaceable battery (Art. 11, from 18 Feb 2027, S), EPR registration per country', 'Design freeze', '$0.5–2k/yr (E)'],
+  ['RoHS 2011/65/EU + (EU) 2015/863', 'EU / CA-RoHS', 'Yes', 'Supplier declarations, BOM-level compliance, technical file', 'PCBA release', '$0–1k'],
+  ['REACH Art. 33 + SCIP database', 'EU', 'Yes, if an SVHC > 0.1% w/w in any article', 'Supplier SVHC declarations; SCIP notification', 'PCBA release', '$0–1k'],
+  ['California Prop 65', 'US-CA', 'Check: brass, PVC cables, some plastics', 'Supplier declarations, or a warning label (businesses with &lt;10 employees are exempt)', 'Pilot', '$0–2k'],
+  ['WEEE 2012/19/EU', 'EU', 'Yes', 'Producer registration per country (or authorised representative); crossed-bin mark', 'Before EU sales', '$0.3–1k/yr/country (E)'],
+  ['Packaging EPR: EU PPWR (Reg. 2025/40) + US state laws (CA SB 54, OR, CO, ME, MN, MD, WA)', 'EU / US states', 'Yes above small-producer thresholds', 'Packaging data, PRO registration (CAA in US states)', 'Pilot', '$0–2k/yr (E)'],
+  ['Conflict minerals (Dodd-Frank §1502 / EU 2017/821)', 'US / EU', 'Not directly (SEC-issuer and raw-mineral importer rules); customers may ask', 'CMRT/EMRT from suppliers (RMI templates)', 'PCBA release', '$0'],
+  ['UFLPA (forced-labour import ban)', 'US', 'Yes: Chinese-origin cells, PCBs, aluminium', 'Supply-chain tracing file per input', 'Shipping release', '$0–3k (E)'],
+  ['DOE battery-charger standard (10 CFR 430.32(z)) / CEC Title 20', 'US / US-CA', 'Embedded charger in a consumer product; DOE has proposed rescinding its rule (S), status unclear', 'Test to Appendix Y/Y1 if still in force; CEC database listing', 'DVT', '$1–3k (E)'],
+  ['EU Cyber Resilience Act', 'EU', 'Yes: product with digital elements', 'Art. 14 reporting (in force since 11 Sep 2026, V); essential requirements from 11 Dec 2027 (V)', 'Firmware release', 'process cost'],
+  ['UK PSTI Act (connectable products)', 'UK', 'Yes if sold in the UK and network-connectable', 'No universal default passwords, vulnerability-disclosure policy, stated update period', 'Firmware release', '$0'],
+  ['European Accessibility Act (Dir. 2019/882)', 'EU', 'Check: covers "consumer general purpose computer hardware systems and their OS"', 'Accessibility assessment and documentation', 'Design freeze', '$1–3k (E)'],
+  ['CPSC Section 15(b) reporting + recall plan', 'US', 'Yes: any consumer product (24-h reporting duty on substantial hazards)', 'Written recall plan, product-liability insurance, traceability (above)', 'Pilot go/no-go', 'insurance $1–5k/yr (E)'],
+  ['Export: ECCN 5A992.c (mass-market encryption)', 'US export', 'Only for shipments out of the US', 'Self-classification memo; restricted-party screening', 'Shipping release', '$0']
+];
+function renderComp() {
+  let done = {}; try { done = JSON.parse(localStorage.getItem('zm_comp') || '{}'); } catch (e) { }
+  $('compTable').innerHTML = '<thead><tr><th>Done</th><th>Regime</th><th>Market</th><th>Applies?</th><th>Evidence</th><th>Gate</th><th>Cost</th></tr></thead><tbody>' +
+    COMP.map((r, i) => `<tr><td><input type="checkbox" data-i="${i}" ${done[i] ? 'checked' : ''}></td><td><b>${r[0]}</b></td><td>${r[1]}</td><td class="note">${r[2]}</td><td class="note">${r[3]}</td><td class="note">${r[4]}</td><td class="note">${r[5]}</td></tr>`).join('') + '</tbody>';
+  $('compTable').querySelectorAll('input').forEach(c => c.onchange = () => { done[c.dataset.i] = c.checked; localStorage.setItem('zm_comp', JSON.stringify(done)); });
+}
+
+// ======================= lifecycle register =======================
+const LIFE = [
+  ['PocketBeagle 2 Industrial (U2)', 'Single: BeagleBoard / Seeed', 'Plain PB2 102110780 (different socket height; recheck the stack)', 'High: a PCN already exists (repo, 2025-02-26 A); 14-wk lead (V)', 'Buffer stock; LTB trigger; volume agreement with Seeed'],
+  ['4.58" ST7701S bar panel', 'Multi-outline: Maxen, BuyDisplay, Tailor Pixels, Adafruit 5805', 'Qualify 2 with a matching pinout; Adafruit 5799 3.7" is a different outline (S)', 'High: panel EOL is common, and pinouts differ by vendor', 'Buy samples from 2 sources now; keep the J3 footprint flexible (F32Q/F32R)'],
+  ['ES8388 codec (U17)', 'Single maker (Everest), deep stock 40k (V)', 'WM8960 (layout change)', 'Low–medium', 'Stock 1k at pilot'],
+  ['FE1.1s hub (U4)', 'Single maker (Terminus), 8.2k at LCSC (V)', 'CH334 / GL850G (footprint change)', 'Medium', 'Second footprint option at Rev B'],
+  ['IP5306 charger/boost (U9)', 'Single maker (Injoinic), 23.5k (V)', 'IP5306-I2C (same package)', 'Low–medium', '—'],
+  ['TPS61165 backlight (U3)', 'TI, 22k at LCSC (V)', 'Pin-compatible alternates to be checked', 'Low', '—'],
+  ['74HC165 ×6', 'Multi-source (Nexperia, TI, Diodes)', 'Drop-in', 'Low', '—'],
+  ['GCT USB1046 ×2', 'Single MPN; 74 at LCSC (V)', 'Any same-footprint USB-A', 'High (stock)', 'Qualify alternate before Proto 2'],
+  ['Amphenol F32Q / F32R', 'Amphenol; F32R 0 at LCSC (V), 6,956 at DigiKey (V)', 'Hirose FH12 (footprint change)', 'Medium', 'Consign F32R if needed'],
+  ['Kailh Choc v1 switches', 'Single: Kailh (proprietary footprint)', 'None pin-compatible (Choc v2 differs)', 'Medium', 'Stock 2× annual need; watch Kailh announcements'],
+  ['Chocfox CFX keycaps', 'Single: Chosfox', 'MBK/LDSA collide on 17 mm pitch (check fit)', 'Medium', 'Custom-printed caps at volume (own tooling)'],
+  ['1S LiPo pack', 'Custom; to be selected', 'Dual-source pack houses on one spec', 'High (unchosen)', 'Write a pack spec (cell, PCM, lead, label, UN38.3)']
+];
+function renderLife() {
+  $('lifeTable').innerHTML = '<thead><tr><th>Part</th><th>Sources</th><th>Alternate</th><th>Lifecycle / stock risk</th><th>Action</th></tr></thead><tbody>' + LIFE.map(r => `<tr><td><b>${r[0]}</b></td><td class="note">${r[1]}</td><td class="note">${r[2]}</td><td class="note">${r[3]}</td><td class="note">${r[4]}</td></tr>`).join('') + '</tbody>';
+}
+
+// ======================= should-cost =======================
+const scP = {};
+function renderPcbaSC() {
+  const s = scP, fixed = s.setup + s.stencil + s.lines * s.feeder;
+  const pcb = s.area / 1e4 * s.m2;
+  const place = s.placements * s.perPlace + s.tht * s.perTht;
+  const test = s.testMin * s.rate / 60;
+  const unit = ((pcb + place + test + s.parts) / (s.yield / 100) + fixed / s.qty) * (1 + s.margin / 100);
+  $('scPcbaOut').innerHTML = `<div class="tv">${money(unit)} <span>/ board at ${s.qty.toLocaleString('en-US')}</span></div>
+    <div class="kv"><b>Bare PCB</b><span>${money(pcb)}</span><b>Placement + THT</b><span>${money(place)}</span><b>Test</b><span>${money(test)}</span><b>Components</b><span>${money(s.parts)}</span><b>Fixed / board</b><span>${money(fixed / s.qty)}</span></div>
+    <p class="note">Compare with the Overview's 1k estimate: PCB $2.20 + PCBA fees $1.50 + parts $6.80 = $10.50.</p>`;
+}
+const MOULD = { lid: { vol: 52.32, rho: 1.20, resin: 5.07, cyc: 45 }, tray: { vol: 40.57, rho: 1.05, resin: 2.87, cyc: 40 }, chassis: { vol: 12.52, rho: 1.05, resin: 2.87, cyc: 30 } };
+const scM = {};
+function renderMouldSC() {
+  const s = scM;
+  const mat = s.vol * s.rho / 1000 * (1 + s.runner / 100) * s.resin;
+  const mach = s.cyc / 3600 * s.mrate / s.cav;
+  const tool = s.tool / Math.min(s.life, s.qty);
+  const unit = (mat + mach + s.post) / (1 - s.scrap / 100) * (1 + s.margin / 100) + tool;
+  $('scMouldOut').innerHTML = `<div class="tv">${money(unit)} <span>/ part incl. tooling over ${Math.min(s.life, s.qty).toLocaleString('en-US')}</span></div>
+    <div class="kv"><b>Material</b><span>${money(mat)}</span><b>Machine time</b><span>${money(mach)}</span><b>Post / pack</b><span>${money(s.post)}</span><b>Tooling / part</b><span>${money(tool)}</span><b>Piece price ex-tooling</b><span>${money(unit - tool)}</span></div>
+    <p class="note">Resin prices are Xometry's published 2020 figures (ABS $1.30/lb, PC $2.30/lb) <span class="tag t-V">V</span>; tinted or optical PC costs more, so raise it for the lid. Machine rate: ~$25/h in China, ~$60–90/h in the US for a 150–250 t press <span class="tag t-E">E</span>.</p>`;
+}
+function bindMould() {
+  const p = MOULD[$('scPart').value];
+  Object.assign(scM, { vol: p.vol, rho: p.rho, resin: p.resin, cyc: p.cyc });
+  form('scMouldIn', [
+    { k: 'vol', label: 'Part volume cm³', v: p.vol, s: 'A' }, { k: 'rho', label: 'Density g/cm³', v: p.rho, s: 'E' }, { k: 'resin', label: 'Resin $/kg', v: p.resin, s: 'V' },
+    { k: 'runner', label: 'Runner/regrind loss %', v: 8, s: 'E' }, { k: 'cyc', label: 'Cycle time s', v: p.cyc, s: 'E' }, { k: 'cav', label: 'Cavities', v: 1 },
+    { k: 'mrate', label: 'Machine + operator $/h', v: 25, s: 'E' }, { k: 'post', label: 'De-gate, pack $/part', v: 0.08, s: 'E' }, { k: 'scrap', label: 'Scrap %', v: 4, s: 'E' },
+    { k: 'margin', label: 'Overhead + margin %', v: 15, s: 'E' }, { k: 'tool', label: 'Tool cost $', v: p === MOULD.lid ? 14000 : p === MOULD.tray ? 8000 : 4000, s: 'E' }, { k: 'life', label: 'Tool life shots', v: 10000, s: 'V' }, { k: 'qty', label: 'Program quantity', v: 1000 }
+  ].map(f => ({ ...f, v: f.v })), (Object.keys(scM).forEach(k => { if (!['vol', 'rho', 'resin', 'cyc'].includes(k)) delete scM[k]; }), scM), renderMouldSC);
+  renderMouldSC();
+}
+
+// ======================= scorecard =======================
+const SCW = { Quality: 30, Delivery: 25, Responsiveness: 15, Cost: 15, Risk: 15 };
+const SUPP = [
+  ['JLCPCB / JLC3DP (PCBA, prints)', 4, 4, 4, 5, 3], ['LCSC (components)', 4, 4, 4, 5, 3], ['DigiKey (PB2, panel, connectors)', 5, 5, 4, 3, 5],
+  ['BeagleBoard / Seeed (PB2)', 4, 3, 3, 3, 2], ['BuyDisplay (panel)', 3, 3, 3, 5, 2], ['Adafruit (panel, cells)', 5, 2, 4, 3, 4],
+  ['Chosfox / Kailh (switches, caps)', 4, 4, 3, 4, 2], ['HLH / Firstmold (casting, tooling)', 4, 4, 4, 4, 3], ['US quick-turn (AdvancedPCB / Sierra)', 5, 5, 5, 2, 5]
+];
+function renderScore() {
+  $('scW').innerHTML = Object.keys(SCW).map(k => `<label>${k} <input type="number" data-w="${k}" value="${SCW[k]}" style="width:56px">%</label>`).join('');
+  $('scW').querySelectorAll('input').forEach(i => i.oninput = () => { SCW[i.dataset.w] = +i.value; drawScore(); });
+  drawScore();
+}
+function drawScore() {
+  const ks = Object.keys(SCW), wsum = ks.reduce((a, k) => a + SCW[k], 0) || 1;
+  const rows = SUPP.map(r => ({ r, t: ks.reduce((a, k, i) => a + r[i + 1] * SCW[k], 0) / wsum })).sort((a, b) => b.t - a.t);
+  $('scTable').innerHTML = '<thead><tr><th>Supplier</th>' + ks.map(k => `<th class="n">${k}</th>`).join('') + '<th class="n">Weighted</th><th>Tier</th></tr></thead><tbody>' +
+    rows.map(({ r, t }) => `<tr><td><b>${r[0]}</b></td>${ks.map((k, i) => `<td class="n"><input type="number" min="1" max="5" data-s="${SUPP.indexOf(r)}" data-c="${i + 1}" value="${r[i + 1]}" style="width:46px"></td>`).join('')}<td class="n"><b>${t.toFixed(2)}</b></td><td>${t >= 4 ? '<span class="ok">preferred</span>' : t >= 3.3 ? 'approved' : '<span class="bad">conditional</span>'}</td></tr>`).join('') + '</tbody>';
+  $('scTable').querySelectorAll('input').forEach(i => i.onchange = () => { SUPP[+i.dataset.s][+i.dataset.c] = Math.max(1, Math.min(5, +i.value)); drawScore(); });
+}
+
+// ======================= warranty =======================
+const wS = {};
+function renderWarranty() {
+  const s = wS, years = s.months / 12;
+  const claims = s.units * (s.doa / 100 + s.afr / 100 * years);
+  const reserve = claims * s.claim;
+  $('wOut').innerHTML = `<div class="tv">${money(reserve / s.units)} <span>reserve per unit sold</span></div><div class="kv"><b>Expected claims</b><span>${claims.toFixed(1)} units</span><b>Total reserve</b><span>${money(reserve, 0)}</span><b>Share of revenue</b><span>${(reserve / (s.units * s.price) * 100).toFixed(1)}%</span></div><p class="note">Accrue it at sale and true it up quarterly against actual claims in the FRACAS. Consumer electronics typically accrues 1–5% of revenue <span class="tag t-E">E</span>.</p>`;
+}
+
+// ======================= newsvendor =======================
+function ncdf(x) { const t = 1 / (1 + 0.2316419 * Math.abs(x)), d = 0.3989423 * Math.exp(-x * x / 2); const p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return x > 0 ? 1 - p : p; }
+function npdf(x) { return Math.exp(-x * x / 2) / Math.sqrt(2 * Math.PI); }
+function ninv(p) { // Acklam
+  const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239], b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572], c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783], d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
+  const pl = 0.02425; let q, r;
+  if (p < pl) { q = Math.sqrt(-2 * Math.log(p)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+  if (p > 1 - pl) { q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+  q = p - 0.5; r = q * q; return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+}
+const nv = {};
+function renderNV() {
+  const { mu, sd, cost, price, salvage } = nv;
+  const cr = (price - cost) / (price - salvage), z = ninv(Math.min(0.999, Math.max(0.001, cr)));
+  const q = Math.max(0, mu + z * sd), L = npdf(z) - z * (1 - ncdf(z)), lostSales = sd * L, sales = mu - lostSales, left = q - sales;
+  const profit = sales * price + left * salvage - q * cost;
+  $('nvOut').innerHTML = `<div class="tv">${Math.round(q).toLocaleString('en-US')} <span>units to build (optimal)</span></div><div class="kv"><b>Critical ratio</b><span>${cr.toFixed(2)} (z = ${z.toFixed(2)})</span><b>In-stock probability</b><span>${(cr * 100).toFixed(0)}%</span><b>Expected sales</b><span>${Math.round(sales)}</span><b>Expected leftovers</b><span>${Math.round(left)}</span><b>Expected profit</b><span>${money(profit, 0)}</span></div><p class="note">Newsvendor with normal demand. Leftovers are sold at the salvage price (discounted after launch). A high margin pushes the build above the mean forecast.</p>`;
+}
+
+// ======================= carbon =======================
+const CO2 = [
+  ['pb2', 'PocketBeagle 2 module (SoC, 1 GB DDR4, 64 GB eMMC)', 6.0], ['pcba', 'Main PCBA (4-layer 214 cm² + 127 parts)', 3.0], ['disp', '4.58" LCD module', 1.5],
+  ['batt', 'Li-ion pack ~11 Wh', 1.0], ['keys', '43 switches + caps', 0.6], ['plastic', 'Tray + chassis + lid (~120 g ABS/PC)', 0.6], ['pack', 'Packaging', 0.3],
+  ['ship', 'Transport (see Material flow tiles)', 3.0], ['eol', 'End of life', 0.2]];
+const co2S = { W: 2.5, h: 3, yrs: 3, grid: 0.37 };
+function renderCO2() {
+  const use = co2S.W * co2S.h * 365 * co2S.yrs / 1000 * co2S.grid;
+  const rows = CO2.map(r => [r[1], co2S[r[0]]]).concat([['Use phase (' + co2S.W + ' W × ' + co2S.h + ' h/day × ' + co2S.yrs + ' yr × ' + co2S.grid + ' kg/kWh)', use]]);
+  const tot = rows.reduce((a, r) => a + r[1], 0), max = Math.max(...rows.map(r => r[1]));
+  $('co2Out').innerHTML = `<div class="tv">${tot.toFixed(1)} <span>kg CO₂e per unit (cradle-to-grave, estimate)</span></div>` + rows.map(r => `<div class="bar"><span>${r[0]}</span><i style="width:${r[1] / max * 100}%"></i><b>${r[1].toFixed(2)}</b></div>`).join('');
+}
+
+// ======================= repairability =======================
+const REP = [['Documentation (open schematics, CAD, disassembly guide)', 9, 20], ['Disassembly depth to battery (lid slides off, 4 screws)', 8, 15], ['Fasteners reversible, no glue (panel is taped)', 6, 15], ['Tools needed (standard Phillips/hex)', 9, 10], ['Spare-part availability (PB2, panel, cells, caps sold separately)', 8, 15], ['Software: open, updatable, long support', 9, 10], ['Part price vs device (PB2 $51 of ~$299)', 8, 5], ['Key switches replaceable (soldered; hot-swap would be 9)', 4, 10]];
+function renderRep() {
+  $('repTable').innerHTML = '<thead><tr><th>Criterion</th><th class="n">Score 0–10</th><th class="n">Weight %</th></tr></thead><tbody>' + REP.map((r, i) => `<tr><td>${r[0]}</td><td class="n"><input type="number" min="0" max="10" data-r="${i}" data-c="1" value="${r[1]}" style="width:52px"></td><td class="n"><input type="number" min="0" data-r="${i}" data-c="2" value="${r[2]}" style="width:52px"></td></tr>`).join('') + '</tbody>';
+  $('repTable').querySelectorAll('input').forEach(i => i.oninput = () => { REP[+i.dataset.r][+i.dataset.c] = +i.value; drawRep(); });
+  drawRep();
+}
+function drawRep() {
+  const w = REP.reduce((a, r) => a + r[2], 0) || 1, sc = REP.reduce((a, r) => a + r[1] * r[2], 0) / w;
+  $('repOut').innerHTML = `<div class="tv">${sc.toFixed(1)} <span>/ 10 repairability (estimate)</span></div><p class="note">Biggest gains: <b>hot-swap sockets</b> (+0.5) and a <b>tool-free battery connector access</b> note in the manual. Replace the panel tape with a clip frame or a pull-tab adhesive (+0.3). Publish spare-part SKUs for lids, caps and cells.</p><p class="note"><b>Reverse logistics:</b> lids and caps are mailable as spares (no hazmat). Cells and whole units ship under UN3481 Section II rules; damaged cells go ground only. Refurbished units need a full EOL re-test and a new serial suffix.</p>`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  $('stkSel').innerHTML = Object.entries(STACKS).map(([k, s]) => `<option value="${k}">${s.name}</option>`).join('');
+  $('stkSel').onchange = renderStack; $('stkProc').onchange = renderStack; renderStack();
+  ['aqlLot', 'aqlLvl', 'aqlA'].forEach(id => $(id).oninput = renderAQL); renderAQL();
+  checklist('ppap', PPAP, 'zm_ppap'); checklist('faiList', FAIL, 'zm_fai');
+  $('trGen').onclick = genTrace; genTrace();
+  renderComp(); renderLife();
+  form('scPcbaIn', [
+    { k: 'qty', label: 'Boards', v: 1000 }, { k: 'area', label: 'Board area cm²', v: 214.2, s: 'A' }, { k: 'm2', label: '4-layer $/m² at volume', v: 70.6, s: 'S' },
+    { k: 'placements', label: 'SMT placements', v: 127, s: 'A' }, { k: 'perPlace', label: '$ per placement (≈4 joints × $0.0016)', v: 0.0064, s: 'V' }, { k: 'tht', label: 'THT joints', v: 30, s: 'E' },
+    { k: 'perTht', label: '$ per THT joint', v: 0.0164, s: 'V' }, { k: 'testMin', label: 'Test minutes', v: 1.5, s: 'E' }, { k: 'rate', label: 'Labour $/h', v: 8, s: 'E' },
+    { k: 'parts', label: 'Components $/board', v: 6.8, s: 'V' }, { k: 'setup', label: 'Setup $', v: 25.56, s: 'V' }, { k: 'stencil', label: 'Stencil $', v: 8.21, s: 'V' },
+    { k: 'lines', label: 'Unique lines', v: 48, s: 'A' }, { k: 'feeder', label: 'Feeder load $/line', v: 1.53, s: 'V' }, { k: 'yield', label: 'Yield %', v: 98, s: 'E' }, { k: 'margin', label: 'Margin %', v: 10, s: 'E' }
+  ], scP, renderPcbaSC); renderPcbaSC();
+  $('scPart').onchange = bindMould; bindMould();
+  renderScore();
+  form('wIn', [{ k: 'units', label: 'Units sold', v: 1000 }, { k: 'price', label: 'Price $', v: 299 }, { k: 'months', label: 'Warranty months', v: 12 }, { k: 'doa', label: 'DOA / early-life failures %', v: 2, s: 'E' }, { k: 'afr', label: 'Annualised failure rate %', v: 3, s: 'E' }, { k: 'claim', label: 'Cost per claim $ (2× ship + part + labour)', v: 73, s: 'E' }], wS, renderWarranty); renderWarranty();
+  form('nvIn', [{ k: 'mu', label: 'Mean demand (units)', v: 1000, s: 'E' }, { k: 'sd', label: 'Std dev of demand', v: 350, s: 'E' }, { k: 'cost', label: 'Landed unit cost $', v: 157, s: 'E' }, { k: 'price', label: 'Price $', v: 299 }, { k: 'salvage', label: 'Salvage / clearance $', v: 120, s: 'E' }], nv, renderNV); renderNV();
+  form('co2In', CO2.map(r => ({ k: r[0], label: r[1] + ' kg', v: r[2], s: r[0] === 'ship' ? 'E' : 'E' })).concat([{ k: 'W', label: 'Use power W', v: 2.5, s: 'E' }, { k: 'h', label: 'Hours/day', v: 3 }, { k: 'yrs', label: 'Years', v: 3 }, { k: 'grid', label: 'Grid kg CO₂e/kWh', v: 0.37, s: 'E' }]), co2S, renderCO2); renderCO2();
+  renderRep();
+});
+
+</script>
+</body></html>

@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zine Machine v3 · 10-day prototype plan</title>
+<link rel="icon" href="data:,">
+<style>:root{
+  color-scheme:light;
+  --bg:#f6f5f1;--card:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--ink3:#8a8984;--rule:#e2e0d9;--hl:#fff6d6;
+  --acc:#2a78d6;--crit:#c0262d;--good:#1a7f37;--warn:#b26b00;
+  --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#6250d6;
+  --v:#1a7f37;--a:#2a78d6;--e:#b26b00;--x:#8a8984;--night:#0000000f;
+}
+@media (prefers-color-scheme:dark){:root{
+  color-scheme:dark;
+  --bg:#121211;--card:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--ink3:#8d8c85;--rule:#2f2e2b;--hl:#2d2a1c;
+  --acc:#3987e5;--crit:#ff6b6b;--good:#4cc76a;--warn:#e0a03a;
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#9085e9;
+  --v:#4cc76a;--a:#5b9ee9;--e:#e0a03a;--night:#ffffff0d;
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Inter,Roboto,sans-serif}
+a{color:var(--acc)}
+header.top{padding:40px 0 22px;border-bottom:1px solid var(--rule)}
+.wrap{max-width:1320px;margin:0 auto;padding:0 28px}
+h1{font:600 40px/1.1 ui-serif,Georgia,"Iowan Old Style",serif;margin:0 0 6px;letter-spacing:-.01em}
+h2{font:600 26px/1.2 ui-serif,Georgia,serif;margin:56px 0 10px;padding-top:12px;border-top:2px solid var(--ink)}
+h3{font-size:17px;margin:28px 0 8px}
+.sub{color:var(--ink2);font-size:16px;max-width:980px}
+nav.site{background:var(--ink);color:var(--bg)}
+nav.site .wrap{display:flex;gap:4px;align-items:center;overflow-x:auto;white-space:nowrap;padding-top:8px;padding-bottom:8px;font-size:13.5px}
+nav.site .brand{font-weight:700;margin-right:14px;letter-spacing:.02em}
+nav.site a{color:var(--bg);text-decoration:none;padding:5px 10px;border-radius:6px;opacity:.78}
+nav.site a:hover{opacity:1;background:color-mix(in srgb,var(--bg) 14%,transparent)}
+nav.site a[aria-current=page]{opacity:1;background:var(--bg);color:var(--ink);font-weight:600}
+nav.toc{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+nav.toc .wrap{display:flex;gap:18px;overflow-x:auto;padding-top:10px;padding-bottom:10px;font-size:13px;white-space:nowrap}
+nav.toc a{text-decoration:none;color:var(--ink2)} nav.toc a:hover{color:var(--ink)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid2>*,.grid3>*{min-width:0}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:18px 20px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+@media(max-width:900px){.tiles{grid-template-columns:1fr 1fr}}
+.tile{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:14px 16px}
+.tl{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink2)}
+.tv{font:600 34px/1.15 ui-serif,Georgia,serif;margin:4px 0}.tv span{font-size:15px;color:var(--ink2);font-family:ui-sans-serif,sans-serif;font-weight:400}
+.ts{font-size:12.5px;color:var(--ink2)}
+.callout{border-left:4px solid var(--warn);background:var(--card);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.callout.crit{border-color:var(--crit)} .callout.info{border-color:var(--acc)} .callout.good{border-color:var(--good)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;background:var(--card)}
+th,td{padding:7px 9px;border-bottom:1px solid var(--rule);vertical-align:top;text-align:left}
+th{font-weight:600;font-size:12px;color:var(--ink2);background:var(--card)}
+td.n,th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.src{font-size:12px;color:var(--ink2);max-width:320px}
+tr.grp td{font-weight:700;background:var(--bg);color:var(--ink2);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+tr.off td{opacity:.38}
+tr.cp td:first-child{box-shadow:inset 3px 0 0 var(--crit)}
+tfoot td{border-top:2px solid var(--ink);font-size:14px}
+.note{font-size:12px;color:var(--ink2)}
+.scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:10px}
+.tag{display:inline-block;font:600 10px/1 ui-monospace,Menlo,monospace;padding:2px 4px;border-radius:3px;color:#fff;vertical-align:1px;cursor:help}
+.t-V{background:var(--v)}.t-A{background:var(--a)}.t-E{background:var(--e)}.t-X{background:var(--x)}.t-S{background:#7a5bbf}
+.controls{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin:12px 0;font-size:14px}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:7px;overflow:hidden;vertical-align:middle}
+.seg button{border:0;background:var(--card);color:var(--ink);padding:6px 12px;font:inherit;font-size:13.5px;cursor:pointer;border-right:1px solid var(--rule)}
+.seg button:last-child{border-right:0}.seg button.on{background:var(--ink);color:var(--bg)}
+.btn{border:1px solid var(--rule);background:var(--card);color:var(--ink);padding:7px 12px;border-radius:7px;font:inherit;font-size:13.5px;cursor:pointer}
+.btn:hover{border-color:var(--ink2)} .btn.pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:12px;font:12px/1.45 ui-monospace,Menlo,monospace;overflow:auto;max-height:520px}
+code{font:12.5px ui-monospace,Menlo,monospace}
+svg{display:block}
+svg text{font-family:ui-sans-serif,-apple-system,sans-serif}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--ink2);margin:8px 0}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.legend i.cp{background:transparent;border:2px solid var(--crit)}
+ul.tight li{margin:3px 0} ol li{margin:4px 0}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;font-size:13.5px}.kv b{color:var(--ink2);font-weight:600}
+input.num{width:58px;font:inherit;font-size:13px;padding:2px 4px;border:1px solid var(--rule);border-radius:4px;background:var(--bg);color:var(--ink);text-align:right}
+#gantt{border:1px solid var(--rule);border-radius:10px;background:var(--card);overflow-x:auto;position:relative}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;line-height:1.4;padding:8px 10px;border-radius:6px;max-width:380px;z-index:20;display:none;box-shadow:0 4px 18px #0004}
+.verdict{font:600 22px/1.3 ui-serif,Georgia,serif}
+.pf{display:inline-block;width:14px;height:14px;border:1.5px solid var(--ink);border-radius:2px;vertical-align:-2px}
+.sheet{background:#fff;color:#000;border:1px solid var(--rule);border-radius:6px;padding:18px 22px;margin:16px 0;font-size:12px}
+.sheet h4{margin:0 0 4px;font-size:16px}
+.sheet table{background:#fff;font-size:11px}
+.sheet th,.sheet td{border:1px solid #999;padding:4px 5px;color:#000;background:#fff}
+.sheet .hdr{display:grid;grid-template-columns:repeat(4,1fr);gap:4px 14px;margin:8px 0 10px}
+.sheet .hdr div{border-bottom:1px solid #999;padding:3px 0}
+footer{margin:60px 0 40px;color:var(--ink3);font-size:12.5px}
+@media print{
+  nav.toc,nav.site,#tip{display:none}
+  body.print-sheets main>*:not(#signoff),body.print-sheets header{display:none}
+  body.print-sheets #signoff>*:not(#sheets){display:none}
+  .sheet{break-after:page;border:0;margin:0}
+  h2{break-before:page}
+}
+</style></head>
+<body>
+<nav class="site" aria-label="Zine Machine sourcing pages"><div class="wrap">
+  <span class="brand">Zine Machine v3 · realization</span>
+  <a href="index.html" data-page="index">Overview</a>
+  <a href="flow.html" data-page="flow">Material flow</a>
+  <a href="proto10.html" data-page="proto10" aria-current="page">10-day proto</a>
+  <a href="gates.html" data-page="gates">Release gates</a>
+  <a href="automation.html" data-page="automation">AI execution</a>
+  <a href="expert.html" data-page="expert">Expert adds</a>
+</div></nav>
+<header class="top"><div class="wrap">
+  <div class="tl">Zine Machine v3 · 10-day prototype sprint · plan made Saturday 7 November 2026</div>
+  <h1>Three validated units in hand in under ten days?</h1>
+  <p class="sub">A plan, hour by hour, from today (day 0 = <b>Sat 7 Nov 2026, 08:00</b>) to <b>3 validated Zine Machine v3 units</b> by day 10 (<b>Tue 17 Nov, 08:00</b>). The schedule is a live model: drag a bar's right edge or type a duration, switch the PCB strategy or enclosure route, and the critical path, slack and a Monte Carlo of the finish date are recomputed in the page. Prices and stock come from the <a href="index.html">Overview</a> page where possible. <b>Every figure is tagged:</b>
+  <span class="tag t-V">V</span> verified live on 2026-11-07 (page, PDF or source file fetched) ·
+  <span class="tag t-A">A</span> from the repo or the Overview page ·
+  <span class="tag t-S">S</span> search snippet or vendor marketing, not confirmed ·
+  <span class="tag t-E">E</span> estimate. Nothing here is a quote, and nothing has been built.</p>
+</div></header>
+<nav class="toc"><div class="wrap">
+  <a href="#verdict">Verdict</a><a href="#plan">Gantt</a><a href="#tasks">Task table</a><a href="#mc">Monte Carlo</a><a href="#vendors">PCBA quick-turn</a><a href="#display">Display</a><a href="#firmware">Firmware bring-up</a><a href="#keys">Key scan</a><a href="#enclosure">Enclosure</a><a href="#buy">Day-0 buy list</a><a href="#validation">Validation</a><a href="#eol">EOL script</a><a href="#fixture">Test fixture</a><a href="#signoff">Sign-off sheets</a><a href="#risks">Risks</a><a href="#refs">Sources</a>
+</div></nav>
+
+<main class="wrap">
+
+<section id="verdict">
+  <h2>Verdict</h2>
+  <div id="tiles" class="tiles"></div>
+  <p class="note" style="margin-top:-8px">The most-likely finish is consistently optimistic compared with the Monte Carlo P50. Carrier legs move on business days, so a one-day slip that pushes a delivery past Friday costs three calendar days, not one. That asymmetry is why P50 and P90 are the numbers to plan with.</p>
+  <div class="grid2">
+    <div>
+      <p class="verdict" id="verdictLine">Computing…</p>
+      <p><b>Yes, but only with the hybrid PCB plan, and only if the units are hand-carried or built where the user is.</b> At the default inputs, hybrid with next-flight-out delivery gives <b>P50 ≈ 9.5 days, P90 ≈ 10.6 days, and about a 3-in-4 chance of day 10</b>. China quick-turn alone gives P50 ≈ 12.4 days (~20% by day 10). Domestic quick-turn gives P50 ≈ 15 days (0%): the ES8388, FE1.1s and IP5306 have no US authorised stock <span class="tag t-V" title="FindChips, live 2026-11-07: only Win Source and brokers list them">V</span>, so a US assembler waits for an LCSC kit and then adds its own turn and two courier legs. <b>Any plan that ends with a FedEx/UPS overnight hits 0%</b>: sign-off falls on a weekend, the courier picks up on Monday and delivers on Tuesday (day 10.1).</p>
+      <p>The model leaves out resource contention beyond the two shared printers, and it treats delays as independent, though an 11.11 backlog would slow LCSC and JLC's DHL leg together. <b>Treat the 3-in-4 as an upper bound; a fair planning number is 55–65%.</b> The hybrid plan works because two independent routes race to "boards in hand": JLC turnkey PCBA by DHL, and US 1-day bare boards (Advanced Circuits) reflowed in-house from an LCSC kit. Each lands on about day 5–6, and whichever is first wins.</p>
+      <p><b>Conditions for under 10 days:</b></p>
+      <ol class="tight">
+        <li><b>Orders go in today (Saturday)</b>: JLC by Saturday evening, the bare boards in time for Advanced Circuits' Monday 12:00 MST cutoff <span class="tag t-S" title="4pcb.com FAQ (search snippet)">S</span>, and DigiKey / Adafruit / LCSC within 2–3 hours of starting.</li>
+        <li><b>DigiKey's 8 Adafruit 5805 panels are still in stock when you order</b> <span class="tag t-V" title="DigiKey 22165010, live 2026-11-07: 8 in stock, 18-wk lead; Adafruit direct out of stock">V</span>. Its pin table matches J3 pin for pin (checked today against the HD458002C40 spec sheet <span class="tag t-V" title="cdn-shop.adafruit.com/product-files/5805/HD458002C40+specsheet.pdf, fetched 2026-11-07">V</span>), so the BuyDisplay panel from Hong Kong is off the critical path.</li>
+        <li><b>First light on a bench PocketBeagle within about 2.5 working days of the parts arriving on Tuesday.</b> Firmware has that much float before the boards land. It is the critical path in only ~8% of runs at the default durations, but in 36% if first light takes 3+ working days. There is no published PB2 DPI overlay (forum question unanswered <span class="tag t-S" title="forum.beagleboard.org thread 41708">S</span>).</li>
+        <li><b>Three people working through both weekends</b>: firmware; mechanics + fixture; reflow + build. A 0.4 mm-pitch QFN reflow needs someone who has done it before.</li>
+        <li><b>Board #1 needs at most about one day of bodging</b>, and validation stays a 2-hour soak plus one 1 m drop on a sacrificial fourth unit.</li>
+        <li><b>Delivery by hand or next-flight-out</b> (or the user is the builder), not an overnight courier.</li>
+      </ol>
+    </div>
+    <div>
+      <div class="callout crit"><b>What usually pushes it past day 10</b>
+        <ul class="tight">
+          <li><b>Day 0 is a Saturday, and so is day 7.</b> US vendors, Xometry and DigiKey don't ship until Monday, so the PB2, panels and test gear arrive on Tuesday (day 3). Couriers don't pick up on the second weekend either. Wednesday 11 Nov is Veterans Day and also China's 11.11 shopping peak, which loads LCSC and DHL.</li>
+          <li><b>DHL from Shenzhen.</b> JLC ships DDP; total duty is about 35% for Section 301 goods <span class="tag t-V" title="JLCPCB US tariff FAQ, updated 29 Oct 2026, fetched 2026-11-07">V</span>. No Sunday delivery.</li>
+          <li><b>First light on the panel:</b> pixel-clock polarity, the panel's 80 px of hidden overscan (its RAM is 400 px wide) and 9-bit SPI on McSPI are each worth a lost day.</li>
+          <li><b>Keycaps:</b> CFX caps only ship from China. Adafruit's Kailh caps are 17.5 mm wide <span class="tag t-S">S</span> and collide at the board's 17 mm pitch, so the fallback is printing caps in-house.</li>
+        </ul></div>
+      <div class="callout info"><b>Scope of "validated"</b>: every unit passes the EOL script (power, display, 43 keys, USB host and device, audio, battery) and the 2 h soak. One extra unit takes the drop test. All of them are checked against CAD and CTQ dimensions and signed off on a per-serial sheet. This is engineering validation of 3 prototypes, not DVT.</div>
+    </div>
+  </div>
+</section>
+
+<section id="plan">
+  <h2>1 · Gantt, hour resolution, day 0 to day 10</h2>
+  <div class="controls">
+    <span>PCB strategy <span id="segStrat" class="seg"></span></span>
+    <span>Enclosure <span id="segEnc" class="seg"></span></span>
+    <span>Working hours <span id="segCal" class="seg"></span></span>
+    <span>To the user <span id="segShip" class="seg"></span></span>
+    <button class="btn" id="btnReset">Reset durations</button>
+  </div>
+  <div class="legend" id="legend"></div>
+  <p class="note">Bars show <b>most-likely</b> durations. Drag a bar's right edge to change its duration; everything recomputes. A red outline marks the critical path. A thin line after a bar shows its total slack, and a faded bar is off the path to the finish (a backup, or a nice-to-have). Shaded columns are the hours outside the working window; tasks done by people (<code>w</code>) only advance inside it. Vendor, JLC and printer tasks (<code>c</code>) run around the clock, and carrier legs (<code>o</code>) only move on business days (pickup by 17:00, delivery at 10:30), so weekends cost real time. The dashed red line is day 10. Hover a bar for its details and source.</p>
+  <div id="gantt"></div>
+</section>
+
+<section id="tasks">
+  <h2>2 · Task table: durations, dependencies, slack</h2>
+  <p>Durations are <b>min / most likely / max</b>, in working hours for people (<code>w</code>, inside the working window), elapsed hours for vendors, JLC and printers (<code>c</code>, around the clock), and <b>business days</b> for carriers and US vendors (<code>o</code>: picked up on a weekday by 17:00, otherwise the next weekday, and delivered at 10:30 that many business days later; whole days only) (the Monte Carlo samples a triangular distribution between them). <b>ES/EF</b> are the earliest start and finish at the most-likely durations. <b>Crit %</b> is how often the task was on the critical path across the Monte Carlo runs. "any of" means the task starts when the <i>first</i> of its predecessors is done: these are the parallel backup routes.</p>
+  <div class="scroll"><table id="taskTable"></table></div>
+</section>
+
+<section id="mc">
+  <h2>3 · Monte Carlo of the finish date</h2>
+  <div class="controls"><span>Runs <span id="segN" class="seg"></span></span><span class="note">Seeded, so a given set of inputs gives the same result every time. Re-run after edits is automatic.</span></div>
+  <div class="grid2">
+    <div class="card"><div id="hist"></div><p class="note">Finish = the "units in hand" milestone. Bars are 6-hour bins; the green line is P50, the orange line is P90 and the red dashed line is day 10.</p></div>
+    <div class="card">
+      <h3 style="margin-top:0">All three strategies, same inputs</h3>
+      <table id="cmpTable"></table>
+      <p class="note">Same enclosure route and working hours as selected above. The model assumes no resource contention except where it is wired in: the Form 4 prints keycaps after the lids, and the fixture prints on the Bambu after the trays. It also assumes people work every day of the sprint, weekends included.</p>
+      <h3>Hybrid, by delivery to the user</h3>
+      <table id="shipTable"></table>
+      <p class="note">Overnight couriers don't pick up at weekends, so a Saturday sign-off ships on Monday and arrives on Tuesday (day 10). Hand-carrying (next-flight-out, or a drive) avoids that.</p>
+      <h3>Most critical tasks (current strategy)</h3>
+      <table id="critTable"></table>
+    </div>
+  </div>
+</section>
+
+<section id="vendors">
+  <h2>4 · PCB / PCBA quick-turn: what is actually on offer</h2>
+  <p>Board: <b>170 × 126 mm = 214.2 cm² = 33.2 in², 4 layers, 1.6 mm</b> <span class="tag t-A" title="bancouver40_pb2.fab.json">A</span>. That is larger than Advanced Circuits' 30 in² limit for its $66 4-layer special <span class="tag t-S">S</span> and larger than JLC's ≤100 × 100 mm row in its published 4-layer build-time table <span class="tag t-V" title="JLC help: PCB fabrication services and production time, fetched 2026-11-07">V</span>. It has 48 assembled BOM lines and 133 placements, all on the top side <span class="tag t-A" title="Overview page / design.py">A</span>.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Vendor</th><th>Offering found</th><th>Fastest turn</th><th>Fit for this board in 10 days</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td><b>JLCPCB</b> (Shenzhen)</td><td>Turnkey PCBA. All 48 lines are LCSC parts, so no consigned parts are needed except the hand-fit THT (switches, PB2 headers, J5, SW44, J10).</td><td>"Complimentary 24-hour PCB fabrication by default" on PCBA orders; ">90% of PCBA orders complete SMT within 24–48 h after fabrication"; SMT expedite <b>$47.83/day</b> <span class="tag t-V">V</span>. Then DHL 3–5 business days <span class="tag t-S">S</span> and duty of about 35% (Section 301 25% + Section 122 10% + 0–7.5% MFN) under DDP <span class="tag t-V">V</span>.</td><td><b>Primary route.</b> Cheapest and lowest risk for parts. Arrives around day 7–9.</td><td class="src">jlcpcb.com/help/article/smt-service-lead-time-overview (live); …/us-tariff-policy-faq (live, upd. 29 Oct 2026)</td></tr>
+      <tr><td><b>PCBWay</b></td><td>Bare boards in 24 h (&lt;50 pcs); 48 h for "advanced" 2–4 layer. Assembly is quoted by hand.</td><td>Assembly quote review 1–2 business days <span class="tag t-S">S</span></td><td>No faster than JLC, and the quote review costs the weekend.</td><td class="src">pcbway.com/quickturn-pcb-fabrication.html (snippet)</td></tr>
+      <tr><td><b>Advanced Circuits</b> (Aurora CO)</td><td>4–10 layers, same-day to 5-day turns. Multilayer 1-day orders due by 12:00 MST, ship the next business day. Claims 1-day PCB plus turnkey assembly.</td><td>Bare 4-layer: order Monday → ships Tuesday → overnight → Wednesday (day 4) <span class="tag t-E">E</span></td><td><b>Hybrid backup:</b> bare boards for in-house reflow. Price for 3 boards at 33 in² on a 1-day turn not retrieved (estimated $450–900).</td><td class="src">4pcb.com spec page and FAQ (snippets)</td></tr>
+      <tr><td><b>Sierra Circuits / ProtoExpress</b> (Sunnyvale)</td><td>Turnkey PRO: 2–8 layer boards "fully assembled in 5 days". Bare boards from 24 h.</td><td>5 days turnkey <span class="tag t-S">S</span></td><td>Would land around day 7 if it can source the China-only ICs. It probably can't in time, so plan on consigning them, which means waiting for the LCSC kit.</td><td class="src">protoexpress.com (marketing pages)</td></tr>
+      <tr><td><b>Screaming Circuits</b> (Canby OR)</td><td>Kitted or turnkey assembly. "Turn-times as quick as 24 hours from when we get your parts and files".</td><td>24–48 h after the kit and boards arrive <span class="tag t-S">S</span>. Rush jobs "upward of $2,000" (2017 article) <span class="tag t-S">S</span></td><td>The <b>domestic</b> strategy's assembler. The clock starts when the LCSC kit has arrived and been forwarded.</td><td class="src">Screaming Circuits profile; Electronic Design (2017)</td></tr>
+      <tr><td><b>MacroFab</b> (Houston)</td><td>"Guaranteed 10-day (or less) turnaround for up to 6-layer designs", under 50 units.</td><td>10 days <span class="tag t-S">S</span></td><td>Too slow for this sprint.</td><td class="src">macrofab.com blog, platform update (snippet)</td></tr>
+      <tr><td><b>Tempo Automation</b></td><td><b>No longer exists.</b> Tempo Automation Holdings filed a Chapter 7 liquidation petition in Delaware on 8 Dec 2023.</td><td>—</td><td>Not an option.</td><td class="src">MarketScreener / SEC filings (snippet)</td></tr>
+    </tbody></table></div>
+  <div class="callout"><b>Why "domestic" doesn't mean faster here.</b> <code>tools/zm_v3/design.py</code> picked LCSC parts. Three of them, the ES8388 (C365736), FE1.1s (C9359) and IP5306 (C181692), are not stocked by DigiKey, Mouser, Arrow or Newark; FindChips today lists only Win Source and brokers <span class="tag t-V" title="findchips.com/search/ES8388, /IP5306, /FE1.1S, live 2026-11-07">V</span>. Any US assembler therefore waits for an LCSC DHL shipment (3–5 business days, estimated), which is about as long as JLC takes to build and ship the finished boards. Swapping in US-stocked parts would need a respin, which doesn't fit in 10 days.</div>
+</section>
+
+<section id="display">
+  <h2>5 · Display: getting a panel without waiting on Hong Kong</h2>
+  <div class="grid2">
+    <div>
+      <div class="scroll"><table>
+        <thead><tr><th>Panel</th><th>Stock / lead</th><th class="n">Price</th><th>Pinout vs J3</th></tr></thead>
+        <tbody>
+          <tr><td><b>Adafruit 5805</b> = HD458002C40 (Shenzhen Huadi), 4.58″ 320×960, ST7701S, SPI3W + RGB18, no touch</td><td>DigiKey <b>8 in stock</b>, 18-wk factory lead <span class="tag t-V">V</span>; Adafruit direct <b>out of stock</b> <span class="tag t-V">V</span></td><td class="n">$19.95 <span class="tag t-V">V</span></td><td><b>Identical pins 1–40</b>: 1 LEDA, 2–3 LEDK, 4 GND, 5 VCC, 6 RST, 9 SDA, 10 SCK, 11 CS, 12 PCLK, 13 DE, 14 VS, 15 HS, 16–33 DB0–17, 34/40 GND, 35–39 touch <span class="tag t-V" title="Spec sheet §6 vs design.py J3PINS, compared 2026-11-07">V</span></td></tr>
+          <tr><td>BuyDisplay ER-TFT4.58-1 (BOM part)</td><td>Ships from HK; time not verifiable (site returns 403 to scripts)</td><td class="n">$14.33 <span class="tag t-A">A</span></td><td>J3 was drawn from the Maxen MX-046HS40FS-N01 datasheet, not this part <span class="tag t-A">A</span></td></tr>
+          <tr><td>AZ Displays ATM0458D1 (Future Electronics)</td><td>0 stock, 16 wk <span class="tag t-S">S</span></td><td class="n">—</td><td>unknown</td></tr>
+          <tr><td>Tailor Pixels TTG046XVS-01</td><td>No distributor found <span class="tag t-S">S</span></td><td class="n">—</td><td>unknown</td></tr>
+        </tbody></table></div>
+      <p class="note">DigiKey's other storefronts showed 18 (CH) and 21 (GR) units in a search snippet <span class="tag t-S">S</span>. They are probably the same warehouse, so don't count them as extra stock.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:0">Differences between the 5805 and what v3 was designed for</h3>
+      <ul class="tight">
+        <li><b>Outline 117.90 × 40.37 mm</b> <span class="tag t-V">V</span>, against the 118.8 × 41.57 mm the display chassis pocket was drawn for <span class="tag t-A">A</span>. The panel sits 0.9 mm short and 1.2 mm narrow, so centre it with tape or a printed shim. The 110.30 × 36.77 mm active area matches the site model <span class="tag t-V">V</span>.</li>
+        <li><b>Backlight:</b> V<sub>f</sub> 12 V typ., I<sub>L</sub> 40 mA typ. and 40 mA absolute maximum; LED life is rated at 20 mA <span class="tag t-V">V</span>. The board's R1 = 5.1 Ω sets 0.2 V / 5.1 Ω ≈ 39 mA <span class="tag t-A">A</span>, which is the absolute maximum. For the proto, <b>cap the PWM duty at 50% in the device tree</b>: the TPS61165 turns the CTRL duty into the FB reference, which should give about 20 mA <span class="tag t-E" title="check against the TPS61165 datasheet's PWM-dimming section">E</span>. Or fit R1 = 10 Ω.</li>
+        <li><b>RAM is 400 × 960 with 80 px of left overscan</b>, according to Adafruit <span class="tag t-V">V</span>. In DE mode the first 80 pixels of each line are hidden. See the bring-up steps.</li>
+        <li>The vendor init sets <code>3A 66</code> (18 bit/pixel) and <code>C3 02</code> (DE mode; the file's own comment gives <code>82</code> for HV mode) <span class="tag t-V" title="AUO4.58-ST7701S-3W-RGB18BIT_initcode.txt">V</span>. The board grounds DB0 and DB12 and drives RGB565 on the other 16 lines <span class="tag t-A">A</span>, so 18-bit mode is correct.</li>
+      </ul>
+      <div class="callout good"><b>Day-0 shortcut:</b> the <b>Adafruit Qualia ESP32-S3</b> (5800, $19.95, in stock <span class="tag t-V">V</span>) lists the 5805 as a known-working display and ships its init code and timings. Lighting the panel on a Qualia first proves the panel, the FPC orientation and the init sequence in about an hour, before any Linux work. If the PocketBeagle then shows nothing, the fault is on the AM62 side.</div>
+    </div>
+  </div>
+</section>
+
+<section id="firmware">
+  <h2>6 · Firmware bring-up: PocketBeagle 2 + panel on a breakout, before the PCB</h2>
+  <p>This work can start <b>today with no hardware</b> (writing the overlay and the init script) and continue on a bench rig on day 3, when the PocketBeagle, the panels and a 40-pin breakout arrive. The bench rig is wired exactly like the main board, so the same overlay works on the PCB. Pad offsets below come from the repo's <code>case/pocketbeagle2/models/industrial/pb2_header_pinout.csv</code> <span class="tag t-A">A</span>.</p>
+  <ol>
+    <li><b>Bench rig (day 3):</b> PB2 Industrial, a 5805 on a Newhaven NHD-FFC40 40-pin 0.5 mm breakout (Adafruit's 1436 is out of stock <span class="tag t-V">V</span>), and 22 short jumpers (≤10 cm, with a ground wire beside PCLK) following the J3 net map in <code>design.py</code>. Leave DB0 and DB12 on GND. Use a bench supply in constant-current mode at <b>≤20 mA, ≥13 V compliance</b> for LEDA/LEDK. VCC is 3.3 V from P1.14.</li>
+    <li><b>DSS overlay:</b> <code>tidss</code> supports <code>MEDIA_BUS_FMT_RGB565_1X16</code> in mainline <span class="tag t-V" title="drivers/gpu/drm/tidss/tidss_dispc.c, fetched 2026-11-07">V</span>. Use a <code>panel-dpi</code> node with <code>data-mapping = "rgb565"</code>, connected to the DPI video port. On AM62x the SK board's DPI is on <code>&amp;dss_ports port@1</code> <span class="tag t-E" title="from memory of k3-am62x-sk-common.dtsi; confirm in the PB2 kernel tree">E</span>. Leave I2C1 unmuxed: VOUT0_D10/D11 share P1.36/P1.33 <span class="tag t-A">A</span>.</li>
+    <li><b>Timings:</b> start with Adafruit's known-good numbers: PCLK <b>16 MHz</b>, H 10 sync / 50 front / 30 back, V 2 / 17 / 14, syncs idle high (active low), DE active high, <code>pclk_active_high = False</code> <span class="tag t-V" title="learn.adafruit.com Qualia HD458002C40 page, fetched 2026-11-07">V</span>. With 400 active pixels that is 490 × 993 total, or <b>32.9 Hz</b>. 60 Hz needs ≈ <b>29.2 MHz</b> (computed); step up 16 → 24 → 29 MHz and watch for speckle on the jumper rig.</li>
+    <li><b>Overscan:</b> for first light, set <code>hactive = 400</code> and accept 80 hidden columns. Then try HV mode (<code>C3 82</code>) with <code>hactive = 320</code> and <code>hback-porch = 30 + 80</code>, so the hidden columns fall in the porch instead of the framebuffer <span class="tag t-E">E</span>.</li>
+    <li><b>SPI init:</b> the mainline <code>panel-sitronix-st7701</code> has an SPI (MIPI-DBI, 3-wire) path, but only for <code>anbernic,rg28xx-panel</code> <span class="tag t-V" title="drivers/gpu/drm/panel/panel-sitronix-st7701.c and the binding, fetched 2026-11-07">V</span>. For the sprint, <b>don't write a kernel driver</b>: send the vendor's 42-command sequence from userspace over <code>spidev</code> at 9 bits per word (D/C bit first) before starting the display manager. McSPI's word length goes up to 32 bits <span class="tag t-E">E</span>; if 9-bit <code>spidev</code> fails, bit-bang the ~200 bytes with libgpiod. A proper <code>st7701_panel_desc</code> modelled on <code>rg28xx_desc</code> is follow-up work, and the Gantt shows it off the critical path.</li>
+    <li><b>Backlight:</b> P1.06 = <code>EHRPWM0_A</code> (pad 0x1AC, mux mode 6) <span class="tag t-A">A</span> → <code>pwm-backlight</code> with levels capped at 50% (see the display notes above). On the bench rig the bench supply stands in for the backlight; PWM is tested on the first real board.</li>
+    <li><b>Exit criteria:</b> colour bars, then a walking-ones pattern on each of the 16 data lines with no stuck or swapped bits, a stable picture for 30 min, and a console at 320 × 960 (rotated to 960 × 320 for the bar).</li>
+  </ol>
+  <div class="grid2">
+    <div><h3>Overlay skeleton (pins verified against the repo CSV)</h3><pre id="dtso"></pre></div>
+    <div><h3>3-wire 9-bit init from userspace</h3><pre id="initpy"></pre></div>
+  </div>
+</section>
+
+<section id="keys">
+  <h2>7 · Key scan: "QMK on the 74HC165 matrix"</h2>
+  <div class="grid2">
+    <div>
+      <p><b>QMK doesn't apply to v3.</b> v3 has no QMK-capable MCU (the ATmega32U4 went with v2). The 43 keys are wired straight to six chained 74HC165s on the PocketBeagle's MCU-domain pins: CLK P1.26 = MCU_GPIO0_13, SH/LD P1.28 = MCU_GPIO0_14, QH P2.05 = MCU_GPIO0_5 <span class="tag t-A">A</span>. The design intent is M4F firmware plus RPMsg to uinput, and nothing for it exists yet <span class="tag t-A">A</span>. <b>For the sprint, use a no-code kernel path:</b></p>
+      <ol class="tight">
+        <li><code>spi-gpio</code> (bit-banged SPI) on CLK and QH, with SH/LD as the load line;</li>
+        <li><code>pisosr-gpio</code>, mainline's parallel-in/serial-out driver for exactly this '165 chain <span class="tag t-V" title="drivers/gpio/gpio-pisosr.c, fetched 2026-11-07">V</span>, with <code>ngpios = &lt;48&gt;</code> and <code>load-gpios</code>;</li>
+        <li><code>gpio-keys-polled</code> at a 5 ms poll over the 43 used bits, giving one evdev input device with full rollover;</li>
+        <li>layers and the three mode keys in <code>keyd</code>, taken from the Vial layout in the repo.</li>
+      </ol>
+      <p class="note">Risk: <code>mcu_gpio0</code> may be reserved for the M4F in the PB2 device tree. Fallback: a ~150-line C scanner with libgpiod plus uinput. Chain order: U10 bit 0 = K00 … U15 = K09/K19/K29/K39/RED/YEL/BLU <span class="tag t-A">A</span>.</p>
+    </div>
+    <div><pre id="keysdts"></pre></div>
+  </div>
+</section>
+
+<section id="enclosure">
+  <h2>8 · Enclosure: in-house versus outsourced</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Part</th><th>CAD size / volume</th><th>In-house</th><th>Outsourced (Xometry / Protolabs)</th></tr></thead>
+    <tbody>
+      <tr><td>Tray_slide</td><td>178.2 × 131.2 × 12.5 mm, 40.57 cm³ <span class="tag t-A" title="mech/cover.log">A</span></td><td>Bambu, PETG, flat on the bed. About 5–8 h per tray <span class="tag t-E">E</span>; 5 trays on one printer ≈ 30–40 h</td><td>MJF PA12: Xometry expedited 1–3 business days <span class="tag t-S">S</span>, plus shipping; an order on Saturday starts Monday</td></tr>
+      <tr><td>Display chassis</td><td>127.3 × 47.1 × 15.0 mm, 12.52 cm³ <span class="tag t-A">A</span></td><td>Bambu, about 2 h each <span class="tag t-E">E</span></td><td>MJF, same order</td></tr>
+      <tr><td>Lid / cradle (translucent)</td><td>181.8 × 133.0 × 22.7 mm, 52.32 cm³, 1.6 mm walls, 0.4 mm nub interference <span class="tag t-A">A</span></td><td><b>Form 4</b> Clear Resin V5. The 200 × 125 mm platform <span class="tag t-S">S</span> is narrower than the lid's 133 mm, so <b>print upright</b> (182 mm tall, under the 210 mm Z); five lids fit side by side. Up to 100 mm/h is the vendor claim <span class="tag t-S">S</span>; expect 8–14 h plus wash, cure, sanding and clear coat <span class="tag t-E">E</span></td><td>SLA clear: Xometry expedited 2–3 business days <span class="tag t-S">S</span>; Protolabs SLA "as fast as 1 day" <span class="tag t-S">S</span></td></tr>
+    </tbody></table></div>
+  <p class="note">Recommendation: <b>in-house</b> if both printers are free all week; it also prints the fixture nest and fallback keycaps. Choosing "both" in the Gantt orders the Xometry set as insurance; the order can be cancelled for a fee if the in-house parts pass their checks. Resin lids are brittle at the snap nubs, so test the detent on a spare lid before fitting it to a unit.</p>
+</section>
+
+<section id="buy">
+  <h2>9 · Day-0 buy list: everything long-lead or single-source, in parallel, with spares</h2>
+  <p><b>Quantities are for 5 kits</b>: 3 units to ship, 1 sacrificial unit for the drop test, 1 kit of spares, plus a bench-rig PocketBeagle and panel. Rows depend on the selected strategy; the total updates.</p>
+  <div class="scroll"><table id="buyTable"></table></div>
+</section>
+
+<section id="validation">
+  <h2>10 · Validation protocol</h2>
+  <p>Run on units S/N 001–003 (to ship) and 004 (sacrificial). Limits tagged <span class="tag t-E">E</span> come from the design numbers. <b>Unit 001 sets the reference values</b>: if it measures outside an E limit but works, re-baseline the limit there and write down why on its sheet.</p>
+  <div class="scroll"><table id="valTable"></table></div>
+</section>
+
+<section id="eol">
+  <h2>11 · EOL test script outline (Python 3 on the PocketBeagle)</h2>
+  <p class="note">Runs on the unit itself, booted from the golden image, and writes <code>/var/log/zm-eol/&lt;serial&gt;.json</code>. An operator follows the prompts on the bar display and on the fixture laptop over SSH. Paths are the expected sysfs names; confirm them on unit 001.</p>
+  <button class="btn" id="copyEol">Copy script</button>
+  <pre id="eolpy"></pre>
+</section>
+
+<section id="fixture">
+  <h2>12 · Test fixture: pogo pins or USB?</h2>
+  <div class="grid2">
+    <div>
+      <h3 style="margin-top:0">Recommendation: a USB-based functional fixture now; pogo pins on the next revision</h3>
+      <p><b>A pogo-pin bed needs test pads that the v3 board doesn't have</b>: there is only <code>TP1</code> (M4F spare) <span class="tag t-A">A</span>. Adding pads means a respin. A bed-of-nails (laser-cut plates, P75 pogo pins, alignment pins in the M2 holes) also takes 3–5 days to design and build <span class="tag t-E">E</span>. For 4 units, test the assembled device through its own connectors:</p>
+      <ul class="tight">
+        <li><b>Printed nest</b> (Bambu, 3–5 h) that holds the tray, with a cut-out over the slide switch and access to all rear ports.</li>
+        <li><b>All-keys press plate</b>: a printed plate with 43 bumps, lowered by hand onto the caps, presses every key at once to test full rollover and the whole '165 chain in one step.</li>
+        <li><b>USB-C inline power meter</b> on the charge port (logs V, A and Wh) and a <b>bench supply as a battery simulator</b> at 3.8 V, 3 A limit, on J5 for the current tests.</li>
+        <li><b>Two USB flash drives</b> for the USB-A ports, plus a <b>USB load</b> (0.5 A per port) for the power-budget test.</li>
+        <li><b>TRRS loopback plug</b> (tip→sleeve-mic through a 10 kΩ/1 kΩ divider) and a 3.5 mm TRS plug into the laptop's line-in.</li>
+        <li><b>Laptop on PB2 USB-C</b>: USB gadget Ethernet for SSH and the device-mode test.</li>
+        <li><b>K-type thermocouples</b> (battery, keyboard deck, PB2 area), a <b>push-pull force gauge</b>, calipers, feeler gauges.</li>
+      </ul>
+      <h3>Pads to add in Rev B, for a later pogo fixture</h3>
+      <p class="note">+5V_SYS, +3V3, VBAT, VIN_CHG, BL_LEDA, BL_LEDK, KEY_CLK, KEY_SHLD, KEY_QH, I2C_SCL/SDA, LCD_PCLK, USB_UP_P/N, GND ×4, all Ø1.0 mm on a 2.54 mm grid on the bottom side, plus 2 tooling holes.</p>
+    </div>
+    <div class="card"><div id="fixtureSvg"></div></div>
+  </div>
+</section>
+
+<section id="signoff">
+  <h2>13 · Sign-off sheet per unit</h2>
+  <div class="controls">
+    <label>Serial prefix <input id="snPrefix" value="ZM3-P10-" style="width:110px;font:inherit"></label>
+    <label>Units <input id="snCount" type="number" min="1" max="10" value="4" class="num"></label>
+    <button class="btn pri" id="btnPrint">Print sheets only</button>
+  </div>
+  <div id="sheets"></div>
+</section>
+
+<section id="risks">
+  <h2>14 · Risk register</h2>
+  <div class="scroll"><table id="riskTable"></table></div>
+</section>
+
+<section id="refs">
+  <h2>Sources (fetched 2026-11-07 unless marked)</h2>
+  <ul class="tight note">
+    <li>Repo: <code>tools/zm_v3/design.py</code> (pin map, J3 pins, parts); <code>pcb/bancouver40_pb2/README.md</code> (DRC 0, verify-before-ordering list, 2.3 A budget); <code>DESIGN_v3.md</code> (M4F key scan); <code>case/pocketbeagle2/models/industrial/pb2_header_pinout.csv</code> (pad offsets); <code>mech/cover.log</code>, <code>mech/cover.py</code>, <code>mech/*.fab.json</code> (sizes, volumes, clearances); <code>sourcing/index.html</code> (prices, stock).</li>
+    <li>Adafruit 5805, <a href="https://www.adafruit.com/product/5805">adafruit.com/product/5805</a> (out of stock, $19.95); spec sheet <a href="https://cdn-shop.adafruit.com/product-files/5805/HD458002C40+specsheet.pdf">HD458002C40</a> (pin table, outline, backlight); <a href="https://cdn-shop.adafruit.com/product-files/5805/AUO4.58-ST7701S-3W-RGB18BIT_initcode.txt">init code</a>; <a href="https://learn.adafruit.com/adafruit-qualia-esp32-s3-for-rgb666-displays/qualia-rgb666-with-hd458002c40-4-58-320x960-bar-display">Qualia guide timings</a>; <a href="https://www.adafruit.com/product/5800">Qualia 5800</a> (in stock); <a href="https://www.adafruit.com/product/1436">1436</a> (out of stock); <a href="https://www.adafruit.com/product/2011">2011 LiPo</a> (60 × 36 × 7 mm, in stock, $12.50); <a href="https://www.adafruit.com/product/5113">5113 Choc 10-pack</a> (52 in stock).</li>
+    <li>DigiKey <a href="https://www.digikey.com/en/products/detail/adafruit-industries-llc/5805/22165010">5805</a> (8 in stock, 18 wk) · <a href="https://www.digikey.com/en/products/detail/beagleboard/100003007/28118583">PB2 Industrial 100003007</a> ($51.03, 3,442 in stock, 14 wk).</li>
+    <li>Linux mainline (raw.githubusercontent.com/torvalds/linux/master): <code>panel-sitronix-st7701.c</code> and <code>sitronix,st7701.yaml</code> (SPI path for rg28xx only), <code>tidss_dispc.c</code> (RGB565_1X16), <code>gpio-pisosr.c</code>.</li>
+    <li>JLCPCB <a href="https://jlcpcb.com/help/article/smt-service-lead-time-overview">SMT lead time</a>, <a href="https://jlcpcb.com/help/article/pcb-fabrication-services-and-production-time">PCB build time</a>, <a href="https://jlcpcb.com/help/article/us-tariff-policy-faq">US tariff FAQ</a> (updated 29 Oct 2026).</li>
+    <li>FindChips <a href="https://www.findchips.com/search/ES8388">ES8388</a>, <a href="https://www.findchips.com/search/IP5306">IP5306</a>, <a href="https://www.findchips.com/search/FE1.1S">FE1.1S</a>: no US authorised distributor.</li>
+    <li>Snippets, not opened: 4pcb.com turn times and FAQ; protoexpress.com turnkey; Screaming Circuits profile and Electronic Design (2017); MacroFab blog (10-day); MarketScreener (Tempo Chapter 7, 8 Dec 2023); PCBWay quick-turn; Xometry expedite FAQ; Hubs/Protolabs SLA "1 day"; Formlabs Form 4 build volume; DHL CN→US 3–5 business days; BeagleBoard forum thread 41708 (PB2 DPI overlay, unanswered); TI E2E AM62P panel-dpi thread; Adafruit Kailh caps 17.5 × 16.6 mm.</li>
+  </ul>
+</section>
+<footer>Generated 2026-11-07 for Zine Machine v3 (repo zinemachine0-v3). The schedule and Monte Carlo run in your browser and depend only on the inputs above. Re-verify every V figure before ordering, and treat every E figure as a starting point for a real quote.</footer>
+</main>
+<div id="tip"></div>
+
+<script id="engine">
+// ===================== status tags =====================
+const TAGTXT = {
+  V: 'Verified live 2026-11-07 (page, PDF or source fetched)',
+  A: 'From the repo or the Overview page (sourcing/index.html)',
+  S: 'Search snippet or vendor marketing; not confirmed',
+  E: 'Estimate; see the basis'
+};
+const tag = (s, t) => `<span class="tag t-${s}" title="${(t ? t + ' · ' : '') + TAGTXT[s]}">${s}</span>`;
+
+// ===================== tracks =====================
+const TRACKS = [
+  { id: 'dfm', name: 'Design freeze & DFM', c: 'var(--s6)' },
+  { id: 'pcb', name: 'PCB / PCBA', c: 'var(--s2)' },
+  { id: 'kit', name: 'Parts kitting', c: 'var(--s4)' },
+  { id: 'pb', name: 'PocketBeagle 2', c: 'var(--s1)' },
+  { id: 'disp', name: 'Display', c: 'var(--s5)' },
+  { id: 'enc', name: 'Enclosure', c: 'var(--s3)' },
+  { id: 'fw', name: 'Display firmware', c: 'var(--s1)' },
+  { id: 'key', name: 'Key-scan firmware', c: 'var(--s6)' },
+  { id: 'tf', name: 'Test fixture', c: 'var(--s4)' },
+  { id: 'asm', name: 'Assembly', c: 'var(--s2)' },
+  { id: 'val', name: 'Validation', c: 'var(--s3)' },
+  { id: 'ship', name: 'Shipping', c: 'var(--s5)' }
+];
+
+// ===================== tasks =====================
+// d = [min, most likely, max] hours. cal: 'w' = people (working window), 'c' = continuous (vendors, carriers, printers).
+// deps: array (all of) or function(ctx) -> {all:[...]} | {any:[...]}. when: function(ctx) -> active?
+const C = ctx => ctx; // for readability
+const TASKS = [
+  // ---- design freeze & DFM ----
+  { id: 'dfm1', tr: 'dfm', n: 'Freeze rev A: re-run ERC/DRC, regenerate fab outputs, git tag', cal: 'w', d: [1.5, 3, 6], deps: [], s: 'E', b: 'README: ERC 0 / DRC 0 / parity clean at release (A). Re-run on a copy; fab/ already holds gerbers, BOM, CPL.' },
+  { id: 'dfm2', tr: 'dfm', n: 'Panel gate: 5805 pin table vs J3 (done: identical)', cal: 'w', d: [0.25, 0.5, 1], deps: [], s: 'V', b: 'HD458002C40 spec sheet §6 compared with design.py J3PINS on 2026-11-07: pins 1–40 identical.' },
+  { id: 'dfm3', tr: 'dfm', n: 'DFM fixes: JLC BOM match, CPL rotation preview, USB-A stock (10 of 74), F32Q placed + F32R loose, J5 polarity', cal: 'w', d: [2, 4, 8], deps: ['dfm1', 'dfm2'], s: 'E', b: 'README "verify before ordering" items 1–6; JLC rotations were never checked for v3 (Overview page). No copper changes in the sprint.' },
+  { id: 'dfm4', tr: 'dfm', n: 'Order go / no-go', cal: 'w', d: [0.25, 0.5, 1], deps: ['dfm3'], ms: true, s: 'E', b: 'Gate: BOM 48/48 matched and in stock, CPL preview signed off, panel pinout confirmed.' },
+  // ---- PCB: China (JLC) ----
+  { id: 'cn1', tr: 'pcb', n: 'JLC: engineering review + parts lock', cal: 'c', d: [3, 8, 24], deps: ['dfm4'], when: x => x.strat !== 'dom', s: 'E', b: 'JLC pauses the clock on "Pending" questions (V). A Saturday-evening order is reviewed on CN Sunday morning.' },
+  { id: 'cn2', tr: 'pcb', n: 'JLC 4-layer fab (free 24 h build on PCBA orders)', cal: 'c', d: [22, 30, 54], deps: ['cn1'], when: x => x.strat !== 'dom', s: 'V', b: 'JLC SMT lead-time article: "complimentary 24-hour PCB fabrication by default" (V). The board is larger than the ≤100×100 row of the 4-layer table, so the mode is E.' },
+  { id: 'cn3', tr: 'pcb', n: 'JLC SMT + AOI (+ baking for MSL parts)', cal: 'c', d: [20, 36, 72], deps: ['cn2'], when: x => x.strat !== 'dom', s: 'V', b: '">90% of PCBA orders complete SMT within 24–48 h after fabrication" (V). Baking adds 48 h if needed (V). Expedite $47.83/day (V).' },
+  { id: 'cn4', tr: 'pcb', n: 'DHL Express CN→US, customs (DDP, ~35% duty)', cal: 'o', cn: 1, d: [2, 3, 5], deps: ['cn3'], when: x => x.strat !== 'dom', s: 'S', b: 'Business days to delivery, door to door. DHL Express CN→US 3–5 business days (snippet). A JLC finish in the CN morning is picked up the same day. 11.11 peak; no weekend delivery. Duty per JLC FAQ (V).' },
+  // ---- PCB: domestic and hybrid backup ----
+  { id: 'lcsc', tr: 'pcb', n: 'LCSC kit (ES8388, FE1.1s, IP5306 + all passives) by DHL', cal: 'o', cn: 1, d: [2, 3, 5], deps: ['buy0'], when: x => x.strat !== 'cn', s: 'E', b: 'No US authorised stock for 3 ICs (FindChips, V). LCSC ships DHL; 3–5 business days assumed; 11.11 backlog risk.' },
+  { id: 'ac', tr: 'pcb', n: 'Bare 4-layer quick-turn (Advanced Circuits 1-day; Mon 12:00 MST cutoff)', cal: 'o', d: [2, 2, 4], deps: ['dfm4'], when: x => x.strat !== 'cn', s: 'S', b: '4pcb.com: 4–10 layers same-day to 5-day; 1-day multilayer orders by 12:00 MST, ship next business day (snippets). Sat order → Mon start → Wed delivery.' },
+  { id: 'kitfwd', tr: 'pcb', n: 'Audit LCSC kit, overnight it to the assembler', cal: 'o', d: [1, 1, 2], deps: ['lcsc'], when: x => x.strat === 'dom', s: 'E', b: 'Kit check against the BOM, labelling, overnight courier.' },
+  { id: 'sc', tr: 'pcb', n: 'Screaming Circuits kitted assembly, rush', cal: 'o', d: [1, 2, 4], deps: ['ac', 'kitfwd'], when: x => x.strat === 'dom', s: 'S', b: '"As quick as 24 hours from when we get your parts and files" (company profile, snippet). Rush pricing above $2,000 (2017, snippet).' },
+  { id: 'scship', tr: 'pcb', n: 'Overnight courier, assembler → you', cal: 'o', d: [1, 1, 2], deps: ['sc'], when: x => x.strat === 'dom', s: 'E', b: 'FedEx/UPS overnight.' },
+  { id: 'sten', tr: 'pcb', n: 'Stencil (OSH Stencils or similar), overnight', cal: 'o', d: [1, 1, 3], deps: ['dfm4'], when: x => x.strat === 'hy', s: 'E', b: 'US stencil vendor, next-business-day ship assumed. Order Saturday → arrives Tuesday.' },
+  { id: 'reflow', tr: 'pcb', n: 'In-house reflow of 3 boards (hot plate / oven, QFN-28 0.4 mm, rework)', cal: 'w', d: [10, 16, 28], deps: ['ac', 'lcsc', 'sten'], when: x => x.strat === 'hy', s: 'E', b: '127 SMD placements per board. A skilled assembler with a stencil manages ~4–6 h per board, including inspection and rework.' },
+  { id: 'bih', tr: 'pcb', n: 'Assembled boards in hand', cal: 'c', d: [0, 0, 0], ms: true,
+    deps: x => x.strat === 'cn' ? { all: ['cn4'] } : x.strat === 'dom' ? { all: ['scship'] } : { any: ['cn4', 'reflow'] }, s: 'E', b: 'Hybrid: whichever set arrives first (JLC boards or the in-house reflowed boards).' },
+  // ---- kitting ----
+  { id: 'buy0', tr: 'kit', n: 'Place every day-0 order (see buy list)', cal: 'w', d: [1.5, 2.5, 4], deps: [], s: 'E', b: 'DigiKey, Adafruit, LCSC, Chosfox, BuyDisplay, stencil, test gear. JLC and Advanced Circuits wait for the go/no-go.' },
+  { id: 'us', tr: 'kit', n: 'US deliveries: switches, LiPo, headers, F32R, Qualia, FPC breakout, test gear', cal: 'o', d: [1, 1, 2], deps: ['buy0'], s: 'E', b: 'Order Saturday; distributors ship Monday; overnight → Tuesday ~10:30. Adafruit 5113: 52 packs in stock (V).' },
+  { id: 'kits', tr: 'kit', n: 'Sort 5 kits, label serials, incoming inspection', cal: 'w', d: [2, 3, 5], deps: ['us', 'pb1', 'p5805'], s: 'E', b: '5 kits = 3 ship + 1 drop + 1 spare.' },
+  { id: 'cfx', tr: 'kit', n: 'CFX keycaps from Chosfox (CN) by DHL', cal: 'c', d: [96, 170, 300], deps: ['buy0'], s: 'E', b: 'No US seller of CFX caps found (snippet search). Processing plus DHL time unknown.' },
+  { id: 'capprint', tr: 'kit', n: 'Fallback: print 5 × 43 caps on the Form 4 (after the lids)', cal: 'c', d: [8, 12, 20], deps: x => ({ all: x.enc === 'out' ? ['enc0'] : ['form'] }), s: 'E', b: '16.5 mm caps at 17 mm pitch, blank. Adafruit Kailh caps are 17.5 mm wide (S) and would collide.' },
+  { id: 'caps', tr: 'kit', n: 'Keycaps in hand', cal: 'c', d: [0, 0, 0], ms: true, deps: { any: ['cfx', 'capprint'] }, s: 'E', b: 'First of the two.' },
+  // ---- PB2 ----
+  { id: 'pb1', tr: 'pb', n: 'PB2 Industrial × 6 from DigiKey, overnight', cal: 'o', d: [1, 1, 2], deps: ['buy0'], s: 'V', b: 'DigiKey 100003007: $51.03, 3,442 in stock (V). Ships Monday after a Saturday order (E).' },
+  { id: 'pb2', tr: 'pb', n: 'Flash golden-base image to eMMC × 6, record serials', cal: 'w', d: [1.5, 3, 6], deps: ['pb1'], s: 'E', b: '64 GB eMMC, so no microSD. Flash over USB-C.' },
+  // ---- display ----
+  { id: 'p5805', tr: 'disp', n: 'Adafruit 5805 × 8 (all DigiKey stock), overnight', cal: 'o', d: [1, 1, 2], deps: ['buy0'], s: 'V', b: 'DigiKey 22165010: 8 in stock, $19.95 (V). Adafruit direct out of stock (V).' },
+  { id: 'pbd', tr: 'disp', n: 'BuyDisplay ER-TFT4.58-1 × 5 (backup, HK)', cal: 'c', d: [120, 200, 340], deps: ['buy0'], s: 'E', b: 'Site blocks scripted fetches; the shipping time can\'t be verified. Not a predecessor of anything: insurance only.' },
+  { id: 'pin', tr: 'disp', n: 'Incoming check: meter FPC vs J3, outline 117.90 × 40.37, contact side', cal: 'w', d: [1, 2, 4], deps: ['p5805'], s: 'E', b: 'The spec sheet already matches (V); meter one panel anyway and check the FPC contact side against F32Q (top contact).' },
+  { id: 'qualia', tr: 'disp', n: 'Qualia ESP32-S3 smoke test with Adafruit\'s init: panel proven', cal: 'w', d: [1, 2, 5], deps: ['p5805', 'us'], s: 'E', b: 'Qualia 5800 lists the 5805 as known working (V).' },
+  // ---- display firmware ----
+  { id: 'dts', tr: 'fw', n: 'DT overlay: tidss VOUT0 RGB565, pad mux, panel-dpi timings', cal: 'w', d: [3, 6, 16], deps: [], s: 'E', b: 'tidss supports RGB565_1X16 (V). No published PB2 DPI overlay (forum, S). Write before the hardware arrives.' },
+  { id: 'spi', tr: 'fw', n: 'SPI 3-wire 9-bit init script (42 vendor commands)', cal: 'w', d: [2, 4, 10], deps: [], s: 'E', b: 'Vendor sequence fetched (V); spidev 9-bit on McSPI unverified (E).' },
+  { id: 'rig', tr: 'fw', n: 'Bench rig: PB2 + 5805 on NHD-FFC40, 22 jumpers, CC backlight', cal: 'w', d: [2, 4, 8], deps: ['pb1', 'p5805', 'us'], s: 'E', b: 'Wired to the J3 net map; 16 MHz PCLK on ≤10 cm jumpers.' },
+  { id: 'light', tr: 'fw', n: 'First light on PB2: colour bars, polarity, overscan, bit order', cal: 'w', d: [4, 16, 60], deps: ['dts', 'spi', 'rig', 'qualia'], s: 'E', b: 'The long tail: there is no reference design for PB2 + DPI + ST7701S. Likely ≈ 1 working day; max ≈ 4 bad days.' },
+  { id: 'hz60', tr: 'fw', n: '60 Hz timing (≈29 MHz), rotation, console font', cal: 'w', d: [1, 3, 10], deps: ['light'], s: 'E', b: '490 × 993 × 60 Hz = 29.2 MHz (computed).' },
+  { id: 'drv', tr: 'fw', n: 'Optional: proper st7701 panel desc in the kernel (SPI path)', cal: 'w', d: [8, 16, 40], deps: ['light'], s: 'E', b: 'Off the critical path: userspace init is enough for validation.' },
+  { id: 'bl', tr: 'fw', n: 'Backlight: EHRPWM0_A P1.06 → pwm-backlight, cap 50%', cal: 'w', d: [1, 2, 6], deps: ['dts', 'brd1'], s: 'E', b: 'Needs the real board (TPS61165 is on it).' },
+  // ---- keys ----
+  { id: 'k1', tr: 'key', n: 'Key-scan DT: spi-gpio + pisosr-gpio (48) + gpio-keys-polled', cal: 'w', d: [2, 5, 14], deps: [], s: 'E', b: 'gpio-pisosr is mainline (V). mcu_gpio0 ownership on PB2 unknown (E).' },
+  { id: 'k2', tr: 'key', n: 'Keymap, layers and mode keys in keyd', cal: 'w', d: [1.5, 3, 6], deps: ['k1'], s: 'E', b: 'From the bancouver40 Vial layout; layer legends per README.' },
+  { id: 'k3', tr: 'key', n: 'On-board: walk 43 keys, chain order, debounce', cal: 'w', d: [1, 2, 8], deps: ['k2', 'brd1'], s: 'E', b: 'Needs the real board.' },
+  // ---- enclosure ----
+  { id: 'enc0', tr: 'enc', n: 'Export STL/3MF, CTQ check, orient lid upright', cal: 'w', d: [1, 2, 4], deps: [], s: 'E', b: 'Lid 181.8 × 133 mm is wider than the Form 4\'s 125 mm platform, so it prints upright.' },
+  { id: 'bambu', tr: 'enc', n: 'Bambu: 5 trays + 5 chassis (PETG), 1 printer', cal: 'c', d: [30, 40, 60], deps: ['enc0'], when: x => x.enc !== 'out', s: 'E', b: '40.6 + 12.5 cm³ per set (A); ~5–8 h per tray, ~2 h per chassis.' },
+  { id: 'form', tr: 'enc', n: 'Form 4: 5 lids, Clear V5, upright, wash + cure', cal: 'c', d: [10, 14, 24], deps: ['enc0'], when: x => x.enc !== 'out', s: 'E', b: '182 mm tall prints; "up to 100 mm/h" is the vendor claim (S).' },
+  { id: 'lidfin', tr: 'enc', n: 'Lid finishing: supports, sand, clear coat', cal: 'w', d: [4, 6, 12], deps: ['form'], when: x => x.enc !== 'out', s: 'E', b: 'Clear look needs wet sanding and a clear coat.' },
+  { id: 'encih', tr: 'enc', n: 'In-house enclosure sets done', cal: 'c', d: [0, 0, 0], ms: true, deps: ['bambu', 'lidfin'], when: x => x.enc !== 'out', s: 'E', b: '' },
+  { id: 'xom', tr: 'enc', n: 'Xometry expedited MJF trays/chassis + SLA lids, shipped', cal: 'o', d: [2, 3, 5], deps: ['enc0'], when: x => x.enc !== 'in', s: 'S', b: 'Xometry expedite: MJF 1–3, SLA 2–3 business days (snippet). Saturday order starts Monday; ground or overnight shipping.' },
+  { id: 'encin', tr: 'enc', n: 'Enclosure parts in hand', cal: 'c', d: [0, 0, 0], ms: true,
+    deps: x => x.enc === 'in' ? { all: ['encih'] } : x.enc === 'out' ? { all: ['xom'] } : { any: ['encih', 'xom'] }, s: 'E', b: '' },
+  { id: 'ctq', tr: 'enc', n: 'CTQ dims on set 1 (calipers) vs CAD', cal: 'w', d: [1, 2, 4], deps: ['encin'], s: 'E', b: 'See test T15.' },
+  // ---- test fixture ----
+  { id: 'tf1', tr: 'tf', n: 'Fixture design: nest, all-keys plate, loopbacks', cal: 'w', d: [2, 4, 8], deps: [], s: 'E', b: 'USB-based functional fixture (section 12).' },
+  { id: 'tf2', tr: 'tf', n: 'Print nest + key plate', cal: 'c', d: [5, 8, 14], deps: x => ({ all: x.enc === 'out' ? ['tf1'] : ['tf1', 'bambu'] }), s: 'E', b: 'Bambu, after the trays (shared printer).' },
+  { id: 'tf3', tr: 'tf', n: 'EOL script (Python) + JSON log', cal: 'w', d: [3, 6, 12], deps: ['tf1'], s: 'E', b: 'Section 11 outline.' },
+  // ---- assembly ----
+  { id: 'brd1', tr: 'asm', n: 'Board #1 bring-up: current-limited power, rails, PB2 boot, hub, codec ID', cal: 'w', d: [3, 6, 30], deps: ['bih', 'us', 'pb2'], s: 'E', b: 'Bench supply on J5 as a battery simulator, 3.8 V, 0.5 A limit first. Max allows ~2 days for a rev-A bodge (new 4-layer board, 3 power ICs, hub, codec).' },
+  { id: 'disp5', tr: 'asm', n: 'Display on the real board', cal: 'w', d: [1, 2, 8], deps: ['brd1', 'light'], s: 'E', b: 'Same overlay; real TPS61165 and F32Q.' },
+  { id: 'build', tr: 'asm', n: 'Build 4 units: headers, 43 switches, THT, battery, panel + FPC fold, caps, lid', cal: 'w', d: [6, 10, 18], deps: ['brd1', 'kits', 'caps', 'encin', 'pin'], s: 'E', b: '~1.5 h for the first, ~45 min after (Overview page, E) × 4, plus 43 switches each.' },
+  { id: 'img', tr: 'asm', n: 'Freeze golden image (overlay, init, keys, backlight, EOL) + flash 4', cal: 'w', d: [1.5, 3, 6], deps: ['disp5', 'hz60', 'bl', 'k3', 'tf3'], s: 'E', b: '' },
+  // ---- validation ----
+  { id: 'eol', tr: 'val', n: 'EOL functional test × 4 in fixture', cal: 'w', d: [2, 3, 6], deps: ['build', 'img', 'tf2'], s: 'E', b: 'T01–T10 per unit, ~40 min each.' },
+  { id: 'soak', tr: 'val', n: '2 h thermal soak (lid on) on battery + discharge log', cal: 'c', d: [2.5, 3.5, 5], deps: ['eol'], s: 'E', b: 'All 4 in parallel. Runs past 2 h to log the battery run-down.' },
+  { id: 'chg', tr: 'val', n: 'Charge cycle: 3.6 V → full, current and termination', cal: 'c', d: [2.5, 3.5, 6], deps: ['soak'], s: 'E', b: '2000 mAh cell at the IP5306 charge rate.' },
+  { id: 'drop', tr: 'val', n: '1 m drop × 10 on unit 004, then retest', cal: 'w', d: [1, 1.5, 3], deps: ['eol'], s: 'E', b: 'Sacrificial unit.' },
+  { id: 'lid', tr: 'val', n: 'Lid slide force, detent retention, 50 cycles', cal: 'w', d: [0.5, 1, 2], deps: ['build'], s: 'E', b: 'Force gauge.' },
+  { id: 'fit', tr: 'val', n: 'Fit vs CAD + CTQ dims', cal: 'w', d: [1, 1.5, 3], deps: ['build', 'ctq'], s: 'E', b: 'Feeler gauges and calipers.' },
+  { id: 'sign', tr: 'val', n: 'Sign-off sheets, photos, pack (UN3481)', cal: 'w', d: [0.5, 1, 2], deps: ['chg', 'drop', 'lid', 'fit'], s: 'E', b: 'Battery in equipment, Section II.' },
+  // ---- ship ----
+  { id: 'cour', tr: 'ship', n: 'Overnight courier to the user (FedEx / UPS)', cal: 'o', d: [1, 1, 2], deps: ['sign'], when: x => x.ship === 'ovn', s: 'E', b: 'Pickup on a weekday by 17:00, delivered next business day 10:30. A weekend sign-off waits until Monday. Lithium in equipment is allowed (UN3481 Section II).' },
+  { id: 'nfo', tr: 'ship', n: 'Next-flight-out / same-day courier (hand-carried)', cal: 'c', d: [6, 10, 16], deps: ['sign'], when: x => x.ship === 'nfo', s: 'E', b: 'Airline counter-to-counter or a dedicated driver; runs on weekends. ~$300–700 (E). Check the airline\'s lithium-in-equipment rules.' },
+  { id: 'done', tr: 'ship', n: '3 validated units in the user\'s hands', cal: 'c', d: [0, 0, 0], ms: true, deps: x => ({ all: [x.ship === 'ovn' ? 'cour' : x.ship === 'nfo' ? 'nfo' : 'sign'] }), s: 'E', b: 'Day 10 = hour 240 (Tue 17 Nov 08:00).' }
+];
+const DEFAULTS = TASKS.map(t => t.d.slice());
+
+// ===================== calendar =====================
+const T0 = Date.UTC(2026, 10, 7, 8, 0); // day 0 08:00 (local wall clock, shown without timezone)
+const CAL = { ws: 8, we: 22 };          // working window (hour of day)
+const hod = t => (((t + 8) % 24) + 24) % 24;
+function addW(t, d) {
+  if (CAL.we - CAL.ws >= 24) return t + d;
+  let g = 0;
+  while (g++ < 2000) {
+    const h = hod(t);
+    if (h < CAL.ws - 1e-9) { t += CAL.ws - h; continue; }
+    if (h >= CAL.we - 1e-9) { t += 24 - h + CAL.ws; continue; }
+    if (d <= 1e-9) return t;
+    const av = CAL.we - h;
+    if (d <= av) return t + d;
+    d -= av; t += av;
+  }
+  return t;
+}
+function subW(t, d) {
+  if (CAL.we - CAL.ws >= 24) return t - d;
+  let g = 0;
+  while (g++ < 2000) {
+    const h = hod(t);
+    if (h > CAL.we + 1e-9) { t -= h - CAL.we; continue; }
+    if (h <= CAL.ws + 1e-9) { if (d <= 1e-9) return t; t -= h + 24 - CAL.we; continue; }
+    if (d <= 1e-9) return t;
+    const av = h - CAL.ws;
+    if (d <= av) return t - d;
+    d -= av; t -= av;
+  }
+  return t;
+}
+// 'o' = carrier / vendor business days: picked up on a business day by 17:00 (else the next business day),
+// delivered at 10:30 after n business days. Day 0 (Sat 7 Nov) has index 0; Mon–Fri are business days.
+const PICK = 17, DROP = 10.5;
+const dayOf = t => Math.floor((t + 8) / 24);
+const isBD = D => { const wd = (6 + D) % 7; return wd >= 1 && wd <= 5; };
+const atH = (D, h) => D * 24 + h - 8;
+const nextBD = D => { do D++; while (!isBD(D)); return D; };
+const prevBD = D => { do D--; while (!isBD(D)); return D; };
+function addO(t, n, cut = PICK) {
+  n = Math.max(1, Math.round(n));
+  let D = dayOf(t);
+  if (!isBD(D) || hod(t) > cut) D = nextBD(D);
+  for (let i = 0; i < n; i++) D = nextBD(D);
+  return atH(D, DROP);
+}
+function subO(T, n, cut = PICK) {
+  n = Math.max(1, Math.round(n));
+  let D = dayOf(T);
+  if (!isBD(D) || atH(D, DROP) > T + 1e-9) D = prevBD(D);
+  for (let i = 0; i < n; i++) D = prevBD(D);
+  return atH(D, Math.min(cut, 23.99));
+}
+// China-origin legs (cn: 1): the shipper's working day is the US night, so any hour of a US business day counts as that day's pickup
+const cutOf = t => t && t.cn ? 24 : PICK;
+const addT = (t, d, cal, task) => cal === 'w' ? addW(t, d) : cal === 'o' ? addO(t, d, cutOf(task)) : t + d;
+const subT = (t, d, cal, task) => cal === 'w' ? subW(t, d) : cal === 'o' ? subO(t, d, cutOf(task)) : t - d;
+function workBetween(a, b) { // working hours in [a,b]
+  if (CAL.we - CAL.ws >= 24) return Math.max(0, b - a);
+  let w = 0, t = a;
+  while (t < b - 1e-9) {
+    const h = hod(t), step = Math.min(b - t, h < CAL.ws ? CAL.ws - h : h >= CAL.we ? 24 - h + CAL.ws : CAL.we - h);
+    if (h >= CAL.ws && h < CAL.we) w += step;
+    t += step;
+  }
+  return w;
+}
+const fmtT = h => {
+  const D = new Date(T0 + h * 3600e3), wd = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][D.getUTCDay()];
+  return `${wd} ${String(D.getUTCDate()).padStart(2, '0')} Nov ${String(D.getUTCHours()).padStart(2, '0')}:${String(D.getUTCMinutes()).padStart(2, '0')}`;
+};
+const fmtD = h => (h / 24).toFixed(1);
+
+// ===================== CPM =====================
+const byId = Object.fromEntries(TASKS.map(t => [t.id, t]));
+function resolve(ctx) {
+  const act = TASKS.filter(t => !t.when || t.when(ctx));
+  const on = new Set(act.map(t => t.id));
+  const R = {};
+  for (const t of act) {
+    let dd = typeof t.deps === 'function' ? t.deps(ctx) : Array.isArray(t.deps) ? { all: t.deps } : t.deps;
+    const mode = dd.any ? 'any' : 'all', list = (dd.any || dd.all).filter(i => on.has(i));
+    R[t.id] = { t, mode, deps: list };
+  }
+  // topo order
+  const order = [], seen = {};
+  const visit = id => { if (seen[id]) return; seen[id] = 1; R[id].deps.forEach(visit); order.push(id); };
+  Object.keys(R).forEach(visit);
+  // ancestors of 'done'
+  const anc = new Set(), st = ['done'];
+  while (st.length) { const i = st.pop(); if (anc.has(i)) continue; anc.add(i); R[i].deps.forEach(d => st.push(d)); }
+  return { R, order, anc };
+}
+function cpm(G, dur) { // dur: id -> hours
+  const { R, order } = G, ES = {}, EF = {};
+  for (const id of order) {
+    const r = R[id]; let s = 0;
+    if (r.deps.length) s = r.mode === 'any' ? Math.min(...r.deps.map(d => EF[d])) : Math.max(...r.deps.map(d => EF[d]));
+    if (r.t.cal === 'w' && dur[id] > 0) s = addW(s, 0);
+    ES[id] = s; EF[id] = addT(s, dur[id], r.t.cal, r.t);
+  }
+  const fin = EF.done, LF = {}, LS = {};
+  for (const id of order) LF[id] = Infinity;
+  LF.done = fin;
+  for (let k = order.length - 1; k >= 0; k--) {
+    const id = order[k], r = R[id];
+    LS[id] = LF[id] === Infinity ? Infinity : subT(LF[id], dur[id], r.t.cal, r.t);
+    if (LS[id] === Infinity) continue;
+    for (const d of r.deps) {
+      if (r.mode === 'any' && EF[d] > ES[id] + 1e-6) continue; // not the binding route
+      LF[d] = Math.min(LF[d], LS[id]);
+    }
+  }
+  // critical = on a chain of driving predecessors back from 'done' (calendar gaps such as nights or weekends
+  // would otherwise show up as false slack on the task that ends just before them)
+  const crit = new Set(), st = ['done'];
+  while (st.length) {
+    const id = st.pop(); if (crit.has(id)) continue; crit.add(id);
+    const r = R[id]; if (!r.deps.length) continue;
+    if (r.mode === 'any') { let b = r.deps[0]; for (const d of r.deps) if (EF[d] < EF[b]) b = d; st.push(b); }
+    else { const m = Math.max(...r.deps.map(d => EF[d])); r.deps.forEach(d => { if (EF[d] >= m - 1e-6) st.push(d); }); }
+  }
+  const slack = {};
+  for (const id of order) slack[id] = crit.has(id) ? 0 : LS[id] === Infinity ? Infinity : Math.max(0.01, LS[id] - ES[id]);
+  return { ES, EF, LS, LF, slack, fin, crit };
+}
+// ===================== Monte Carlo =====================
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function tri(u, a, m, b) { if (b <= a) return m; const F = (m - a) / (b - a); return u < F ? a + Math.sqrt(u * (b - a) * (m - a)) : b - Math.sqrt((1 - u) * (b - a) * (b - m)); }
+function monteCarlo(ctx, N, seed = 20261107) {
+  const G = resolve(ctx), r = rng(seed), fins = [], crit = {};
+  const ids = G.order;
+  for (let i = 0; i < N; i++) {
+    const dur = {};
+    for (const id of ids) { const d = G.R[id].t.d; dur[id] = tri(r(), d[0], d[1], d[2]); }
+    const res = cpm(G, dur);
+    fins.push(res.fin);
+    for (const id of ids) if (res.slack[id] < 0.01) crit[id] = (crit[id] || 0) + 1;
+  }
+  fins.sort((a, b) => a - b);
+  const q = p => fins[Math.min(N - 1, Math.floor(p * N))];
+  return { fins, P10: q(.1), P50: q(.5), P80: q(.8), P90: q(.9), pOn: fins.filter(f => f <= 240).length / N, crit: Object.fromEntries(Object.entries(crit).map(([k, v]) => [k, v / N])), N };
+}
+const nominal = ctx => { const G = resolve(ctx), dur = {}; for (const id of G.order) dur[id] = G.R[id].t.d[1]; return { G, ...cpm(G, dur), dur }; };
+if (typeof module !== 'undefined') module.exports = { TASKS, resolve, cpm, monteCarlo, nominal, CAL, fmtT };
+</script>
+
+<script>
+// ===================== UI state =====================
+const state = { strat: 'hy', enc: 'in', ship: 'nfo', N: 3000 };
+const ctx = () => ({ strat: state.strat, enc: state.enc, ship: state.ship });
+const STRATS = [['dom', 'Domestic quick-turn'], ['cn', 'China quick-turn + DHL'], ['hy', 'Hybrid (both, first wins)']];
+const ENCS = [['in', 'In-house (Bambu + Form 4)'], ['out', 'Xometry / Protolabs'], ['both', 'Both']];
+const CALS = [['8-22', '08–22 (14 h)'], ['8-18', '08–18 (10 h)'], ['0-24', '24 h crunch']];
+const trById = Object.fromEntries(TRACKS.map(t => [t.id, t]));
+let NOM = null, MC = null, MCALL = null, MCSHIP = null;
+
+function seg(el, opts, cur, fn) {
+  el.innerHTML = opts.map(([k, l]) => `<button data-k="${k}" class="${k === cur ? 'on' : ''}">${l}</button>`).join('');
+  el.onclick = e => { const b = e.target.closest('button'); if (!b) return; [...el.children].forEach(c => c.classList.toggle('on', c === b)); fn(b.dataset.k); };
+}
+seg(document.getElementById('segStrat'), STRATS, state.strat, k => { state.strat = k; recompute(true); });
+seg(document.getElementById('segEnc'), ENCS, state.enc, k => { state.enc = k; recompute(true); });
+seg(document.getElementById('segCal'), CALS, '8-22', k => { const [a, b] = k.split('-').map(Number); CAL.ws = a; CAL.we = b; recompute(true); });
+seg(document.getElementById('segN'), [['1000', '1,000'], ['3000', '3,000'], ['10000', '10,000']], '3000', k => { state.N = +k; recompute(true); });
+const SHIPS = [['none', 'Built where the user is'], ['nfo', 'Next-flight-out'], ['ovn', 'Overnight courier']];
+seg(document.getElementById('segShip'), SHIPS, state.ship, k => { state.ship = k; recompute(true); });
+document.getElementById('btnReset').onclick = () => { TASKS.forEach((t, i) => t.d = DEFAULTS[i].slice()); recompute(true); };
+document.getElementById('legend').innerHTML = TRACKS.map(t => `<span><i style="background:${t.c}"></i>${t.name}</span>`).join('') +
+  '<span><i class="cp"></i>critical path</span><span>◆ milestone</span>';
+
+let mcTimer = null;
+function recompute(withMC) {
+  NOM = nominal(ctx());
+  drawGantt(); drawTable();
+  clearTimeout(mcTimer);
+  mcTimer = setTimeout(() => {
+    MC = monteCarlo(ctx(), state.N);
+    MCALL = STRATS.map(([k]) => [k, monteCarlo({ ...ctx(), strat: k }, Math.min(state.N, 3000))]);
+    MCSHIP = SHIPS.map(([k]) => [k, monteCarlo({ ...ctx(), strat: 'hy', ship: k }, Math.min(state.N, 3000))]);
+    drawTable(); drawMC(); drawVerdict(); drawBuy();
+  }, withMC ? 30 : 250);
+  drawBuy();
+}
+
+// ===================== Gantt =====================
+const tip = document.getElementById('tip');
+function showTip(e, html) { tip.innerHTML = html; tip.style.display = 'block'; const x = Math.min(e.clientX + 14, innerWidth - 400); tip.style.left = x + 'px'; tip.style.top = (e.clientY + 14) + 'px'; }
+function hideTip() { tip.style.display = 'none'; }
+let drag = null;
+function drawGantt() {
+  const { G, ES, EF, slack, fin, dur } = NOM;
+  const rows = [];
+  for (const tr of TRACKS) {
+    const ts = TASKS.filter(t => t.tr === tr.id && G.R[t.id]);
+    if (!ts.length) continue;
+    rows.push({ grp: tr });
+    ts.forEach(t => rows.push({ t }));
+  }
+  const H = Math.max(264, Math.ceil((fin + 12) / 24) * 24), LW = 330, W = Math.max(1100, document.getElementById('gantt').clientWidth - 2), RH = 19, top = 34;
+  const cw = W - LW - 16, x = h => LW + h / H * cw, ht = top + rows.length * RH + 10;
+  let s = `<svg width="${W}" height="${ht}" viewBox="0 0 ${W} ${ht}" id="gsvg">`;
+  // night shading
+  if (CAL.we - CAL.ws < 24) for (let d = -1; d * 24 < H; d++) {
+    const a = d * 24 + (CAL.we - 8), b = (d + 1) * 24 + (CAL.ws - 8);
+    const xa = x(Math.max(0, a)), xb = x(Math.min(H, b));
+    if (xb > xa) s += `<rect x="${xa}" y="${top - 4}" width="${xb - xa}" height="${ht - top}" fill="var(--night)"/>`;
+  }
+  for (let h = 0; h <= H; h += 6) {
+    const day = h % 24 === 0;
+    s += `<line x1="${x(h)}" x2="${x(h)}" y1="${day ? 4 : top - 6}" y2="${ht}" stroke="var(--rule)" stroke-width="${day ? 1 : .5}"/>`;
+    if (day && h < H) s += `<text x="${x(h) + 3}" y="14" font-size="11" fill="var(--ink)" font-weight="600">Day ${h / 24}</text><text x="${x(h) + 3}" y="27" font-size="10" fill="var(--ink2)">${fmtT(h).slice(0, 10)}</text>`;
+  }
+  s += `<line x1="${x(240)}" x2="${x(240)}" y1="4" y2="${ht}" stroke="var(--crit)" stroke-width="1.6" stroke-dasharray="5 3"/><text x="${x(240) - 4}" y="${ht - 4}" text-anchor="end" font-size="11" fill="var(--crit)">day 10</text>`;
+  rows.forEach((r, i) => {
+    const y = top + i * RH;
+    if (r.grp) { s += `<text x="8" y="${y + 13}" font-size="11.5" font-weight="700" fill="var(--ink2)" style="text-transform:uppercase;letter-spacing:.05em">${r.grp.name}</text><line x1="0" x2="${W}" y1="${y + RH}" y2="${y + RH}" stroke="var(--rule)"/>`; return; }
+    const t = r.t, a = ES[t.id], b = EF[t.id], sl = slack[t.id], cp = sl < 0.01, off = !G.anc.has(t.id), col = trById[t.tr].c;
+    const nm = t.n.length > 52 ? t.n.slice(0, 50) + '…' : t.n;
+    s += `<text x="16" y="${y + 13}" font-size="11.5" fill="var(--ink)" opacity="${off ? .5 : 1}">${nm}</text>`;
+    if (t.ms) {
+      const cx = x(a);
+      s += `<path d="M${cx} ${y + 3} l6 6 l-6 6 l-6 -6z" fill="${cp ? 'var(--crit)' : col}" data-id="${t.id}" class="bar"/>`;
+    } else {
+      s += `<rect class="bar" data-id="${t.id}" x="${x(a)}" y="${y + 3}" width="${Math.max(2, x(b) - x(a))}" height="${RH - 6}" rx="3" fill="${col}" fill-opacity="${off ? .28 : .85}" ${cp ? 'stroke="var(--crit)" stroke-width="2.2"' : ''}/>`;
+      if (sl > 0.01 && sl !== Infinity) s += `<line x1="${x(b)}" x2="${x(Math.min(H, b + sl))}" y1="${y + RH / 2}" y2="${y + RH / 2}" stroke="var(--ink3)" stroke-width="1"/><line x1="${x(Math.min(H, b + sl))}" x2="${x(Math.min(H, b + sl))}" y1="${y + 5}" y2="${y + RH - 5}" stroke="var(--ink3)"/>`;
+      s += `<rect class="hdl" data-id="${t.id}" x="${x(b) - 4}" y="${y + 2}" width="8" height="${RH - 4}" fill="transparent" style="cursor:ew-resize"/>`;
+    }
+  });
+  s += '</svg>';
+  const g = document.getElementById('gantt'); g.innerHTML = s;
+  const svg = g.querySelector('svg');
+  svg.onmousemove = e => {
+    if (drag) return;
+    const el = e.target.closest('[data-id]'); if (!el) return hideTip();
+    const t = byId[el.dataset.id], id = t.id, r = G.R[id];
+    const deps = r.deps.map(d => byId[d].n.split(':')[0]).join(r.mode === 'any' ? ' OR ' : ', ') || '—';
+    showTip(e, `<b>${t.n}</b><br>${fmtT(ES[id])} → ${fmtT(EF[id])}<br>duration ${t.d[1]} ${t.cal === 'o' ? 'business days' : t.cal === 'w' ? 'working h' : 'elapsed h'} (min ${t.d[0]}, max ${t.d[2]})<br>slack ${slack[id] === Infinity ? 'off the finish path' : slack[id].toFixed(1) + ' h'}${MC && MC.crit[id] ? ' · critical in ' + Math.round(MC.crit[id] * 100) + '% of runs' : ''}<br>after: ${deps}<br><i>[${t.s}] ${t.b}</i>`);
+  };
+  svg.onmouseleave = hideTip;
+  svg.onpointerdown = e => {
+    const el = e.target.closest('.hdl'); if (!el) return;
+    const id = el.dataset.id; drag = { id, a: ES[id] };
+    svg.setPointerCapture(e.pointerId); e.preventDefault();
+  };
+  svg.onpointermove = e => {
+    if (!drag) return;
+    const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+    const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+    const h = Math.max(drag.a, (p.x - LW) / cw * H), t = byId[drag.id];
+    let d;
+    if (t.cal === 'o') { // count business days from pickup to the drop day
+      let D = dayOf(drag.a); if (!isBD(D) || hod(drag.a) > cutOf(t)) D = nextBD(D);
+      let n = 0; const E = dayOf(h); while (D < E) { D = nextBD(D); if (D <= E) n++; }
+      d = Math.max(1, n);
+    } else d = Math.max(0.5, Math.round((t.cal === 'w' ? workBetween(drag.a, h) : h - drag.a) * 2) / 2);
+    if (d !== t.d[1]) {
+      const k0 = t.d[0] / (t.d[1] || 1), k2 = t.d[2] / (t.d[1] || 1);
+      t.d = [Math.round(d * k0 * 2) / 2, d, Math.round(d * k2 * 2) / 2];
+      showTip(e, `<b>${t.n}</b><br>most likely ${d} h (min ${t.d[0]}, max ${t.d[2]})`);
+      requestAnimationFrame(() => { NOM = nominal(ctx()); drawGantt(); drawTable(); });
+    }
+  };
+  svg.onpointerup = () => { if (drag) { drag = null; hideTip(); recompute(true); } };
+}
+
+// ===================== task table =====================
+function drawTable() {
+  const { G, ES, EF, slack } = NOM;
+  let h = '<thead><tr><th>Task</th><th>Cal</th><th class="n">min</th><th class="n">likely</th><th class="n">max</th><th>Depends on</th><th>ES</th><th>EF</th><th class="n">Slack h</th><th class="n">Crit %</th><th>Basis</th></tr></thead><tbody>';
+  for (const tr of TRACKS) {
+    const ts = TASKS.filter(t => t.tr === tr.id);
+    h += `<tr class="grp"><td colspan="11">${tr.name}</td></tr>`;
+    for (const t of ts) {
+      const r = G.R[t.id], on = !!r, sl = on ? slack[t.id] : null, cp = on && sl < 0.01;
+      const deps = on ? (r.deps.map(d => byId[d].n.split(/[:(]/)[0].trim().slice(0, 28)).join(r.mode === 'any' ? ' <b>or</b> ' : ', ') || '—') : '<i>not in this strategy</i>';
+      const inp = (k) => t.ms ? '<span class="note">—</span>' : `<input class="num" type="number" step="0.5" min="0" data-id="${t.id}" data-k="${k}" value="${t.d[k]}" ${on ? '' : 'disabled'}>`;
+      h += `<tr class="${on ? '' : 'off'} ${cp ? 'cp' : ''}"><td>${t.ms ? '◆ ' : ''}${t.n}</td><td><code>${t.cal}</code></td><td class="n">${inp(0)}</td><td class="n">${inp(1)}</td><td class="n">${inp(2)}</td><td class="note">${r && r.mode === 'any' ? 'any of: ' : ''}${deps}</td>` +
+        `<td class="note">${on ? fmtT(ES[t.id]) : ''}</td><td class="note">${on ? fmtT(EF[t.id]) : ''}</td><td class="n">${on ? (sl === Infinity ? '<span class="note">off path</span>' : sl.toFixed(1)) : ''}</td>` +
+        `<td class="n">${on && MC && MC.crit[t.id] ? Math.round(MC.crit[t.id] * 100) : on ? '0' : ''}</td><td class="src">${tag(t.s)} ${t.b}</td></tr>`;
+    }
+  }
+  const el = document.getElementById('taskTable'); el.innerHTML = h + '</tbody>';
+  el.querySelectorAll('input').forEach(i => i.onchange = () => {
+    const t = byId[i.dataset.id], k = +i.dataset.k, v = Math.max(0, +i.value);
+    t.d[k] = v;
+    if (t.d[0] > t.d[1]) t.d[k === 0 ? 1 : 0] = v;
+    if (t.d[2] < t.d[1]) t.d[k === 2 ? 1 : 2] = v;
+    recompute(false);
+  });
+}
+
+// ===================== Monte Carlo charts =====================
+function drawMC() {
+  const f = MC.fins, lo = Math.floor(f[0] / 6) * 6, hi = Math.ceil(f[f.length - 1] / 6) * 6 + 6;
+  const bins = []; for (let b = lo; b < hi; b += 6) bins.push(0);
+  f.forEach(v => bins[Math.min(bins.length - 1, Math.floor((v - lo) / 6))]++);
+  const W = 600, H = 260, L = 40, B = 34, mx = Math.max(...bins), x = h => L + (h - lo) / (hi - lo) * (W - L - 28), y = c => H - B - c / mx * (H - B - 18);
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+  bins.forEach((c, i) => { const h0 = lo + i * 6; s += `<rect x="${x(h0) + .5}" y="${y(c)}" width="${x(h0 + 6) - x(h0) - 1}" height="${H - B - y(c)}" fill="${h0 + 6 <= 240 ? 'var(--s1)' : 'var(--ink3)'}" opacity=".8"/>`; });
+  for (let d = Math.ceil(lo / 24); d * 24 <= hi; d++) s += `<line x1="${x(d * 24)}" x2="${x(d * 24)}" y1="${H - B}" y2="${H - B + 4}" stroke="var(--ink2)"/><text x="${x(d * 24)}" y="${H - B + 16}" font-size="11" text-anchor="middle" fill="var(--ink2)">day ${d}</text>`;
+  const vl = (h, c, l, dash) => h >= lo && h <= hi ? `<line x1="${x(h)}" x2="${x(h)}" y1="14" y2="${H - B}" stroke="${c}" stroke-width="2" ${dash ? 'stroke-dasharray="5 3"' : ''}/><text x="${x(h) + 3}" y="12" font-size="11" fill="${c}">${l}</text>` : '';
+  s += vl(240, 'var(--crit)', '', true) + vl(MC.P50, 'var(--good)', 'P50 ' + fmtD(MC.P50) + ' d') + vl(MC.P90, 'var(--warn)', 'P90 ' + fmtD(MC.P90) + ' d');
+  s += `<line x1="${L}" x2="${W - 10}" y1="${H - B}" y2="${H - B}" stroke="var(--ink2)"/><text x="${L}" y="${H - 6}" font-size="11" fill="var(--ink2)">${MC.N.toLocaleString()} runs · ${STRATS.find(s => s[0] === state.strat)[1]}</text></svg>`;
+  document.getElementById('hist').innerHTML = s;
+  document.getElementById('cmpTable').innerHTML = '<thead><tr><th>Strategy</th><th class="n">P10</th><th class="n">P50</th><th class="n">P90</th><th class="n">P(≤ day 10)</th></tr></thead><tbody>' +
+    MCALL.map(([k, m]) => `<tr ${k === state.strat ? 'style="font-weight:600"' : ''}><td>${STRATS.find(s => s[0] === k)[1]}</td><td class="n">${fmtD(m.P10)} d</td><td class="n">${fmtD(m.P50)} d</td><td class="n">${fmtD(m.P90)} d</td><td class="n">${Math.round(m.pOn * 100)}%</td></tr>`).join('') + '</tbody>';
+  document.getElementById('shipTable').innerHTML = '<thead><tr><th>Delivery</th><th class="n">P50</th><th class="n">P90</th><th class="n">P(≤ day 10)</th></tr></thead><tbody>' +
+    MCSHIP.map(([k, m]) => `<tr ${k === state.ship ? 'style="font-weight:600"' : ''}><td>${SHIPS.find(s => s[0] === k)[1]}</td><td class="n">${fmtD(m.P50)} d</td><td class="n">${fmtD(m.P90)} d</td><td class="n">${Math.round(m.pOn * 100)}%</td></tr>`).join('') + '</tbody>';
+  const top = Object.entries(MC.crit).filter(([id]) => !byId[id].ms && id !== 'done').sort((a, b) => b[1] - a[1]).slice(0, 10);
+  document.getElementById('critTable').innerHTML = '<thead><tr><th>Task</th><th class="n">critical in</th></tr></thead><tbody>' + top.map(([id, p]) => `<tr><td>${byId[id].n}</td><td class="n">${Math.round(p * 100)}%</td></tr>`).join('') + '</tbody>';
+}
+
+function cpChain() {
+  const { G, ES, EF, slack } = NOM;
+  // walk back from done through binding critical predecessors
+  const chain = []; let id = 'done';
+  while (id) {
+    chain.unshift(id);
+    const r = G.R[id]; let nx = null;
+    for (const d of r.deps) if (slack[d] < 0.01 && Math.abs(EF[d] - ES[id]) < 24) { if (!nx || EF[d] > EF[nx]) nx = d; }
+    id = nx;
+  }
+  return chain.filter(i => !byId[i].ms || i === 'done');
+}
+function drawVerdict() {
+  const m = MC, on = m.pOn;
+  const sname = STRATS.find(s => s[0] === state.strat)[1];
+  document.getElementById('tiles').innerHTML = [
+    ['Finish at most-likely durations', fmtD(NOM.fin), 'days', fmtT(NOM.fin)],
+    ['P50 (Monte Carlo)', fmtD(m.P50), 'days', fmtT(m.P50)],
+    ['P90 (Monte Carlo)', fmtD(m.P90), 'days', fmtT(m.P90)],
+    ['Chance of ≤ day 10', Math.round(on * 100), '%', sname]
+  ].map(([l, v, u, s]) => `<div class="tile"><div class="tl">${l}</div><div class="tv">${v} <span>${u}</span></div><div class="ts">${s}</div></div>`).join('');
+  const verdict = on >= .85 ? 'Yes, likely' : on >= .6 ? 'Achievable, but not safe' : on >= .4 ? 'About a coin flip' : on >= .1 ? 'Unlikely' : 'No';
+  const chain = cpChain().map(i => byId[i].n.split(/[:(]/)[0].trim()).join(' → ');
+  document.getElementById('verdictLine').innerHTML = `${verdict}: with <i>${sname}</i>, P50 is ${fmtD(m.P50)} days, P90 is ${fmtD(m.P90)} days, and the chance of finishing by day 10 is ${Math.round(on * 100)}%.<br><span style="font:14px/1.5 ui-sans-serif,sans-serif;color:var(--ink2)">Critical path at most-likely durations: ${chain}.</span>`;
+}
+
+// ===================== buy list =====================
+const BUY = [
+  // [item, vendor, url, qty, unit, tag, basis, strategies, note]
+  ['PocketBeagle 2 Industrial (100003007)', 'DigiKey', 'https://www.digikey.com/en/products/detail/beagleboard/100003007/28118583', 6, 51.03, 'V', '3,442 in stock, 14-wk factory lead', 'all', '4 builds + 1 bench rig + 1 spare'],
+  ['Adafruit 5805 4.58″ 320×960 ST7701S bar panel', 'DigiKey', 'https://www.digikey.com/en/products/detail/adafruit-industries-llc/5805/22165010', 8, 19.95, 'V', '8 in stock (all of it); Adafruit direct OOS', 'all', '4 builds + rig + 3 spares (panels crack)'],
+  ['BuyDisplay ER-TFT4.58-1, no touch (backup)', 'BuyDisplay (HK)', 'https://www.buydisplay.com/bar-type-4-58-inch-320x960-ips-tft-lcd-display-spi-rgb-interface', 5, 14.33, 'A', 'site 403s scripts; ship time unknown', 'all', 'insurance if DigiKey stock vanishes'],
+  ['Adafruit Qualia ESP32-S3 (5800)', 'Adafruit', 'https://www.adafruit.com/product/5800', 1, 19.95, 'V', 'in stock', 'all', 'panel smoke test'],
+  ['40-pin 0.5 mm FPC breakout NHD-FFC40', 'Newhaven Display', 'https://newhavendisplay.com/40-pin-0-5mm-pitch-ffc-connector-breakout-board/', 2, 6.5, 'E', 'listing found (snippet); price not read', 'all', 'Adafruit 1436 is OOS (V)'],
+  ['LiPo 3.7 V 2000 mAh, 60 × 36 × 7 mm, JST-PH (2011)', 'Adafruit', 'https://www.adafruit.com/product/2011', 6, 12.50, 'V', 'in stock; fits the 9 × 40 × 70 envelope', 'all', 'check JST polarity vs J5 pin 1 = +'],
+  ['Kailh Choc v1 red, 10-pack (5113)', 'Adafruit', 'https://www.adafruit.com/product/5113', 22, 10.76, 'V', '52 packs in stock; $10.76 at 10–99', 'all', '5 kits × 43 = 215 switches'],
+  ['Chocfox CFX keycaps 16.5 mm, ~43 per kit', 'Chosfox (CN)', 'https://www.chosfox.com/products/chocfox-cfx-choc-keycaps', 215, 0.80, 'V', '"from $0.80" listing; DHL extra (E)', 'all', 'fallback: print in-house'],
+  ['2×40 breakaway male header (cut to 2×18), e.g. Sullins PRPC040DAAN-RC', 'DigiKey', 'https://www.digikey.com/en/products/result?keywords=PRPC040DAAN-RC', 12, 2.20, 'E', 'price not retrieved', 'all', '2 per PB2'],
+  ['Amphenol F32R-1A7H1-11040 (bottom-contact fallback)', 'DigiKey / Newark', 'https://www.findchips.com/search/F32R-1A7H1-11040', 6, 1.87, 'A', 'Newark/TME $1.07–1.87 (Overview page)', 'all', 'hand-swap if the tail contacts face down'],
+  ['M2 thread-forming screw kit + 3M 9495LE tape', 'McMaster / DigiKey', 'https://www.mcmaster.com/thread-forming-screws-for-plastic/', 1, 21.28, 'A', '~$10 kit + $11.28 tape (Overview page)', 'all', ''],
+  ['JLCPCB 4-layer PCB + turnkey PCBA, 5 boards, DHL DDP', 'JLCPCB', 'https://cart.jlcpcb.com/quote', 1, 520, 'E', '~$55 PCB + ~$82 fees + 5 × ~$13 parts + 1-day expedite $47.83 (V) + DHL ~$60 + ~35% duty (V)', 'cn,hy', 'all 48 lines are LCSC parts'],
+  ['LCSC hand-assembly kit for 3 boards (incl. ES8388, FE1.1s, IP5306), DHL', 'LCSC', 'https://www.lcsc.com/bom', 1, 110, 'E', 'parts ~$10/board at 1 (Overview, V) + reel minimums + DHL', 'dom,hy', 'the only source for 3 ICs'],
+  ['Bare 4-layer 170 × 126 mm × 3, 1-day turn', 'Advanced Circuits', 'https://www.4pcb.com', 1, 650, 'E', 'not quoted; 33.2 in² misses the $66 special', 'dom,hy', 'Mon 12:00 MST cutoff'],
+  ['Stainless stencil, framed or frameless', 'OSH Stencils', 'https://www.oshstencils.com', 1, 60, 'E', 'not quoted', 'hy', 'in-house reflow'],
+  ['Kitted rush assembly, 3 boards, 48 h', 'Screaming Circuits', 'https://www.screamingcircuits.com', 1, 2500, 'S', '"upward of $2,000" for 24 h (2017)', 'dom', 'quote on Monday'],
+  ['Formlabs Clear Resin V5, 1 L (5 lids + supports ≈ 0.35 L)', 'Formlabs', 'https://formlabs.com/store/materials/clear-resin/', 1, 199, 'E', 'price not retrieved', 'enc:in', 'plus PETG for Bambu (~$25)'],
+  ['Xometry expedited: 5 MJF trays + chassis, 5 SLA clear lids', 'Xometry', 'https://www.xometry.com', 1, 1100, 'E', 'not quoted; expedite 1–3 BD (S)', 'enc:out', ''],
+  ['USB-C inline power meter (logging)', 'Amazon / ChargerLAB', 'https://www.amazon.com/s?k=usb+c+power+meter+logging', 1, 50, 'E', '', 'all', 'fixture'],
+  ['USB load testers 0.5–3 A × 2, USB flash drives × 2', 'Amazon', 'https://www.amazon.com/s?k=usb+load+tester', 1, 45, 'E', '', 'all', 'fixture'],
+  ['Push-pull force gauge 50 N + K-type thermometer, 2 probes', 'Amazon', 'https://www.amazon.com/s?k=digital+force+gauge+50n', 1, 95, 'E', '', 'all', 'lid and thermal tests'],
+  ['TRRS + TRS breakouts, 10 kΩ / 1 kΩ (loopback plug)', 'Adafruit / DigiKey', 'https://www.adafruit.com/search?q=TRRS', 1, 12, 'E', '', 'all', 'fixture']
+];
+function drawBuy() {
+  const inStrat = s => s === 'all' || s.split(',').some(k => k === state.strat || (k.startsWith('enc:') && (state.enc === 'both' || k.slice(4) === state.enc)));
+  let tot = 0, totV = 0;
+  let h = '<thead><tr><th>Item</th><th>Vendor</th><th class="n">Qty</th><th class="n">Unit</th><th class="n">Line</th><th>Status</th><th>Why / note</th></tr></thead><tbody>';
+  for (const [it, v, u, q, p, s, b, st, n] of BUY) {
+    const on = inStrat(st), line = q * p;
+    if (on) { tot += line; if (s === 'V') totV += line; }
+    h += `<tr class="${on ? '' : 'off'}"><td><a href="${u}" target="_blank" rel="noopener">${it}</a></td><td>${v}</td><td class="n">${q}</td><td class="n">$${p.toFixed(2)}</td><td class="n">$${line.toFixed(0)}</td><td class="src">${tag(s)} ${b}</td><td class="note">${n}${on ? '' : ' (not in this strategy)'}</td></tr>`;
+  }
+  h += `</tbody><tfoot><tr><td colspan="4"><b>Day-0 spend, ${STRATS.find(s => s[0] === state.strat)[1]}, enclosure ${ENCS.find(s => s[0] === state.enc)[1]}</b></td><td class="n"><b>$${Math.round(tot).toLocaleString()}</b></td><td colspan="2" class="note">of which $${Math.round(totV).toLocaleString()} is live-verified pricing; the rest is estimates. Excludes shipping on distributor orders (~$30–60 each overnight, E) and labour.</td></tr></tfoot>`;
+  document.getElementById('buyTable').innerHTML = h;
+}
+
+// ===================== validation tests =====================
+const TESTS = [
+  ['T01', 'Visual + polarity', 'Loupe inspection of the PCBA; meter J5 pin 1 (+) against the battery lead; check that the PB2 header tails are trimmed', 'No bridges or tombstones; battery + on J5 pin 1; tails < 3 mm', 'A', 'J5 pin 1 = VBAT (README item 5)', 'meter, loupe', 5],
+  ['T02', 'Power-on current', 'Bench supply at 3.80 V on J5 (3 A limit). (a) slide switch OFF; (b) ON without the PB2; (c) ON with the PB2, at the login prompt, backlight 50%; (d) peak during boot', '(a) ≤ 100 µA · (b) ≤ 60 mA · (c) 0.40–1.00 A · (d) ≤ 1.6 A, no supply foldback', 'E', 'from the 2.3 A 5 V budget (README) at ~90% boost efficiency; unit 001 sets the band ±20%', 'bench supply, DMM', 10],
+  ['T03', 'Rails', 'Measure at the test vias / caps with (c) running', '+5V_SYS 4.85–5.25 V · +3V3 3.20–3.40 V · AVDD_3V3 3.27–3.33 V · HUB_3V3 3.15–3.45 V · BL_LEDA 10.5–14 V at 50%', 'E', 'nominal ± regulator tolerances', 'DMM', 5],
+  ['T04', 'Boot', 'Cold boot from eMMC; time to the login prompt on the panel; dmesg', 'Login ≤ 60 s; D4 boot LED on; no tidss/spi/i2c errors in dmesg', 'E', '', 'stopwatch', 3],
+  ['T05', 'Display test pattern', 'EOL script: full-screen R, G, B, W, K; colour bars; 1-px grid; walking-ones on each of the 16 data bits; 16-step grey ramp; backlight 0/25/50%', 'No missing or swapped bits (each walking-ones step shows the expected colour); ≤ 2 dark dots, 0 bright dots; no flicker; backlight current monotonic, V(R1) at 50% = 0.10 V ± 15% (≈ 20 mA)', 'E', 'panel IL 40 mA abs max, LED life at 20 mA (V, spec sheet); dot limits are E', 'eyes, DMM across R1', 6],
+  ['T06', 'All 43 keys', 'Prompted walk: press each key once; then 5 rapid presses each on 4 sample keys; then the all-keys press plate', 'Each key gives exactly one press and one release with the right code; ≤ 1 event per press; plate: 43 keys reported down at once (full rollover)', 'E', '43 = 40 + 3 mode keys (A)', 'fixture plate', 8],
+  ['T07', 'USB host (USB-A × 2 via FE1.1s)', 'Insert a flash drive in each port; read 100 MB; then a 0.5 A load on each port at once', 'Enumerates at 480 Mb/s; read ≥ 15 MB/s; +5V_SYS ≥ 4.75 V with 2 × 0.5 A load; no brown-out reboot', 'E', 'power budget is tight: ~2.3 A vs IP5306 2.1–2.4 A (README)', 'drives, USB loads', 5],
+  ['T08', 'USB device (PB2 USB-C)', 'Laptop on PB2 USB-C: gadget Ethernet + SSH; charge-only USB-C on J6 with the meter', 'Gadget enumerates, ping < 2 ms; J6: CC 5.1 kΩ seen, source delivers ≥ 1 A', 'E', 'J6 is charge only (A)', 'laptop, USB-C meter', 3],
+  ['T09', 'Audio', 'ES8388 on I2C (0x10); 1 kHz tone out → TRRS loopback → mic in; line out into the laptop; HP_DET plug and unplug', 'Codec ACKs; tone detected 1 kHz ± 1%, level within ± 3 dB of unit 001; HP_DET toggles', 'E', '', 'loopback plug', 4],
+  ['T10', 'Battery charge + discharge', 'Charge: pre-discharged to 3.6 V, charge from 5 V USB-C. Discharge: from full, display 50% + CPU load until the IP5306 cuts out (logged during the soak)', 'Charge current 0.8–2.1 A; CHG LED on and terminates 4.15–4.22 V; cell ≤ 45 °C. Run time ≥ 2.0 h; VBAT_SENSE within ± 50 mV of the DMM', 'E', '2000 mAh × 3.7 V = 7.4 Wh / ~3 W ≈ 2.3 h (computed, E); Adafruit 2011 cell (V)', 'USB-C meter, thermocouple', 'run'],
+  ['T11', '2 h thermal soak', 'Lid on (cover mode), 23 ± 3 °C ambient, stress-ng on 4 cores + display 50% + audio playing, on battery. Thermocouples on the battery, deck above the PB2, lid top', 'No throttling below 1.0 GHz, no reboot or artefacts; SoC ≤ 95 °C (thermal_zone); battery ≤ 45 °C; touchable plastic ≤ 48 °C', 'E', 'touch limit E (IEC 62368-1 class for plastic held briefly: check)', 'thermocouples', 'run'],
+  ['T12', '1 m drop (unit 004 only)', 'Lid on as cover. 10 drops from 1.0 m onto 18 mm plywood over concrete: 6 faces, 4 corners. Then T04–T09', 'Boots and passes T04–T09; no cracked bosses or panel; battery not displaced or swollen; lid may come off but must refit', 'E', 'proto-level, not ISTA', 'tape measure', 30],
+  ['T13', 'Lid slide force and detent', 'Push-pull gauge along the slide axis: peak to pass the detent, running force; device hanging from the lid, shaken; 50 on/off cycles in each mode', 'Detent peak 5–15 N; running ≤ 5 N; retention ≥ 6 N (≈ 2 × device weight); no whitening or cracks after 50 cycles; cradle tilt 4° ± 1°', 'E', 'nub 0.4 mm interference, cradle 4.01°, device ~305 g (A, cover.log)', 'force gauge, protractor', 10],
+  ['T14', 'Fit against CAD', 'Lid on: feeler gauge between the lid and the highest keycap; panel and chassis gap; all plugs seat fully through the openings (USB-C × 2, USB-A × 2, jacks × 2)', 'Lid–keycap ≥ 0.5 mm (CAD 0.90); lid–panel/chassis ≥ 0.3 mm (CAD 0.50); every plug seats', 'A', 'CAD clearances from mech/cover.log', 'feeler gauges', 8],
+  ['T15', 'CTQ dimensions', 'Calipers on each printed part', 'Tray 178.2 × 131.2 × 12.5 ± 0.3; lid 181.8 × 133.0 × 22.7 ± 0.4, wall 1.6 ± 0.15; chassis 127.3 × 47.1 × 15.0 ± 0.3; PCB 170.0 × 126.0 ± 0.2', 'A', 'nominals from cover.log / fab.json (A); tolerances E', 'calipers', 8]
+];
+document.getElementById('valTable').innerHTML = '<thead><tr><th>ID</th><th>Test</th><th>Procedure</th><th>Pass criteria</th><th>Basis</th><th>Equipment</th><th class="n">min/unit</th></tr></thead><tbody>' +
+  TESTS.map(([id, n, p, c, s, b, eq, mins]) => `<tr><td><b>${id}</b></td><td>${n}</td><td class="note">${p}</td><td>${c}</td><td class="src">${tag(s)} ${b}</td><td class="note">${eq}</td><td class="n">${mins}</td></tr>`).join('') + '</tbody>';
+
+// ===================== sign-off sheets =====================
+function drawSheets() {
+  const pre = document.getElementById('snPrefix').value, n = Math.max(1, Math.min(10, +document.getElementById('snCount').value || 4));
+  let h = '';
+  for (let i = 1; i <= n; i++) {
+    const sn = pre + String(i).padStart(3, '0');
+    h += `<div class="sheet"><h4>Zine Machine v3 · prototype sign-off · ${sn}${i === 4 ? ' (sacrificial: drop test)' : ''}</h4>
+      <div class="hdr"><div>PB2 serial:</div><div>Panel lot / #:</div><div>Board (JLC / in-house) #:</div><div>Battery lot:</div>
+      <div>Image SHA-256 (8):</div><div>EOL log file:</div><div>Built by / date:</div><div>Tested by / date:</div></div>
+      <table><thead><tr><th style="width:40px">ID</th><th style="width:150px">Test</th><th>Pass criteria</th><th style="width:150px">Measured</th><th style="width:34px">P</th><th style="width:34px">F</th><th style="width:44px">Init.</th></tr></thead><tbody>` +
+      TESTS.map(([id, nm, , c]) => `<tr><td>${id}</td><td>${nm}</td><td>${c}</td><td></td><td><span class="pf"></span></td><td><span class="pf"></span></td><td></td></tr>`).join('') +
+      `</tbody></table><p style="margin:10px 0 0">Deviations / rework:</p><div style="border-bottom:1px solid #999;height:34px"></div>
+      <p style="margin:14px 0 0">Released for shipment: ☐ yes ☐ no &nbsp;&nbsp; Signature: ______________________ &nbsp; Date: ____________</p></div>`;
+  }
+  document.getElementById('sheets').innerHTML = h;
+}
+document.getElementById('snPrefix').oninput = drawSheets;
+document.getElementById('snCount').oninput = drawSheets;
+document.getElementById('btnPrint').onclick = () => { document.body.classList.add('print-sheets'); window.print(); setTimeout(() => document.body.classList.remove('print-sheets'), 500); };
+
+// ===================== risk register =====================
+const RISKS = [
+  ['Display first light slips (no published PB2 DPI overlay; polarity, overscan, 9-bit SPI)', 'high', '1–3 d', 'No picture on the bench rig by the end of day 4', 'Qualia proves the panel and init in hours, which isolates the fault to the AM62 side. Try HV mode and the PCLK edge. Fall back to bit-banged init. Post on TI E2E and the BeagleBoard forum on day 3, not day 6. If there is still no light by day 6, validate everything else and ship with the display marked open.', 'S'],
+  ['DigiKey\'s 8 × 5805 sell before the order lands', 'low–med', '5–10 d', 'Cart shows < 8', 'Order at hour 0. BuyDisplay × 5 is already ordered as insurance (pinout unconfirmed: meter on arrival). Adafruit back-in-stock alert.', 'V'],
+  ['5805 backlight run at its 40 mA absolute maximum (R1 = 5.1 Ω → 39 mA)', 'certain if uncapped', 'panel life', 'V(R1) ≈ 0.2 V at 100%', 'Cap PWM at 50% (~20 mA, the LED-life rating point) in the overlay, or fit R1 = 10 Ω on the proto boards.', 'V'],
+  ['5805 outline 117.90 × 40.37 vs the chassis pocket 118.8 × 41.57', 'certain', 'cosmetic', 'Panel rattles', 'Centre with 9495LE tape plus a 0.5 mm printed shim; update display_chassis.py for Rev B.', 'V'],
+  ['DHL CN→US slow (11.11 peak, Veterans Day, weekend), customs hold', 'med', '1–3 d', 'Tracking idle > 24 h', 'The hybrid in-house reflow path. DDP with a correct HTS code. EIN on file if the value exceeds $2,500 (JLC FAQ).', 'V'],
+  ['In-house reflow yield: ES8388 QFN-28 0.4 mm, 0402s, IP5306 thermal pad', 'med', '0.5–1 d', 'T09 / T02 fails on reflowed boards', 'Reflow 3 for 2 good; hot-air rework; JLC boards replace them when they arrive. Inspect QFN fillets with a loupe.', 'E'],
+  ['LCSC kit late (11.11 backlog); no US source for ES8388 / FE1.1s / IP5306', 'med', '1–2 d', 'No ship notice by Mon', 'JLC path continues. Win Source lists stock (FindChips, V), but it is a broker: quality risk.', 'V'],
+  ['CFX keycaps from China late', 'high', '0 d with the fallback', 'No tracking by day 3', 'Print blank 16.5 mm caps on the Form 4 after the lids. Kailh 17.5 mm caps do not fit the 17 mm pitch.', 'S'],
+  ['Power budget: ~2.3 A worst case vs IP5306 2.1–2.4 A', 'med', '0 d (test scope)', 'T07 brown-out under a 2 × 0.5 A load', 'Record it, limit the USB-A ports to one 0.5 A load in the shipped config, raise it as a Rev B item. Not a sprint blocker.', 'A'],
+  ['Adafruit 2011 LiPo: 2000 mAh (< 2.5–3 Ah design); JST polarity may differ', 'med', '0 d', 'T01 meter check', 'Meter before plugging in; re-pin the JST if reversed. Run-time limit set at ≥ 2.0 h for this cell.', 'V'],
+  ['Key scan: mcu_gpio0 reserved for the M4F in the PB2 device tree', 'med', '0.5 d', 'pisosr probe fails', 'Enable mcu_gpio0 in the overlay, or a libgpiod C scanner → uinput. M4F firmware after the sprint.', 'E'],
+  ['Form 4 upright 182 mm lid prints fail; resin nubs crack', 'med', '0.5–1 d', 'Failed print / T13 cracks', 'Print 6 lids for 5; reprint overnight; PETG translucent lid on the Bambu as a fallback; or Xometry SLA ("both").', 'E'],
+  ['Thermal: PB2 in a closed translucent lid for 2 h', 'low–med', '0.5 d', 'T11 SoC > 95 °C or throttling', 'Thermal pad from the PB2 to the chassis; cpufreq cap; run in cradle mode (lid underneath) and record it.', 'E'],
+  ['Drop test destroys unit 004', 'expected', '0 d', '—', 'That\'s why unit 004 is sacrificial. Kit 5 holds spares for the three shipped units.', 'E'],
+  ['Only one or two people', 'high', '2–4 d', 'Firmware and reflow need the same person', 'The plan assumes 3 people (firmware; mechanics + fixture; reflow + build). With 2, drop the in-house reflow path and the P50 moves to the China strategy\'s value.', 'E'],
+  ['Weekend start: US vendors and Xometry idle until Monday', 'certain', 'built in', '—', 'Orders still go in on Saturday so they are first in the Monday queue. The PB2, panels and firmware arrive Tuesday and are planned that way.', 'E'],
+  ['Domestic assembler can\'t take a 4-layer kit at 24–48 h', 'med', '1–3 d', 'Screaming Circuits quote on Monday', 'Use the hybrid instead; don\'t pay a ~$2.5k rush for no time gain.', 'S'],
+  ['Tempo Automation in an old vendor list', '—', '—', '—', 'It filed for Chapter 7 liquidation on 8 Dec 2023. Don\'t plan on it.', 'S']
+];
+document.getElementById('riskTable').innerHTML = '<thead><tr><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Trigger</th><th>Fallback</th><th>Basis</th></tr></thead><tbody>' +
+  RISKS.map(([r, l, i, t, f, s]) => `<tr><td><b>${r}</b></td><td>${l}</td><td class="n">${i}</td><td class="note">${t}</td><td>${f}</td><td>${tag(s)}</td></tr>`).join('') + '</tbody>';
+
+// ===================== code blocks =====================
+const PADS = [ // header, signal, pad offset (from pb2_header_pinout.csv), mux mode
+  ['P2.02', 'VOUT0_DATA0', 0x0b8, 0], ['P2.04', 'VOUT0_DATA1', 0x0bc, 0], ['P2.06', 'VOUT0_DATA2', 0x0c0, 0], ['P2.08', 'VOUT0_DATA3', 0x0c4, 0],
+  ['P2.20', 'VOUT0_DATA4', 0x0c8, 0], ['P1.20', 'VOUT0_DATA5', 0x0cc, 0], ['P2.24', 'VOUT0_DATA6', 0x0d0, 0], ['P2.33', 'VOUT0_DATA7', 0x0d4, 0],
+  ['P2.18', 'VOUT0_DATA8', 0x0d8, 0], ['P2.35', 'VOUT0_DATA9', 0x0dc, 0], ['P1.36', 'VOUT0_DATA10', 0x0e0, 0], ['P1.33', 'VOUT0_DATA11', 0x0e4, 0],
+  ['P2.32', 'VOUT0_DATA12', 0x0e8, 0], ['P2.30', 'VOUT0_DATA13', 0x0ec, 0], ['P1.31', 'VOUT0_DATA14', 0x0f0, 0], ['P2.34', 'VOUT0_DATA15', 0x0f4, 0],
+  ['P2.28', 'VOUT0_HSYNC', 0x0f8, 0], ['P1.29', 'VOUT0_DE', 0x0fc, 0], ['P2.22', 'VOUT0_VSYNC', 0x100, 0], ['P2.17', 'VOUT0_PCLK', 0x104, 0]
+];
+const hx = n => '0x' + n.toString(16).padStart(3, '0');
+document.getElementById('dtso').textContent = `// zm-v3-display.dtso — PocketBeagle 2 + ST7701S bar panel (RGB565 DPI)
+// Pad offsets: case/pocketbeagle2/models/industrial/pb2_header_pinout.csv (0x000F4xxx → offset)
+/dts-v1/;
+/plugin/;
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pwm/pwm.h>
+#include "k3-pinctrl.h"
+
+&main_pmx0 {
+\tzm_dss_pins: zm-dss-pins {
+\t\tpinctrl-single,pins = <
+${PADS.map(([h, s, o, m]) => `\t\t\tAM62X_IOPAD(${hx(o)}, PIN_OUTPUT, ${m}) /* ${h} ${s} */`).join('\n')}
+\t\t>;
+\t};
+\tzm_spi0_pins: zm-spi0-pins {
+\t\tpinctrl-single,pins = <
+\t\t\tAM62X_IOPAD(0x1bc, PIN_OUTPUT, 0) /* P2.29 SPI0_CLK */
+\t\t\tAM62X_IOPAD(0x1c4, PIN_OUTPUT, 0) /* P2.25 SPI0_D1 -> panel SDA */
+\t\t\tAM62X_IOPAD(0x1b4, PIN_OUTPUT, 0) /* P2.31 SPI0_CS0 */
+\t\t\tAM62X_IOPAD(0x174, PIN_OUTPUT, 7) /* P2.10 GPIO0_91 LCD_RESET */
+\t\t>;
+\t};
+\tzm_bl_pins: zm-bl-pins {
+\t\tpinctrl-single,pins = <
+\t\t\tAM62X_IOPAD(0x1ac, PIN_OUTPUT, 6) /* P1.06 EHRPWM0_A */
+\t\t>;
+\t};
+};
+
+&dss {
+\tpinctrl-names = "default";
+\tpinctrl-0 = <&zm_dss_pins>;
+\tstatus = "okay";
+};
+&dss_ports {                       /* check: DPI is port@1 on AM62x SK (E) */
+\tport@1 {
+\t\treg = <1>;
+\t\tdpi_out: endpoint { remote-endpoint = <&panel_in>; };
+\t};
+};
+
+&main_spi0 {
+\tpinctrl-names = "default";
+\tpinctrl-0 = <&zm_spi0_pins>;
+\tstatus = "okay";
+\tlcd_spi: spidev@0 {
+\t\tcompatible = "rohm,dh2228fv";   /* any spidev-accepted compatible */
+\t\treg = <0>;
+\t\tspi-max-frequency = <1000000>;
+\t};
+};
+
+&epwm0 {
+\tpinctrl-names = "default";
+\tpinctrl-0 = <&zm_bl_pins>;
+\tstatus = "okay";
+};
+
+/ {
+\tbacklight: backlight {
+\t\tcompatible = "pwm-backlight";
+\t\tpwms = <&epwm0 0 50000 0>;          /* 20 kHz into TPS61165 CTRL (check range) */
+\t\tbrightness-levels = <0 5 10 20 30 40 50>;   /* % duty, capped at 50% (~20 mA) */
+\t\tdefault-brightness-level = <5>;
+\t};
+\tpanel {
+\t\tcompatible = "panel-dpi";
+\t\tdata-mapping = "rgb565";
+\t\tbacklight = <&backlight>;
+\t\twidth-mm = <37>; height-mm = <110>;
+\t\tpanel-timing {
+\t\t\tclock-frequency = <16000000>;   /* Adafruit known-good; step to ~29.2 MHz for 60 Hz */
+\t\t\thactive = <400>; vactive = <960>; /* 80 px hidden in DE mode; HV mode: 320 + hback 110 */
+\t\t\thsync-len = <10>; hfront-porch = <50>; hback-porch = <30>;
+\t\t\tvsync-len = <2>;  vfront-porch = <17>; vback-porch = <14>;
+\t\t\thsync-active = <0>; vsync-active = <0>; de-active = <1>;
+\t\t\tpixelclk-active = <0>;         /* try 1 if the image speckles */
+\t\t};
+\t\tport { panel_in: endpoint { remote-endpoint = <&dpi_out>; }; };
+\t};
+};
+`;
+const INIT = [['FF', '77 01 00 00 13'], ['EF', '08'], ['FF', '77 01 00 00 10'], ['C0', '77 00'], ['C1', '09 08'], ['C2', '01 02'], ['C3', '02'], ['CC', '10'],
+  ['B0', '40 14 59 10 12 08 03 09 05 1E 05 14 10 68 33 15'], ['B1', '40 08 53 09 11 09 02 07 09 1A 04 12 12 64 29 29'], ['FF', '77 01 00 00 11'],
+  ['B0', '6D'], ['B1', '1D'], ['B2', '87'], ['B3', '80'], ['B5', '49'], ['B7', '85'], ['B8', '20'], ['C1', '78'], ['C2', '78'], ['D0', '88'],
+  ['E0', '00 00 02'], ['E1', '02 8C 00 00 03 8C 00 00 00 33 33'], ['E2', '33 33 33 33 C9 3C 00 00 CA 3C 00 00 00'], ['E3', '00 00 33 33'], ['E4', '44 44'],
+  ['E5', '05 CD 82 82 01 C9 82 82 07 CF 82 82 03 CB 82 82'], ['E6', '00 00 33 33'], ['E7', '44 44'], ['E8', '06 CE 82 82 02 CA 82 82 08 D0 82 82 04 CC 82 82'],
+  ['EB', '08 01 E4 E4 88 00 40'], ['EC', '00 00 00'], ['ED', 'FF F0 07 65 4F FC C2 2F F2 2C CF F4 56 70 0F FF'], ['EF', '10 0D 04 08 3F 1F'],
+  ['FF', '77 01 00 00 00'], ['11', '', 120], ['35', '00'], ['3A', '66'], ['11', '', 120], ['29', '']];
+document.getElementById('initpy').textContent = `#!/usr/bin/env python3
+"""zm-panel-init: ST7701S 3-wire 9-bit init for the 4.58" 320x960 bar (HD458002C40 / Adafruit 5805).
+Sequence: cdn-shop.adafruit.com/product-files/5805/AUO4.58-ST7701S-3W-RGB18BIT_initcode.txt (fetched 2026-11-07).
+Run before the display manager (systemd: Before=display-manager.service)."""
+import time, spidev, gpiod
+
+SEQ = [  # (command, data bytes, delay ms)
+${INIT.map(([c, d, ms]) => `    (0x${c}, bytes.fromhex("${d.replace(/ /g, '')}"), ${ms || 0}),`).join('\n')}
+]
+# C3 02 = DE mode (80 px hidden). For HV mode use C3 82 and hactive 320 / hback-porch 110.
+
+def reset(chip="/dev/gpiochip0", line=91):        # P2.10 = GPIO0_91 (LCD_RESET)
+    req = gpiod.request_lines(chip, consumer="zm-lcd",
+        config={line: gpiod.LineSettings(direction=gpiod.line.Direction.OUTPUT)})
+    for v, t in ((1, .01), (0, .02), (1, .12)):
+        req.set_value(line, gpiod.line.Value(v)); time.sleep(t)
+
+def main():
+    reset()
+    spi = spidev.SpiDev(); spi.open(0, 0)          # SPI0 CS0 (P2.29 / P2.25 / P2.31)
+    spi.mode, spi.max_speed_hz = 0, 1_000_000
+    spi.bits_per_word = 9                          # D/C bit + 8 data bits; McSPI WL up to 32 (check)
+    for cmd, data, ms in SEQ:
+        words = [cmd] + [0x100 | b for b in data]  # bit 8 = 1 for parameters
+        spi.writebytes2(b"".join(w.to_bytes(2, "little") for w in words))
+        if ms: time.sleep(ms / 1000)
+    print("ST7701S init sent:", len(SEQ), "commands")
+
+if __name__ == "__main__":
+    main()
+`;
+document.getElementById('keysdts').textContent = `/* zm-v3-keys.dtso fragment: 6 x 74HC165 on MCU-domain GPIO, no custom code */
+&mcu_pmx0 {
+\tzm_keys_pins: zm-keys-pins {
+\t\tpinctrl-single,pins = <
+\t\t\tAM62X_MCU_IOPAD(0x034, PIN_OUTPUT, 7) /* P1.26 MCU_GPIO0_13 KEY_CLK  */
+\t\t\tAM62X_MCU_IOPAD(0x038, PIN_OUTPUT, 7) /* P1.28 MCU_GPIO0_14 KEY_SHLD */
+\t\t\tAM62X_MCU_IOPAD(0x014, PIN_INPUT,  7) /* P2.05 MCU_GPIO0_5  KEY_QH   */
+\t\t>;
+\t};
+};
+/* the shorted main-domain balls GPIO0_44 / GPIO0_43 / GPIO1_24 stay unmuxed inputs */
+&mcu_gpio0 { status = "okay"; };   /* may be reserved for the M4F on PB2: check */
+
+/ {
+\tkeyspi: spi-keys {
+\t\tcompatible = "spi-gpio";
+\t\tpinctrl-names = "default"; pinctrl-0 = <&zm_keys_pins>;
+\t\tsck-gpios  = <&mcu_gpio0 13 GPIO_ACTIVE_HIGH>;
+\t\tmiso-gpios = <&mcu_gpio0 5 GPIO_ACTIVE_HIGH>;
+\t\tnum-chipselects = <0>;
+\t\t#address-cells = <1>; #size-cells = <0>;
+\t\tkeys165: gpio@0 {
+\t\t\tcompatible = "pisosr-gpio";
+\t\t\treg = <0>;
+\t\t\tspi-max-frequency = <500000>;
+\t\t\tgpio-controller; #gpio-cells = <2>;
+\t\t\tngpios = <48>;                                  /* 6 x 8, 43 used */
+\t\t\tload-gpios = <&mcu_gpio0 14 GPIO_ACTIVE_LOW>;  /* SH/LD low = load */
+\t\t};
+\t};
+\tkeys {
+\t\tcompatible = "gpio-keys-polled";
+\t\tpoll-interval = <5>;
+\t\t/* one node per key: U10 bit0 = K00 (Q) ... keys are active low (pull-up, key to GND) */
+\t\tk00 { label = "Q"; linux,code = <16>; gpios = <&keys165 0 GPIO_ACTIVE_LOW>; };
+\t\tk10 { label = "A"; linux,code = <30>; gpios = <&keys165 1 GPIO_ACTIVE_LOW>; };
+\t\t/* ... generate the other 41 from design.py INPUTS (QH order: check on the board) ... */
+\t};
+};`;
+document.getElementById('eolpy').textContent = `#!/usr/bin/env python3
+"""zm-eol: end-of-line functional test for Zine Machine v3 prototypes (runs on the PocketBeagle 2).
+Usage: sudo zm-eol --serial ZM3-P10-001 [--skip T07] ; writes /var/log/zm-eol/<serial>.json
+Operator console: SSH over the PB2 USB-C gadget; prompts are also drawn on the bar display."""
+import argparse, glob, json, os, re, subprocess, sys, time
+from pathlib import Path
+import evdev                      # python3-evdev
+from smbus2 import SMBus          # python3-smbus2
+
+LOG = Path("/var/log/zm-eol"); LOG.mkdir(parents=True, exist_ok=True)
+EXPECT_KEYS = 43
+LIMITS = {   # E: re-baseline on unit 001
+    "boot_s_max": 60, "vbat_err_mv": 50, "usb_mbps_min": 15, "tone_hz": (990, 1010),
+    "soc_c_max": 95, "bl_levels": [0, 1, 3, 5],
+}
+
+class Run:
+    def __init__(s, serial): s.r = {"serial": serial, "t0": time.time(), "tests": {}}
+    def rec(s, tid, ok, **kw):
+        s.r["tests"][tid] = {"pass": bool(ok), **kw}
+        print(f"[{'PASS' if ok else 'FAIL'}] {tid} {kw}")
+    def ask(s, q): return input(f"  ? {q} [y/n] ").strip().lower().startswith("y")
+    def save(s):
+        s.r["pass"] = all(t["pass"] for t in s.r["tests"].values())
+        p = LOG / f"{s.r['serial']}.json"; p.write_text(json.dumps(s.r, indent=2)); return p
+
+def sh(cmd, **kw): return subprocess.run(cmd, shell=True, capture_output=True, text=True, **kw)
+
+def t04_boot(R):
+    up = float(open("/proc/uptime").read().split()[0])          # run at first login
+    bad = sh("dmesg --level=err,crit | grep -Ei 'tidss|spi|i2c|panel'").stdout.strip()
+    R.rec("T04", up < LIMITS["boot_s_max"] and not bad, uptime_s=up, dmesg_errors=bad[:400])
+
+def t05_display(R):
+    fb = "/dev/fb0"                                               # or DRM via python3-kms++
+    w, h = 400, 960                                               # DE mode: 80 px hidden
+    def fill(rgb565):
+        with open(fb, "wb") as f: f.write(rgb565.to_bytes(2, "little") * (w * h))
+    seq = [("red", 0xF800), ("green", 0x07E0), ("blue", 0x001F), ("white", 0xFFFF), ("black", 0x0000)]
+    seq += [(f"bit D{b}", 1 << b) for b in range(16)]             # walking ones on VOUT0_D0..D15
+    fails = []
+    for name, v in seq:
+        fill(v)
+        if not R.ask(f"Panel shows {name} (0x{v:04X}) uniformly, no stuck lines?"): fails.append(name)
+    bl = glob.glob("/sys/class/backlight/*/brightness")[0]
+    for lvl in LIMITS["bl_levels"]:
+        Path(bl).write_text(str(lvl)); time.sleep(.5)
+    v_r1 = float(input("  DMM across R1 at level 5 (V): "))     # 0.10 V ± 15% ≈ 20 mA
+    dots = R.ask("≤ 2 dark dots, 0 bright dots on white and black?")
+    R.rec("T05", not fails and dots and 0.085 <= v_r1 <= 0.115, failed_patterns=fails, v_r1=v_r1)
+
+def t06_keys(R):
+    dev = next(evdev.InputDevice(p) for p in evdev.list_devices() if "keys" in evdev.InputDevice(p).name)
+    seen, extra = {}, []
+    print(f"  Press each of the {EXPECT_KEYS} keys once (mode keys included)...")
+    t_end = time.time() + 180
+    while len(seen) < EXPECT_KEYS and time.time() < t_end:
+        ev = dev.read_one()
+        if ev and ev.type == evdev.ecodes.EV_KEY and ev.value == 1:
+            if ev.code in seen: extra.append(ev.code)
+            seen[ev.code] = time.time()
+    input("  Lower the all-keys press plate, then press Enter")
+    down = len(dev.active_keys())
+    R.rec("T06", len(seen) == EXPECT_KEYS and down == EXPECT_KEYS and len(extra) <= 1,
+          unique=len(seen), simultaneous=down, chatter=extra)
+
+def t07_usb_host(R):
+    out = sh("lsusb -t").stdout
+    drives = glob.glob("/dev/disk/by-id/usb-*-0:0")
+    speeds = re.findall(r"Mass Storage.*?(\\d+)M", out)
+    mbps = []
+    for d in drives[:2]:
+        r = sh(f"dd if={d} of=/dev/null bs=1M count=100 iflag=direct 2>&1 | tail -1").stdout
+        m = re.search(r"([\\d.]+) MB/s", r); mbps.append(float(m.group(1)) if m else 0)
+    load_ok = R.ask("Both 0.5 A loads on: still running, +5V_SYS ≥ 4.75 V on the DMM?")
+    R.rec("T07", len(drives) >= 2 and all(s == "480" for s in speeds[:2]) and
+          all(v >= LIMITS["usb_mbps_min"] for v in mbps) and load_ok, speeds=speeds, mbps=mbps)
+
+def t08_usb_device(R):
+    gadget = bool(glob.glob("/sys/class/udc/*")) and "usb0" in sh("ip -br link").stdout
+    R.rec("T08", gadget and R.ask("J6 charge port: meter shows ≥ 1 A from the charger?"), gadget=gadget)
+
+def t09_audio(R):
+    try:
+        with SMBus(3) as b: b.read_byte_data(0x10, 0x00)          # I2C3 (P2.09/P2.11), ES8388 @0x10
+        codec = True
+    except OSError: codec = False
+    sh("sox -n -r 48000 -c 2 /tmp/t.wav synth 2 sine 1000")
+    sh("arecord -D hw:0 -f S16_LE -r 48000 -c 1 -d 2 /tmp/r.wav & sleep .2; aplay -D hw:0 /tmp/t.wav; wait")
+    f = sh("sox /tmp/r.wav -n stat -freq 2>&1 | sort -k2 -n | tail -1").stdout.split()
+    hz = float(f[0]) if f else 0
+    lo, hi = LIMITS["tone_hz"]
+    R.rec("T09", codec and lo <= hz <= hi and R.ask("Unplug/replug headset: HP_DET toggled?"), codec=codec, tone_hz=hz)
+
+def t10_vbat(R):
+    raw = glob.glob("/sys/bus/iio/devices/iio:device*/in_voltage0_raw")   # AIN0 = P1.19 VBAT_SENSE (1M/1M)
+    mv = int(Path(raw[0]).read_text()) * 2 * 1800 / 4095 if raw else None  # scale: check the PB2 ADC
+    dmm = float(input("  DMM on VBAT (mV): "))
+    R.rec("T10a", mv is not None and abs(mv - dmm) <= LIMITS["vbat_err_mv"], adc_mv=mv, dmm_mv=dmm)
+
+def soak(R, hours=2.0):                                           # T11 (+ T10 discharge log)
+    sh("stress-ng --cpu 4 --timeout %ds &" % int(hours * 3600))
+    tmax, log = 0, []
+    t_end = time.time() + hours * 3600
+    while time.time() < t_end:
+        t = max(int(Path(z).read_text()) for z in glob.glob("/sys/class/thermal/thermal_zone*/temp")) / 1000
+        f = int(Path("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq").read_text()) / 1e6
+        tmax = max(tmax, t); log.append((round(time.time() - R.r["t0"]), t, f)); time.sleep(30)
+    throttled = any(f < 1.0 for *_, f in log)
+    R.rec("T11", tmax <= LIMITS["soc_c_max"] and not throttled, soc_max_c=tmax, samples=len(log))
+
+def main():
+    ap = argparse.ArgumentParser(); ap.add_argument("--serial", required=True)
+    ap.add_argument("--skip", nargs="*", default=[]); ap.add_argument("--soak", action="store_true")
+    a = ap.parse_args(); R = Run(a.serial)
+    R.r["image"] = sh("sha256sum /etc/zm-image-id").stdout[:16]
+    for tid, fn in [("T04", t04_boot), ("T05", t05_display), ("T06", t06_keys), ("T07", t07_usb_host),
+                    ("T08", t08_usb_device), ("T09", t09_audio), ("T10a", t10_vbat)]:
+        if tid not in a.skip:
+            try: fn(R)
+            except Exception as e: R.rec(tid, False, error=repr(e))
+    if a.soak: soak(R)
+    p = R.save(); print("RESULT", "PASS" if R.r["pass"] else "FAIL", "->", p)
+    sys.exit(0 if R.r["pass"] else 1)
+
+if __name__ == "__main__":
+    main()
+`;
+document.getElementById('copyEol').onclick = () => navigator.clipboard.writeText(document.getElementById('eolpy').textContent);
+
+// fixture diagram
+document.getElementById('fixtureSvg').innerHTML = `<svg viewBox="0 0 560 360" width="100%">
+<defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="var(--ink2)"/></marker></defs>
+<rect x="150" y="110" width="260" height="150" rx="10" fill="none" stroke="var(--ink)" stroke-width="2"/>
+<text x="280" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">Unit in printed nest</text>
+<rect x="170" y="145" width="220" height="40" rx="4" fill="var(--s5)" opacity=".25"/><text x="280" y="170" text-anchor="middle" font-size="11" fill="var(--ink)">bar panel: patterns, prompts</text>
+<rect x="170" y="195" width="220" height="50" rx="4" fill="var(--s1)" opacity=".18"/><text x="280" y="224" text-anchor="middle" font-size="11" fill="var(--ink)">43 keys ← all-keys press plate</text>
+<g font-size="11" fill="var(--ink)">
+<rect x="10" y="20" width="130" height="44" rx="6" fill="var(--card)" stroke="var(--rule)"/><text x="75" y="38" text-anchor="middle">Laptop (SSH)</text><text x="75" y="54" text-anchor="middle" fill="var(--ink2)">runs zm-eol, logs</text>
+<path d="M75 64 L180 110" stroke="var(--ink2)" marker-end="url(#ar)"/><text x="95" y="96" fill="var(--ink2)">PB2 USB-C (gadget)</text>
+<rect x="420" y="20" width="130" height="44" rx="6" fill="var(--card)" stroke="var(--rule)"/><text x="485" y="38" text-anchor="middle">USB-C PSU + meter</text><text x="485" y="54" text-anchor="middle" fill="var(--ink2)">V, A, Wh log</text>
+<path d="M485 64 L390 110" stroke="var(--ink2)" marker-end="url(#ar)"/><text x="430" y="96" fill="var(--ink2)">J6 charge</text>
+<rect x="10" y="290" width="130" height="44" rx="6" fill="var(--card)" stroke="var(--rule)"/><text x="75" y="308" text-anchor="middle">Bench PSU 3.8 V</text><text x="75" y="324" text-anchor="middle" fill="var(--ink2)">battery sim on J5</text>
+<path d="M140 300 L180 260" stroke="var(--ink2)" marker-end="url(#ar)"/>
+<rect x="215" y="300" width="130" height="44" rx="6" fill="var(--card)" stroke="var(--rule)"/><text x="280" y="318" text-anchor="middle">2 flash drives</text><text x="280" y="334" text-anchor="middle" fill="var(--ink2)">+ 0.5 A loads</text>
+<path d="M280 300 L280 262" stroke="var(--ink2)" marker-end="url(#ar)"/>
+<rect x="420" y="290" width="130" height="44" rx="6" fill="var(--card)" stroke="var(--rule)"/><text x="485" y="308" text-anchor="middle">TRRS loopback</text><text x="485" y="324" text-anchor="middle" fill="var(--ink2)">+ line-out → laptop</text>
+<path d="M420 300 L385 260" stroke="var(--ink2)" marker-end="url(#ar)"/>
+<rect x="420" y="160" width="130" height="44" rx="6" fill="var(--card)" stroke="var(--rule)"/><text x="485" y="178" text-anchor="middle">Thermocouples ×3</text><text x="485" y="194" text-anchor="middle" fill="var(--ink2)">battery, deck, lid</text>
+<path d="M420 182 L412 182" stroke="var(--ink2)" marker-end="url(#ar)"/>
+<rect x="10" y="160" width="130" height="44" rx="6" fill="var(--card)" stroke="var(--rule)"/><text x="75" y="178" text-anchor="middle">DMM + force gauge</text><text x="75" y="194" text-anchor="middle" fill="var(--ink2)">R1, rails, lid</text>
+<path d="M140 182 L148 182" stroke="var(--ink2)" marker-end="url(#ar)"/>
+</g></svg>`;
+
+drawSheets();
+recompute(true);
+window.addEventListener('resize', () => { if (NOM) drawGantt(); });
+</script>
+</body></html>
