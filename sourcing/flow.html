@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zine Machine v3 · material flow &amp; strategy comparator</title>
+<link rel="icon" href="data:,">
+<style>:root{
+  color-scheme:light;
+  --bg:#f6f5f1;--card:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--ink3:#8a8984;--rule:#e2e0d9;--hl:#fff6d6;
+  --acc:#2a78d6;--crit:#c0262d;--good:#1a7f37;--warn:#b26b00;
+  --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#6250d6;
+  --v:#1a7f37;--a:#2a78d6;--e:#b26b00;--x:#8a8984;
+}
+@media (prefers-color-scheme:dark){:root{
+  color-scheme:dark;
+  --bg:#121211;--card:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--ink3:#8d8c85;--rule:#2f2e2b;--hl:#2d2a1c;
+  --acc:#3987e5;--crit:#ff6b6b;--good:#4cc76a;--warn:#e0a03a;
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#9085e9;
+  --v:#4cc76a;--a:#5b9ee9;--e:#e0a03a;
+}}
+*{box-sizing:border-box}
+
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Inter,Roboto,sans-serif}
+a{color:var(--acc)}
+header.top{padding:48px 0 24px;border-bottom:1px solid var(--rule)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+h1{font:600 40px/1.1 ui-serif,Georgia,"Iowan Old Style",serif;margin:0 0 6px;letter-spacing:-.01em}
+h2{font:600 26px/1.2 ui-serif,Georgia,serif;margin:56px 0 10px;padding-top:12px;border-top:2px solid var(--ink)}
+h3{font-size:17px;margin:28px 0 8px}
+.sub{color:var(--ink2);font-size:16px;max-width:900px}
+nav.toc{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+nav.toc .wrap{display:flex;gap:18px;overflow-x:auto;padding-top:10px;padding-bottom:10px;font-size:13px;white-space:nowrap}
+nav.toc a{text-decoration:none;color:var(--ink2)} nav.toc a:hover{color:var(--ink)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:18px 20px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+@media(max-width:900px){.tiles{grid-template-columns:1fr 1fr}}
+.tile{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:14px 16px}
+.tl{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink2)}
+.tv{font:600 34px/1.15 ui-serif,Georgia,serif;margin:4px 0}.tv span{font-size:15px;color:var(--ink2);font-family:ui-sans-serif,sans-serif;font-weight:400}
+.ts{font-size:12.5px;color:var(--ink2)}
+.callout{border-left:4px solid var(--warn);background:var(--card);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.callout.crit{border-color:var(--crit)} .callout.info{border-color:var(--acc)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;background:var(--card)}
+th,td{padding:7px 9px;border-bottom:1px solid var(--rule);vertical-align:top;text-align:left}
+th{font-weight:600;font-size:12px;color:var(--ink2);background:var(--card)}
+td.n,th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.hl,th.hl{background:var(--hl)}
+td.brk{box-shadow:inset 3px 0 0 var(--good)}
+td.grp{font-weight:600;color:var(--ink2);white-space:nowrap}
+td.src{font-size:12px;color:var(--ink2);max-width:260px}
+tr.opt td{opacity:.85;font-style:italic} tr.nre td:nth-child(2){color:var(--ink2)}
+tfoot td{border-top:2px solid var(--ink);font-size:14px}
+.note{font-size:12px;color:var(--ink2)}
+.risk{font-size:12px;color:var(--crit);margin-top:2px}
+.scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:10px}
+.tag{display:inline-block;font:600 10px/1 ui-monospace,Menlo,monospace;padding:2px 4px;border-radius:3px;color:#fff;vertical-align:1px}
+.t-V{background:var(--v)}.t-A{background:var(--a)}.t-E{background:var(--e)}.t-X{background:var(--x)}.t-S{background:#7a5bbf}
+.controls{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin:12px 0;font-size:14px}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:7px;overflow:hidden}
+.seg button{border:0;background:var(--card);color:var(--ink);padding:6px 12px;font:inherit;cursor:pointer;border-right:1px solid var(--rule)}
+.seg button:last-child{border-right:0}.seg button.on{background:var(--ink);color:var(--bg)}
+.btn{border:1px solid var(--rule);background:var(--card);color:var(--ink);padding:8px 12px;border-radius:7px;font:inherit;font-size:13.5px;cursor:pointer}
+.btn:hover{border-color:var(--ink2)} .btn.pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:12px;font:12px/1.45 ui-monospace,Menlo,monospace;overflow:auto;max-height:260px}
+svg{width:100%;height:auto;display:block}
+svg .grid{stroke:var(--rule);stroke-width:1} svg .ax{fill:var(--ink2);font-size:11px} svg .lg{fill:var(--ink);font-size:12px}
+svg .tn{fill:var(--ink);font-size:12px} svg .ph{fill:var(--ink);font-size:12px;font-weight:700}
+svg .phase{fill:var(--rule);opacity:.55} svg .today{stroke:var(--crit);stroke-width:1.5;stroke-dasharray:4 3}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--ink2);margin:8px 0}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.legend i.cp{background:transparent;border:2px solid var(--crit)}
+figure{margin:0}figure img{width:100%;border-radius:10px;border:1px solid var(--rule);background:#fff}
+figcaption{font-size:12.5px;color:var(--ink2);margin-top:6px}
+ul.tight li{margin:3px 0} ol li{margin:4px 0}
+.phasecard h3{margin-top:0}.phasecard .meta{font-size:12.5px;color:var(--ink2);margin-bottom:6px}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;font-size:13.5px}.kv b{color:var(--ink2);font-weight:600}
+.sources li{font-size:13px;margin:3px 0;word-break:break-word}
+footer{margin:60px 0 40px;color:var(--ink3);font-size:12.5px}
+@media print{nav.toc{display:none}th{position:static}h2{break-before:page}}
+nav.site{background:var(--ink);color:var(--bg)}
+nav.site .wrap{display:flex;gap:4px;align-items:center;overflow-x:auto;white-space:nowrap;padding-top:8px;padding-bottom:8px;font-size:13.5px}
+nav.site .brand{font-weight:700;margin-right:14px;letter-spacing:.02em}
+nav.site a{color:var(--bg);text-decoration:none;padding:5px 10px;border-radius:6px;opacity:.78}
+nav.site a:hover{opacity:1;background:color-mix(in srgb,var(--bg) 14%,transparent)}
+nav.site a[aria-current=page]{opacity:1;background:var(--bg);color:var(--ink);font-weight:600}
+:root{--c1:#2a78d6;--c2:#eb6834;--c3:#1baf7a;--c4:#eda100;--c5:#e87ba4;--c6:#008300;--c7:#6250d6;--s5:#e87ba4}
+@media (prefers-color-scheme:dark){:root{--c1:#3987e5;--c2:#d95926;--c3:#199e70;--c4:#c98500;--c5:#d55181;--c6:#008300;--c7:#9085e9;--s5:#d55181}}
+.ctrlgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:1000px){.ctrlgrid{grid-template-columns:1fr 1fr}}
+.ctrlgrid .card{font-size:13.5px}
+label.row{display:flex;gap:8px;align-items:center;margin:8px 0;flex-wrap:wrap}
+.lab{display:grid;grid-template-columns:1fr 1fr;gap:6px}.lab label{display:flex;justify-content:space-between;gap:6px;font-size:12.5px}.lab input{width:70px}
+input[type=number],select{background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:5px;padding:3px 5px;font:inherit}
+.tiles5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:14px 0}
+@media(max-width:1100px){.tiles5{grid-template-columns:1fr 1fr}}
+.stile{all:unset;box-sizing:border-box;cursor:pointer;background:var(--card);border:1px solid var(--rule);border-top:4px solid var(--c);border-radius:10px;padding:12px 14px;display:block}
+.stile.on{outline:2px solid var(--ink);outline-offset:1px}
+.sname{font-size:12.5px;font-weight:600;color:var(--ink2);display:flex;gap:6px;align-items:center}.sname i{width:10px;height:10px;border-radius:2px;background:var(--c);display:inline-block}
+.sv{font:600 28px/1.2 ui-serif,Georgia,serif;margin:6px 0}.sv span{font:400 12px ui-sans-serif,sans-serif;color:var(--ink2);margin-left:4px}
+.badge{font:600 10px ui-sans-serif,sans-serif;background:var(--good);color:#fff;padding:2px 5px;border-radius:4px;vertical-align:4px}
+.sgrid{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:12px;color:var(--ink2)}.sgrid b{color:var(--ink);font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+svg .cur{stroke:var(--ink2);stroke-dasharray:3 3}
+.pip{display:inline-block;width:calc(var(--v)*10px);height:8px;border-radius:2px;background:var(--warn);margin-right:6px;opacity:.75}
+.chklist{columns:2;column-gap:24px}@media(max-width:900px){.chklist{columns:1}}
+label.chk{display:flex;gap:8px;break-inside:avoid;padding:6px 0;border-bottom:1px solid var(--rule);font-size:13.5px}
+label.chk input{margin-top:3px}
+.ctrl input[type=range]{vertical-align:middle}
+</style></head>
+<body>
+<nav class="site" aria-label="Zine Machine sourcing pages"><div class="wrap">
+  <span class="brand">Zine Machine v3 · realization</span>
+  <a href="index.html" data-page="index">Overview</a>
+  <a href="flow.html" data-page="flow" aria-current="page">Material flow</a>
+  <a href="proto10.html" data-page="proto10">10-day proto</a>
+  <a href="gates.html" data-page="gates">Release gates</a>
+  <a href="automation.html" data-page="automation">AI execution</a>
+  <a href="expert.html" data-page="expert">Expert adds</a>
+</div></nav>
+<header class="top"><div class="wrap">
+  <div class="tl">Zine Machine v3 · material-flow study · 7 November 2026</div>
+  <h1>Where to build it: five ways to make the Zine Machine</h1>
+  <p class="sub">An interactive model of five ways to make and land the v3 device: all-USA, North America (USMCA), China, a China-PCBA/US-assembly hybrid, and Southeast Asia (China+1). Change the quantity, tariff layers, freight mode, FX, expedite and labour rates, and every output updates: landed cost, NRE, lead time, cash tied up, CO₂e and risk. Part prices come from the <a href="index.html">Overview</a> page. Process prices, freight and tariffs are tagged
+  <span class="tag t-V">V</span> verified live 2026-11-07, <span class="tag t-S">S</span> snippet, or <span class="tag t-E">E</span> estimate. <b>No figure here is a quote.</b></p>
+</div></header>
+<nav class="toc"><div class="wrap">
+  <a href="#controls">Controls</a><a href="#compare">Compare</a><a href="#flowmap">Flow map</a><a href="#mc">Monte Carlo</a><a href="#cashsec">Cash</a><a href="#risk">Risk</a><a href="#tariffsec">Tariffs</a><a href="#infra">Infrastructure</a><a href="#trade">HTS / ECCN</a><a href="#buy">Week-0 buy-ahead</a><a href="#method">Method</a>
+</div></nav>
+<main class="wrap">
+
+<section id="controls">
+  <h2>Controls</h2>
+  <div class="ctrlgrid">
+    <div class="card"><div class="tl">Quantity per batch</div><div id="qSeg" class="seg"></div>
+      <label class="row">Freight mode (international finished-goods / PCBA legs)
+        <select id="mode"><option value="express">Express courier (DHL/FedEx)</option><option value="air" selected>Air freight (forwarder)</option><option value="lcl">Ocean LCL</option><option value="fcl">Ocean FCL 40′</option></select></label>
+      <label class="row">Mould instead of print from <input id="mouldAt" type="number" value="1000" step="100" style="width:80px"> units</label>
+    </div>
+    <div class="card"><div class="tl">Money</div>
+      <label class="row">FX: local currency vs USD <input id="fx" type="range" min="-25" max="25" value="0"> <b id="fxV"></b></label>
+      <label class="row">Expedite premium <input id="exp" type="range" min="0" max="100" value="0" step="5"> <b id="expV"></b></label>
+      <label class="row"><input id="usmca" type="checkbox" checked> Finished goods qualify under USMCA (strategy B)</label>
+      <label class="row"><input id="nreIn" type="checkbox" checked> Spread tooling NRE into $/unit</label>
+    </div>
+    <div class="card"><div class="tl">Labour, fully loaded $/h <span class="tag t-E">E</span></div>
+      <div class="lab"><label>US <input id="labUS" type="number" step="1"></label><label>MX <input id="labMX" type="number" step="0.5"></label><label>CN <input id="labCN" type="number" step="0.5"></label><label>VN/MY <input id="labVN" type="number" step="0.5"></label></div>
+      <div class="tl" style="margin-top:10px">Freight rates <span class="tag t-E">E</span></div>
+      <div class="lab"><label>Express $/kg <input id="fr_express" type="number" step="0.5"></label><label>Air $/kg <input id="fr_air" type="number" step="0.5"></label><label>LCL $/cbm <input id="fr_lcl" type="number" step="10"></label><label>FCL $/40′ <input id="fr_fcl" type="number" step="100"></label><label>Truck $/kg <input id="fr_truck" type="number" step="0.05"></label></div>
+    </div>
+    <div class="card"><div class="tl">Sales (for the cash model)</div>
+      <label class="row">Price $ <input id="price" type="number" value="299" style="width:80px"></label>
+      <label class="row">Pre-ordered share <input id="pre" type="range" min="0" max="100" value="30"> <b id="preV"></b></label>
+      <label class="row">Sell-through weeks <input id="sellW" type="number" value="12" style="width:60px"></label>
+      <p class="note">The tariff layers are toggled and edited in the <a href="#tariffsec">Tariffs</a> section; the risk weights in <a href="#risk">Risk</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section id="compare">
+  <h2>Strategies at <span id="qLabel"></span> units</h2>
+  <p class="note">Click a tile to drive the flow map, cash curve and tornado chart. "Lead" counts from PO to first units at a US 3PL. Below the mould threshold, the lead includes printing, not tooling.</p>
+  <div id="tiles" class="tiles5"></div>
+  <h3>Landed cost per unit, by category</h3>
+  <div class="card"><div class="legend" id="compareLegend"></div><div id="compareChart"></div></div>
+  <h3>Crossover: landed $/unit against quantity</h3>
+  <div class="card"><div id="cross"></div><p class="note">The vertical line marks the selected quantity. Where lines cross, the cheapest strategy changes. Domestic wins on speed and at very low quantity only when the batch is tiny and labour hours are short. Moulding (above the threshold) drags the enclosure country's tooling into the price.</p></div>
+</section>
+
+<section id="flowmap">
+  <h2>Flow map</h2>
+  <p class="note" id="sankeyTitle"></p>
+  <div class="card"><div id="sankey" style="overflow-x:auto"></div>
+    <div class="legend"><span><i style="background:var(--ink)"></i>stage (value per unit)</span><span><i style="background:var(--crit);opacity:.5"></i>flow crossing a border (tariff, broker, transit)</span><span>link width = $ value carried per unit</span></div></div>
+  <h3>Transit legs, Incoterms and border costs</h3>
+  <div class="scroll"><table id="legs"></table></div>
+</section>
+
+<section id="mc">
+  <h2>Monte Carlo: cost and lead-time uncertainty</h2>
+  <p>Every input below gets a triangular distribution (low, mode, high). The model samples them all together and re-evaluates each strategy. The bands show P10–P90 with the P50 dot. All distributions are estimates; edit <code>MCV</code> in the page source to change them.</p>
+  <div class="controls"><label>Iterations <select id="mcN"><option>500</option><option selected>2000</option><option>5000</option></select></label><button class="btn pri" id="mcRun">Run simulation</button></div>
+  <div class="card"><b>Landed cost per unit (P10–P90, P50 dot)</b><div id="mcCost"></div></div><div class="card" style="margin-top:12px"><b>Lead time to US 3PL, days (P10–P90, P50 dot)</b><div id="mcDays"></div></div>
+  <h3>Tornado: what moves the answer · <span id="tornTitle"></span></h3>
+  <div class="controls"><label>Metric <select id="tornMetric"><option value="unit">Landed $/unit</option><option value="days">Lead time (days)</option></select></label></div>
+  <div class="card"><div class="legend"><span><i style="background:var(--s1)"></i>input at its low value</span><span><i style="background:var(--s2)"></i>input at its high value</span></div><div id="tornado"></div></div>
+  <div class="scroll" style="margin-top:12px"><table><thead><tr><th>Variable</th><th class="n">Low</th><th class="n">Mode</th><th class="n">High</th><th>Basis</th></tr></thead><tbody>
+    <tr><td>Bought-part prices</td><td class="n">×0.92</td><td class="n">×1</td><td class="n">×1.15</td><td><span class="tag t-E">E</span> distributor price drift + allocation</td></tr>
+    <tr><td>PCBA + enclosure quotes</td><td class="n">×0.8</td><td class="n">×1</td><td class="n">×1.35</td><td><span class="tag t-E">E</span> no live quotes for US/MX/VN EMS</td></tr>
+    <tr><td>Labour</td><td class="n">×0.9</td><td class="n">×1</td><td class="n">×1.25</td><td><span class="tag t-E">E</span></td></tr>
+    <tr><td>Freight rates</td><td class="n">×0.7</td><td class="n">×1</td><td class="n">×1.9</td><td><span class="tag t-E">E</span> container indices have swung ±2× in 2024–26</td></tr>
+    <tr><td>Tariff change</td><td class="n">−10 pts</td><td class="n">0</td><td class="n">+25 pts</td><td><span class="tag t-E">E</span> policy volatility: skewed up</td></tr>
+    <tr><td>FX</td><td class="n">−10%</td><td class="n">0</td><td class="n">+10%</td><td><span class="tag t-E">E</span> applied to non-US value-add</td></tr>
+    <tr><td>Transit / supplier lead / customs hold / slip</td><td class="n">×0.85 / ×0.8 / 0 d / 0 d</td><td class="n">1 / 1 / 0.5 d / 2 d</td><td class="n">×1.7 / ×1.5 / 10 d / 20 d</td><td><span class="tag t-E">E</span></td></tr>
+  </tbody></table></div>
+</section>
+
+<section id="cashsec">
+  <h2>Cash tied up: working-capital curve</h2>
+  <p class="note">The selected strategy and quantity. Tooling is paid 50% at kickoff and 50% at T1. Distributor parts are prepaid. CN/VN suppliers take a 30% deposit and 70% before shipment; US and MX EMS work on net 30 once credit is approved (US is 50% up front below 1k). Freight is paid at shipment and duty at entry. Sales are DTC (paid at order); pre-orders arrive at week 0. All terms are <span class="tag t-E">E</span> norms, not negotiated terms.</p>
+  <div class="card"><div id="cash"></div><p id="cashStats" class="note"></p></div>
+</section>
+
+<section id="risk">
+  <h2>Risk score</h2>
+  <p class="note">Scores (1 = low, 5 = high) are the analyst's judgement (<span class="tag t-E">E</span>). Weights are yours. <b>Every strategy shares one risk:</b> the PocketBeagle 2 is single-source from Seeed in China, so "domestic" never removes China from the bill of materials.</p>
+  <div class="controls">
+    <label>Geopolitical / tariff <input id="w_geo" type="range" min="0" max="50"></label>
+    <label>Single source <input id="w_single" type="range" min="0" max="50"></label>
+    <label>Logistics <input id="w_logi" type="range" min="0" max="50"></label>
+    <label>IP <input id="w_ip" type="range" min="0" max="50"></label></div>
+  <div class="scroll"><table id="riskTable"></table></div>
+</section>
+
+<section id="tariffsec">
+  <h2>Tariff scenario (state as of 2026-11-07)</h2>
+  <div class="callout crit"><b>What changed in 2026 (verified 2026-11-07; tariff law is in active litigation, so re-check before acting):</b>
+<ul class="tight">
+<li><b>IEEPA tariffs are gone.</b> The Supreme Court held 6–3 in <i>Learning Resources v. Trump</i> (20 Feb 2026) that IEEPA does not authorise tariffs. CBP stopped collecting the "fentanyl" and "reciprocal" tariffs on 24 Feb 2026. Refunds are not automatic: they go to the importer of record via CBP's CAPE system under CIT supervision; a class was certified on 8 Oct 2026. <span class="tag t-V">V</span> Zonos tracker (26 Oct 2026), Troutman (12 Oct 2026)</li>
+<li><b>Section 122</b> (10% global, 24 Feb–24 Jul 2026) has expired. <span class="tag t-V">V</span> STR</li>
+<li><b>Section 301 "forced labor" tariffs</b> apply to 60 economies from 24 Jul 2026: <b>China +12.5%, Vietnam +12.5%, Malaysia +10%, Mexico/Canada +10% unless USMCA-qualifying</b>. About 863 of 2,120 codes are exempt. <b>Whether HTS 8471 is exempt was not verified</b>: if it is, China's finished-device rate drops from 12.5% to 0%. Litigation was argued 30 Sep 2026, no decision yet. <span class="tag t-V">V</span> Zonos, RVIA</li>
+<li><b>The older China Section 301 lists still apply</b> to parts: 8473.30 PCBAs on List 3 (+25%); non-EV Li-ion 8507.60 rose to 25% on 1 Jan 2026. 8471.30 portable computers (List 4B) were never collected. 178 product exclusions expire 9–10 Nov 2026. <span class="tag t-S">S</span>/<span class="tag t-V">V</span></li>
+<li><b>De minimis is suspended indefinitely</b> (since 29 Aug 2025; CBP interim final rules 24 Jun 2026). Every shipment, including a JLC DHL box, makes an informal (&lt;$2,500, MPF $2.77) or formal entry. <span class="tag t-S">S</span>/<span class="tag t-V">V</span></li>
+<li><b>USMCA:</b> HTSUS General Note 11(p) deems 8471.30/.41/.49/.50 and 8473.30 goods originating when imported from a USMCA country, with no tariff-shift test (CBP ruling N359764, 31 Mar 2026; H312426). A Mexico-assembled device built from Chinese parts should qualify. Policy risk: on 1 Jul 2026 the US declined to extend USMCA, so it now faces annual reviews. <span class="tag t-V">V</span>/<span class="tag t-S">S</span></li>
+<li><b>Customs enforcement order EO 14411</b> (3 Jun 2026) tells CBP to tighten bonds and importer-of-record eligibility within 180 days. Expect bond and IOR cost changes. <span class="tag t-S">S</span></li>
+</ul>
+<p><b>The counter-intuitive result:</b> under these rules, <b>importing parts costs more duty than importing the finished computer</b>. From China, a PCBA pays about 37.5% (List 3 + forced labor) and a Li-ion pack about 40.9% (MFN + 301 + forced labor), while a finished 8471.30 device pays 12.5% (or 0% if exempt). That hits strategies A and D, which import parts and assemble in the US, and favours B (USMCA, 0%) and C.</p></div>
+  <div class="scroll"><table id="tariffs"></table></div>
+  <p class="note">How the model applies them: a layer adds its rate to the goods classes and origins it lists. Finished devices (class <code>fg</code>) pay on full transaction value at the border. In A and D the parts pay on entry (classes <code>mod, disp, batt, keys, comp, hw, pcba</code>), and US labour and enclosure are never dutiable. B pays 0% when the USMCA box is ticked. Duty is charged on value at the border (FOB transaction value under US rules, not CIF).</p>
+</section>
+
+<section id="infra">
+  <h2>Infrastructure checklist per strategy</h2>
+  <div class="controls"><label>Strategy <select id="infraSel"></select></label><span id="infraProg" class="note"></span></div>
+  <div id="infraList" class="chklist"></div>
+</section>
+
+<section id="trade">
+  <h2>HTS and ECCN reasoning (flag for a broker and an export counsel)</h2>
+  <div class="grid2">
+    <div class="card"><h3 style="margin-top:0">HTS classification</h3>
+<table><thead><tr><th>Candidate</th><th>Description</th><th>MFN</th><th>Fit</th></tr></thead><tbody>
+<tr><td><b>8471.30.01</b></td><td>Portable ADP machines ≤10 kg with at least a CPU, keyboard and display</td><td>Free <span class="tag t-V">V</span></td><td><b>Most likely.</b> One self-contained unit with its own battery, ~0.3 kg, with CPU, keyboard and display.</td></tr>
+<tr><td>8471.41</td><td>Other ADP machines with CPU + input + output in one housing</td><td>Free</td><td>Only if CBP held it "not portable", which is unlikely with a battery.</td></tr>
+<tr><td>8471.50</td><td>Processing units</td><td>Free</td><td>No: it has a keyboard and display.</td></tr>
+<tr><td>8471.60</td><td>Input/output units (keyboards)</td><td>Free</td><td>No: it has its own CPU. This would only fit the v2 keyboard-only product.</td></tr>
+<tr><td>8473.30.11</td><td>PCBAs, parts of 8471 machines</td><td>Free <span class="tag t-V">V</span></td><td>For a bare main-board import (strategy D). List 3: +25% from China.</td></tr>
+<tr><td>8507.60.00</td><td>Li-ion accumulators</td><td>3.4% <span class="tag t-V">V</span></td><td>Loose spare/replacement packs only. Inside the device the battery follows the device.</td></tr>
+</tbody></table>
+<p class="note"><b>Flag for the broker:</b> ask for a binding ruling (CBP eRulings, free, ~30–90 days) on 8471.30.01 before the pilot. Also ask how to classify the PocketBeagle 2 module when imported loose (8473.30 vs 8471.50 vs 8542), since that decides its List 3 exposure in strategy A. Sources: USITC HTS REST API, live 2026-11-07.</p></div>
+    <div class="card"><h3 style="margin-top:0">Export control (ECCN)</h3>
+<p><b>Likely 5A992.c</b>, not EAR99 <span class="tag t-E">E</span>, medium-high confidence. The device runs Linux with standard OpenSSL/TLS/SSH. That is encryption for data confidentiality, which takes it out of EAR99 and into Category 5 Part 2. It meets the mass-market criteria (Note 3 to Cat. 5 Pt. 2: sold to the public from stock, user cannot easily change the crypto, no substantial support needed), so it falls to <b>5A992.c</b>. <span class="tag t-V">V</span> BIS mass-market page</p>
+<ul class="tight note">
+<li>Since 29 Mar 2021, <b>mass-market end items need no BIS submission and no annual self-classification report</b>. The report under 740.17(b)(1) now covers mass-market <i>components</i>, executable software and toolkits only. <span class="tag t-V">V</span> Thompson Hine 2021</li>
+<li>5A992.c ships "NLR" (no licence required) to most destinations. Embargoed and sanctioned destinations (Cuba, Iran, North Korea, Syria, Russian-occupied regions; Russia/Belarus controls) and restricted end users still apply. Screen every international order against the Consolidated Screening List.</li>
+<li>The ECCN only matters for <b>exports from the US</b> (international DTC orders, a Kickstarter shipping worldwide). It is irrelevant to importing.</li>
+<li><b>Flag for export counsel:</b> if the firmware ships non-standard crypto, or the M4F firmware adds anything beyond standard libraries, re-check. Keep the self-classification memo on file. The open-source exemption (EAR 734.3(b)(3)) covers the published source, not the hardware.</li>
+</ul></div>
+  </div>
+</section>
+
+<section id="buy">
+  <h2>Front-loaded proto NRE: the week-0 buy-ahead</h2>
+  <p>Spend this money before the design locks. It removes the risks that would otherwise stall a build: single-source modules, thin stock, an unverified panel, an unchosen battery. Untick or change quantities and the total updates.</p>
+  <div class="scroll"><table id="buyahead"></table></div>
+</section>
+
+<section id="method">
+  <h2>Method and limits</h2>
+  <ul class="tight note">
+    <li><b>Bill of materials:</b> the part prices (PB2, panel, cells, switches and caps, LCSC components, hardware) are the same in every strategy and come from the Overview page. Country of origin is China for all of them, so A–D are still mostly China-origin.</li>
+    <li><b>Process costs</b> (PCBA, enclosure printing and moulding, tooling) by country are estimates scaled from the verified JLC fee table and the Protolabs and TEAM Rapid tooling figures. US, Mexican and Vietnamese EMS prices need real RFQs.</li>
+    <li><b>Freight:</b> the shipment is costed per batch (units × 0.6 kg, 0.0016 m³ packed) with minimum charges, and short legs default to truck. Lead time adds component lead (PB2 98 d once a batch exceeds DigiKey's 3,442 units; panel 45 d at MOQ), the parallel PCBA/enclosure path, assembly, transit and customs.</li>
+    <li><b>CO₂e:</b> tonne-km × a mode factor (well-to-wheel, GLEC-style, estimated; see the tariff/freight notes) plus a last-mile parcel allowance. It covers transport only: no materials, no manufacturing energy.</li>
+    <li><b>Not modelled:</b> Mexican or Vietnamese import duties outside IMMEX/EPE zones, state sales tax, scrap and yield loss (add 2–5%), EMS margin above the estimate, demurrage and detention.</li>
+  </ul>
+</section>
+<footer>Zine Machine v3 · material-flow study · generated 2026-11-07. Tariff law changes often: re-verify the tariff table before acting on any number here.</footer>
+</main>
+
+<script>
+// ===================== Zine Machine v3 · material-flow & realization model =====================
+// Every default carries a status: V verified live (date), A repo/AGENTS.md, S snippet, E estimate.
+const QS = [3, 10, 100, 1000, 5000, 10000];
+const interp = (arr, qi) => arr[qi];
+
+// ---- material (bought parts) per unit, USD, by quantity point. Origin = country of manufacture. ----
+const MATERIAL = [
+  { id: 'pb2', name: 'PocketBeagle 2 Industrial', origin: 'CN', hts: '8473.30', cls: 'mod', kg: 0.012,
+    p: [51.03, 51.03, 51.03, 46, 43, 42], s: 'V DigiKey 2026-11-07 ($51.03, no breaks); 1k+ E' },
+  { id: 'disp', name: '4.58" bar LCD module', origin: 'CN', hts: '8524.11', cls: 'disp', kg: 0.03,
+    p: [14.33, 13.95, 12.82, 10.5, 9.0, 8.5], s: 'A/S BuyDisplay; 1k+ E' },
+  { id: 'batt', name: '1S LiPo pack ~2.5–3 Ah', origin: 'CN', hts: '8507.60', cls: 'batt', kg: 0.05,
+    p: [14.95, 13.46, 11.96, 5.0, 4.0, 3.8], s: 'V Adafruit 328 (1–100); 1k+ E custom pack' },
+  { id: 'keys', name: '43 Choc v1 switches + 43 CFX caps', origin: 'CN', hts: '8536.50', cls: 'keys', kg: 0.09,
+    p: [37, 34.45, 27.9, 19.35, 15.05, 13.5], s: 'A/E (see Overview)' },
+  { id: 'smd', name: 'Board components (48 lines, LCSC)', origin: 'CN', hts: '85xx', cls: 'comp', kg: 0.03,
+    p: [13, 10.5, 8.1, 6.8, 6.2, 6.0], s: 'V LCSC API 2026-11-07 for 11 key lines; rest E' },
+  { id: 'hw', name: 'Headers, M2 screws, foam, tape, bumpons', origin: 'CN', hts: '7318', cls: 'hw', kg: 0.02,
+    p: [8, 3.0, 1.2, 0.55, 0.43, 0.38], s: 'E' }
+];
+
+// ---- sites ----
+const SITES = {
+  US: { name: 'USA', flag: 'US', cur: null },
+  MX: { name: 'Mexico (Monterrey / Guadalajara)', flag: 'MX', cur: 'MXN' },
+  CA: { name: 'Canada', flag: 'CA', cur: 'CAD' },
+  CN: { name: 'China (Shenzhen)', flag: 'CN', cur: 'CNY' },
+  VN: { name: 'Vietnam / Malaysia', flag: 'VN', cur: 'VND' }
+};
+
+// PCB fab + PCBA (fees + board + assembly labour + margin), per unit, by site and Q. All E except CN low-Q (V fee table).
+const PCBA = {
+  CN: { p: [45.7, 16.4, 6.0, 3.7, 3.1, 2.9], s: 'JLC fees V 2026-11-07 + board E' },
+  US: { p: [420, 140, 38, 15, 10.5, 9.5], s: 'E: US quick-turn turnkey 4-layer; see 10-day proto page for vendor turns' },
+  MX: { p: [260, 95, 22, 7.5, 5.2, 4.6], s: 'E: Mexican EMS (NRE-heavy at low Q)' },
+  VN: { p: [140, 55, 12, 5.0, 3.8, 3.4], s: 'E: Vietnam/Malaysia EMS' }
+};
+// Enclosure set (tray + chassis + translucent lid): printed below the mould threshold, moulded above.
+const ENCL_PRINT = { CN: [49, 42.5, 43.5, 40, 38, 37], US: [110, 92, 75, 65, 60, 58], MX: [115, 95, 78, 68, 62, 60], VN: [55, 47, 45, 42, 40, 39] };
+const ENCL_MOULD = { CN: [0, 0, 9, 7.2, 4.6, 4.2], US: [0, 0, 14, 9.5, 6.2, 5.6], MX: [0, 0, 12, 8.4, 5.4, 4.9], VN: [0, 0, 10, 7.8, 5.0, 4.5] };
+const TOOLING = { CN: 18000, US: 34000, MX: 30000, VN: 22000 }; // E: 3 aluminium/P20 tools; US = Protolabs-class
+// Assembly + test hours per unit by Q (learning curve), E.
+const HOURS = [1.6, 1.3, 0.75, 0.5, 0.42, 0.38];
+const PACK = [3.5, 3.5, 3.5, 1.8, 1.3, 1.2];
+const OUTBOUND = 7.6; // USPS Ground Advantage 1 lb commercial, S (snippet 2026)
+
+// ---- strategies: where each stage happens + transit legs ----
+// leg: {from,to,goods:'comp'|'pcba'|'fg'|'encl', mode:'sel'|fixed mode, km, incoterm, border:bool}
+const STRATS = [
+  { id: 'A', name: 'A · All-domestic USA', short: 'USA', color: 1,
+    pcba: 'US', encl: 'US', fa: 'US', fulfil: 'US 3PL',
+    legs: [
+      { from: 'Asia parts', to: 'US EMS', goods: 'comp', mode: 'express', km: 12000, incoterm: 'DAP (distributor) / DDP', border: true, note: 'components cross the border; tariffs land on parts' },
+      { from: 'US EMS', to: 'US 3PL', goods: 'fg', mode: 'truck', km: 1500, incoterm: 'domestic', border: false }],
+    risk: { geo: 2, single: 3, logi: 1, ip: 1 },
+    notes: 'Highest labour cost; every Chinese-origin part (PB2, panel, cells, switches) still pays its component tariff on entry. Shortest, most controllable loop; best for 3–100 units and for speed.' },
+  { id: 'B', name: 'B · North America / USMCA', short: 'USMCA', color: 2,
+    pcba: 'MX', encl: 'MX', fa: 'MX', fulfil: 'US 3PL (TX)',
+    legs: [
+      { from: 'Asia parts', to: 'MX EMS (IMMEX)', goods: 'comp', mode: 'air', km: 13500, incoterm: 'CIF Guadalajara/Monterrey, IMMEX temporary import', border: true, note: 'IMMEX: Mexican duty suspended on inputs re-exported' },
+      { from: 'MX EMS', to: 'US 3PL (Laredo/DFW)', goods: 'fg', mode: 'truck', km: 900, incoterm: 'FCA Monterrey / DAP', border: true, note: '0% if USMCA-originating; otherwise Mexico reciprocal/IEEPA rate' }],
+    risk: { geo: 2, single: 3, logi: 2, ip: 2 },
+    notes: 'Mexican labour, truck to Texas in days. The finished good is tariff-free only if it qualifies under USMCA rules of origin (claim + certification of origin). Mexican EMS NRE is high below ~1k units.' },
+  { id: 'C', name: 'C · Global / China (Shenzhen)', short: 'China', color: 3,
+    pcba: 'CN', encl: 'CN', fa: 'CN', fulfil: 'US 3PL',
+    legs: [
+      { from: 'Shenzhen suppliers', to: 'Shenzhen CM', goods: 'comp', mode: 'truck', km: 50, incoterm: 'local', border: false },
+      { from: 'Shenzhen CM', to: 'US 3PL', goods: 'fg', mode: 'sel', km: 11600, incoterm: 'FOB Yantian / FCA HKG → DDP option', border: true, note: 'finished device enters as HTS 8471.30 from China' }],
+    risk: { geo: 5, single: 3, logi: 3, ip: 4 },
+    notes: 'Lowest piece cost and the deepest supply base (JLC, LCSC, HLH-class moulders). Full China tariff stack on the whole landed value; long ocean legs; IP exposure.' },
+  { id: 'D', name: 'D · Hybrid: China PCBA, US enclosure + final', short: 'Hybrid', color: 4,
+    pcba: 'CN', encl: 'US', fa: 'US', fulfil: 'US 3PL',
+    legs: [
+      { from: 'JLC Shenzhen', to: 'US final assembly', goods: 'pcba', mode: 'sel', km: 11600, incoterm: 'DDP (JLC) or DAP + broker', border: true, note: 'PCBA enters as 8473.30; parts as their own HTS' },
+      { from: 'Asia parts', to: 'US final assembly', goods: 'comp', mode: 'sel', km: 12000, incoterm: 'DAP', border: true },
+      { from: 'US final assembly', to: 'US 3PL', goods: 'fg', mode: 'truck', km: 800, incoterm: 'domestic', border: false }],
+    risk: { geo: 3, single: 3, logi: 2, ip: 2 },
+    notes: 'Cheap, fast JLC PCBA; enclosure, firmware flash and box-build stay in the US (IP and cosmetics control). Tariffs apply to the PCBA and parts, not to US labour and enclosure. Country-of-origin marking needs a substantial-transformation ruling to say "Made in USA"/"Assembled in USA".' },
+  { id: 'E', name: 'E · Southeast Asia (Vietnam / Malaysia) China+1', short: 'SEA', color: 5,
+    pcba: 'VN', encl: 'VN', fa: 'VN', fulfil: 'US 3PL',
+    legs: [
+      { from: 'China parts', to: 'VN/MY EMS (EPE zone)', goods: 'comp', mode: 'truck', km: 1200, incoterm: 'DAP Hai Phong / Penang', border: true, note: 'export-processing: no local duty on inputs' },
+      { from: 'VN/MY EMS', to: 'US 3PL', goods: 'fg', mode: 'sel', km: 13000, incoterm: 'FOB Hai Phong / Penang', border: true, note: 'transshipment scrutiny: origin must be substantially transformed' }],
+    risk: { geo: 3, single: 3, logi: 3, ip: 3 },
+    notes: 'Lower tariff stack than China if origin is genuinely Vietnamese/Malaysian. Thinner small-volume EMS base, parts still sourced from China, and US transshipment penalties if the content is mostly Chinese.' }
+];
+
+// ---- tariff layers (editable). rate in %; applies[origin][class] boolean. ----
+// defaults are replaced in place by verified values from research (see TARIFF_NOTES)
+let TARIFF = {
+  asOf: '2026-11-07',
+  layers: [] // filled by tariffs.js
+};
+
+// ---- freight (editable), USD ----
+let FREIGHT = {
+  express: { perKg: 9, min: 80, days: [3, 5, 9], co2: 0.9, s: 'S $7–15/kg (Sino-Shipping); CO2 E' },
+  air:     { perKg: 9.5, min: 450, days: [4, 7, 12], co2: 0.788, s: 'Freightos air index $7.76/kg LIVE 3 Nov 2026 + small-shipment premium E; GLEC 788 g/tkm LIVE' },
+  lcl:     { perCbm: 502, fixed: 900, minCbm: 1, days: [20, 26, 40], co2: 0.00727, s: 'Gateway LCL Shanghai→LA $502/cbm CFS–CFS LIVE 2 Nov 2026; fixed fees E; GLEC 7.27 g/tkm LIVE' },
+  fcl:     { perBox: 8300, fixed: 1400, cbm: 60, days: [18, 24, 38], co2: 0.00727, s: 'Freightos FBX01 ~$8,300/40ft LIVE 3 Nov 2026; fixed E' },
+  truck:   { perKg: 0.35, min: 250, days: [1, 3, 6], co2: 0.101, s: 'E (MX FTL $1.8–3k est.); GLEC 101 g/tkm LIVE' }
+};
+const UNIT_KG = 0.6, UNIT_CBM = 0.0016, COMP_KG = 0.25, PCBA_KG = 0.12;
+let CUSTOMS = { brokerPerEntry: 155, informalBroker: 25, mpfPct: 0.3464, mpfMin: 34.58, mpfMax: 670.86, mpfInformal: 2.77, hmfPct: 0.125, isf: 50, bondYear: 500, s: 'MPF FY2027 LIVE Livingston; broker/ISF/bond LIVE ClearIT' };
+let LABOUR = { US: 45, MX: 7.5, CN: 8, VN: 4, s: 'E/S' };
+const LABOUR0 = { ...LABOUR };
+
+// ---- core cost/lead/CO2 model ----
+function legCost(mode, kg, cbm) {
+  const f = FREIGHT[mode];
+  if (mode === 'lcl') return f.fixed + f.perCbm * Math.max(f.minCbm, cbm);
+  if (mode === 'fcl') return Math.ceil(cbm / f.cbm) * f.perBox + f.fixed;
+  return Math.max(f.min, f.perKg * kg);
+}
+function tariffRate(origin, cls, opts) {
+  let r = 0;
+  for (const L of TARIFF.layers) {
+    if (!L.on) continue;
+    const a = L.applies[origin];
+    if (!a) continue;
+    if (a === true || a.includes(cls)) r += (L.override != null ? L.override : L.rate);
+  }
+  return r / 100;
+}
+
+function evaluate(st, qi, P, mc) {
+  // P: global params; mc: optional Monte Carlo multipliers
+  mc = mc || {};
+  const Q = QS[qi];
+  const m = k => (mc[k] == null ? 1 : mc[k]);
+  const fx = 1 + (P.fx + (mc.fxPts || 0)) / 100;            // local currency vs USD shift on non-US value-add
+  const exp = P.expedite / 100;
+  const out = { lines: [], nre: 0, days: 0, co2: 0, legs: [] };
+  const add = (k, v, cat) => out.lines.push({ k, v, cat });
+  // materials
+  let matTotal = 0;
+  MATERIAL.forEach(mt => { const v = mt.p[qi] * m('parts'); matTotal += v; add(mt.name, v, 'Parts'); });
+  // PCBA
+  const site = st.pcba;
+  const pcbaBase = PCBA[site].p[qi] * m('process') * (site === 'US' ? 1 : fx);
+  const labourAdj = LABOUR[site] / LABOUR0[site] * m('labour');
+  const pcba = pcbaBase * (0.65 + 0.35 * labourAdj) * (1 + exp);
+  add('PCB fab + PCBA (' + site + ')', pcba, 'PCBA');
+  // enclosure
+  const mould = Q >= P.mouldAt;
+  const enclSite = st.encl;
+  const encl = (mould ? ENCL_MOULD[enclSite][qi] : ENCL_PRINT[enclSite][qi]) * m('process') * (enclSite === 'US' ? 1 : fx) * (1 + exp * 0.5);
+  add((mould ? 'Moulded' : 'Printed') + ' enclosure set (' + enclSite + ')', encl, 'Enclosure');
+  if (mould) out.nre += TOOLING[enclSite] * m('process');
+  // final assembly + test
+  const fa = HOURS[qi] * LABOUR[st.fa] * m('labour') * (st.fa === 'US' ? 1 : fx) * (1 + exp * 0.3);
+  add('Final assembly + test (' + st.fa + ', ' + HOURS[qi] + ' h)', fa, 'Assembly');
+  add('Pack-out', PACK[qi], 'Assembly');
+  // ---- freight + duties per leg ----
+  let freight = 0, duty = 0, customs = 0, co2 = 0, transitDays = 0;
+  const smdV = MATERIAL.find(x => x.id === 'smd').p[qi] * m('parts');
+  const valueOf = goods => goods === 'pcba' ? pcba + smdV : goods === 'fg' ? matTotal + pcba + encl + fa + PACK[qi] : (st.id === 'D' ? matTotal - smdV : matTotal);
+  st.legs.forEach(L => {
+    const mode = L.mode === 'sel' ? P.mode : L.mode;
+    const kgU = L.goods === 'fg' ? UNIT_KG : L.goods === 'pcba' ? PCBA_KG : COMP_KG;
+    const cbmU = L.goods === 'fg' ? UNIT_CBM : UNIT_CBM * 0.4;
+    const shipKg = kgU * Q, shipCbm = cbmU * Q;
+    const legMode = (mode === 'fcl' || mode === 'lcl') && L.km < 2000 ? 'truck' : mode;
+    const c = legCost(legMode, shipKg, shipCbm) * m('freight') / Q;
+    freight += c;
+    const f = FREIGHT[legMode];
+    const d = f.days[1] * m('transit');
+    transitDays = Math.max(transitDays, 0) + d;
+    const co2U = kgU / 1000 * L.km * f.co2;
+    co2 += co2U;
+    let dutyU = 0, entryU = 0;
+    if (L.border) {
+      // dutiable value per unit and its origin mix
+      if (L.goods === 'fg') {
+        const origin = st.fa;
+        let rate;
+        if (origin === 'MX') rate = P.usmca ? 0 : tariffRate('MX', 'fg');
+        else rate = tariffRate(origin, 'fg');
+        dutyU = valueOf('fg') * (rate + (mc.tariffPts || 0) / 100);
+      } else if (L.goods === 'pcba') {
+        dutyU = valueOf('pcba') * (tariffRate('CN', 'pcba') + (mc.tariffPts || 0) / 100);
+      } else if (L.goods === 'comp' && L.to.includes('US')) {
+        MATERIAL.forEach(mt => { if (st.id === 'D' && mt.id === 'smd') return; dutyU += mt.p[qi] * m('parts') * (tariffRate(mt.origin, mt.cls) + (mc.tariffPts || 0) / 100); });
+      }
+      if (L.to.includes('US') || L.to.includes('3PL')) {
+        const val = valueOf(L.goods) * Q;
+        const formal = val >= 2500;  // de minimis suspended indefinitely: every shipment makes an entry
+        const mpf = formal ? Math.min(CUSTOMS.mpfMax, Math.max(CUSTOMS.mpfMin, val * CUSTOMS.mpfPct / 100)) : CUSTOMS.mpfInformal;
+        const hmf = (legMode === 'lcl' || legMode === 'fcl') ? val * CUSTOMS.hmfPct / 100 + CUSTOMS.isf : 0;
+        entryU = (mpf + hmf + (formal ? CUSTOMS.brokerPerEntry : CUSTOMS.informalBroker)) / Q;
+      }
+    }
+    duty += Math.max(0, dutyU);
+    customs += entryU;
+    out.legs.push({ ...L, legMode, cost: c, days: d, co2: co2U, duty: dutyU, entry: entryU });
+  });
+  add('Freight (all legs)', freight, 'Freight');
+  add('Duties / tariffs', duty, 'Duty');
+  add('Customs entry (broker, MPF, HMF, ISF)', customs, 'Duty');
+  add('Outbound parcel to customer', OUTBOUND * m('freight'), 'Freight');
+  out.co2 = co2 + UNIT_KG / 1000 * 1500 * 0.4; // last mile parcel E
+  if (P.nreInUnit) out.lines.push({ k: 'Tooling NRE / ' + Q, v: out.nre / Q, cat: 'NRE' });
+  out.unit = out.lines.reduce((a, l) => a + l.v, 0);
+  // ---- lead time to first units at the US 3PL (days) ----
+  const compDays = (Q > 3442 ? 98 : 7) * m('supplier');           // PB2: DigiKey stock vs 14-wk factory (V)
+  const dispDays = (Q >= 1000 ? 45 : 7) * m('supplier');
+  const pcbaDays = ({ CN: 5, US: 12, MX: 18, VN: 16 }[site] + Q / 2000) * (1 - Math.min(0.5, exp / 2));
+  const enclDays = (mould ? 45 : 5) * (1 - Math.min(0.4, exp / 2));
+  const faDays = 2 + Q * HOURS[qi] / (8 * ({ US: 4, MX: 20, CN: 30, VN: 20 }[st.fa]));
+  const customsDays = 2 + (mc.customsHold || 0);
+  out.days = Math.max(compDays, dispDays) + Math.max(pcbaDays, enclDays) + faDays + transitDays + customsDays + (mc.slip || 0);
+  out.duty = duty; out.freight = freight; out.mould = mould; out.transit = transitDays + customsDays; out.mfgDone = out.days - out.transit;
+  out.parts = matTotal; out.pcba = pcba; out.encl = encl; out.fa = fa; out.smd = smdV;
+  return out;
+}
+
+// ---- US tariff layers as researched 2026-11-07 (see the Tariffs section for sources) ----
+TARIFF.layers = [
+  { name: 'MFN general duty, Li-ion cells/packs (HTS 8507.60.00)', rate: 3.4, on: true, applies: { CN: ['batt'], VN: ['batt'], MX: ['batt'] }, st: 'V', src: 'USITC HTS API, live 2026-11-07. 8471.30.01 and 8473.30.11 are MFN free (live).' },
+  { name: 'Section 301 China, List 3: PCBAs and ADP parts (8473.30)', rate: 25, on: true, applies: { CN: ['pcba', 'mod'] }, st: 'S', src: 'List-3 placement of 8473.30 (MacroFab 2019, STR CIT case; snippet). The PB2 module is treated as 8473.30 here; a broker may classify it otherwise.' },
+  { name: 'Section 301 China, four-year review: non-EV Li-ion 7.5% → 25% from 1 Jan 2026', rate: 25, on: true, applies: { CN: ['batt'] }, st: 'S', src: 'Four-year review summary (Gaia, snippet).' },
+  { name: 'Section 301 China, Lists 1–4A on other parts (display modules, switches, ICs, hardware)', rate: 25, on: true, applies: { CN: ['disp', 'keys', 'comp', 'hw'] }, st: 'E', note: 'Per-HTS-line rates vary 0–50%; not checked line by line. Replace with a broker-confirmed figure per part.', src: 'Estimate: blended placeholder.' },
+  { name: 'Section 301 China, List 4B: 8471.30 portable computers', rate: 0, on: true, applies: { CN: ['fg'] }, st: 'V', src: 'List 4B suspended, never collected (cybermaxtools, live 14 Oct 2026).' },
+  { name: 'Section 301 "forced labor" tariff (since 24 Jul 2026): China +12.5%', rate: 12.5, on: true, applies: { CN: true }, st: 'V', note: 'About 863 of 2,120 codes are exempt; whether 8471 is exempt is UNVERIFIED. Check US Note 52, Ch. 99. Litigation argued 30 Sep 2026, no decision yet.', src: 'Zonos tracker (live, updated 26 Oct 2026); RVIA 24 Jul 2026 (live).' },
+  { name: 'Section 301 "forced labor": Vietnam +12.5% (Malaysia +10%)', rate: 12.5, on: true, applies: { VN: true }, st: 'V', src: 'Zonos guide (live).' },
+  { name: 'Section 301 "forced labor": Mexico +10%, only if NOT USMCA-qualifying', rate: 10, on: true, applies: { MX: true }, st: 'V', note: 'Applied only when the USMCA box is unticked.', src: 'Zonos guide (live).' },
+  { name: 'Section 232 semiconductors (advanced chips; consumer electronics 0%)', rate: 0, on: false, applies: { CN: ['comp'], VN: ['comp'] }, st: 'S', src: 'CBP CSMS 67400472 (snippet): 25% from 15 Jan 2026 on a narrow chip set only.' },
+  { name: 'IEEPA "fentanyl" + "reciprocal" (struck down)', rate: 20, on: false, applies: { CN: true, VN: true, MX: true }, st: 'V', note: 'Supreme Court, Learning Resources v. Trump, 20 Feb 2026 (6–3); CBP stopped collecting 24 Feb 2026. Refunds go to the importer of record via CAPE under CIT supervision. Toggle on to see the 2025 world.', src: 'Zonos tracker (live); Troutman 12 Oct 2026 (live).' },
+  { name: 'Section 122 10% global (expired 24 Jul 2026)', rate: 10, on: false, applies: { CN: true, VN: true, MX: true }, st: 'V', src: 'STR (live).' }
+];
+
+// ---- week-0 buy-ahead (front-loaded proto NRE) ----
+const BUYAHEAD = [
+  { on: true, item: 'PocketBeagle 2 Industrial (100003007)', where: 'DigiKey, 3,442 in stock, 14-wk factory lead', q: 8, u: 51.03, s: 'V',
+    why: '3 proto units + 2 bring-up/dev boards + 3 spares. Single-source module; 14-week lead if stock drains.' },
+  { on: true, item: 'PocketBeagle 2 (plain, 102110780)', where: 'DigiKey, 10,333 in stock', q: 2, u: 39.53, s: 'V',
+    why: 'Fallback SKU and a second bring-up target; proves the overlay on both variants.' },
+  { on: true, item: 'Bar LCD, BuyDisplay ER-TFT4.58-1 (no touch)', where: 'buydisplay.com (403 to scripts; ships from HK)', q: 6, u: 14.33, s: 'A',
+    why: 'Panel actually in the BOM; meter the pinout, contact side and outline.' },
+  { on: true, item: 'Bar LCD, Adafruit 5805 via DigiKey', where: 'DigiKey 22165010, 8 in stock, 18-wk lead', q: 4, u: 19.95, s: 'V',
+    why: 'Second source with a known pinout. Only 8 in US stock: buy now or lose them.' },
+  { on: true, item: 'Amphenol F32Q-1A7H1-11040 (top contact)', where: 'LCSC C3168061, 871 in stock', q: 20, u: 0.99, s: 'V', why: 'J3 for every board revision.' },
+  { on: true, item: 'Amphenol F32R-1A7H1-11040 (bottom contact)', where: 'DigiKey, 6,956 in stock (0 at LCSC)', q: 20, u: 2.03, s: 'V', why: 'Fallback footprint if the tail contacts face the other way; consign it to JLC.' },
+  { on: true, item: 'GCT USB1046 USB-A', where: 'LCSC C6307429, only 74 in stock', q: 70, u: 1.61, s: 'V', why: 'Lock the remaining stock for Proto 1–2 while a second source gets qualified.' },
+  { on: true, item: 'Critical IC kit (ES8388, FE1.1s, IP5306, TPS61165 ×50 each)', where: 'LCSC, all in stock', q: 1, u: 125, s: 'V', why: 'Live LCSC tiers: about $2.50 per board set at qty 50. Insulates Proto 2 from stock swings.' },
+  { on: true, item: 'LiPo candidates: Adafruit 328 + 2 custom-pack sample sets', where: 'Adafruit (in stock); Shenzhen pack houses', q: 15, u: 15, s: 'E', why: 'Battery is unchosen. Test 3 cells for fit, capacity and IP5306 behaviour now.' },
+  { on: true, item: 'Kailh Choc v1 switches', where: 'Chosfox / splitkb / Kailh', q: 300, u: 0.5, s: 'A', why: '43 per unit × 5 units + spares and a switch-life sample.' },
+  { on: true, item: 'Chocfox CFX keycaps', where: 'Chosfox', q: 300, u: 0.35, s: 'A', why: 'Same; legends are blank or stock for prototypes.' },
+  { on: true, item: 'FPC breakout + dev adapter boards (JLC 2-layer)', where: 'JLCPCB', q: 1, u: 60, s: 'E', why: 'Display bring-up before the main board exists.' },
+  { on: true, item: 'EOL fixture parts: pogo pins, USB-C PD trigger/load, current shunt, USB hub tester', where: 'DigiKey / Amazon', q: 1, u: 250, s: 'E', why: 'The fixture is on the critical path for "validated", so build it in parallel.' },
+  { on: false, item: 'Formlabs Form 4 + Clear resin (in-house SLA)', where: 'formlabs.com', q: 1, u: 4999, s: 'E', why: 'Same-day enclosure iterations instead of 3–7-day service turns. Only buy if more than ~3 enclosure spins are expected.' }
+];
+
+// ---- infrastructure checklist (s = strategies it applies to) ----
+const INFRA = [
+  { k: 'hts', area: 'Trade', s: 'ABCDE', t: 'HTS classification memo, confirmed by a licensed customs broker', d: 'Candidate 8471.30.0100 for the finished device; 8473.30 for a bare PCBA; 8507.60 for loose cells. See the HTS reasoning below.' },
+  { k: 'eccn', area: 'Trade', s: 'ABCDE', t: 'ECCN self-classification on file', d: 'Likely 5A992.c (mass-market encryption under 740.17(b)(1)); it only matters when shipping outside the US. See the ECCN reasoning below.' },
+  { k: 'broker', area: 'Customs', s: 'BCDE', t: 'Licensed US customs broker + power of attorney (CBP Form 5291)', d: 'Needed whenever you are the importer. In A the distributors import the parts.' },
+  { k: 'ior', area: 'Customs', s: 'BCDE', t: 'Importer of record decided: you (EIN + CBP Form 5106) or DDP through supplier or forwarder', d: 'DDP hides duty in the price but you lose control of classification and valuation.' },
+  { k: 'bond', area: 'Customs', s: 'BCDE', t: 'Continuous customs bond (CBP Form 301)', d: 'Single-entry bonds are fine for the first one or two shipments.' },
+  { k: 'isf', area: 'Customs', s: 'CE', t: 'ISF 10+2 filing ≥24 h before ocean loading (forwarder files)', d: '' },
+  { k: 'immex', area: 'Mexico', s: 'B', t: 'IMMEX / shelter arrangement through the Mexican EMS', d: 'Temporary import of Asian components without Mexican duty, provided the goods are exported.' },
+  { k: 'usmcaCO', area: 'Mexico', s: 'B', t: 'USMCA origin analysis + certification of origin (minimum data elements), kept 5 years', d: 'Without it the truck from Monterrey pays the Mexico non-USMCA rate.' },
+  { k: 'coo', area: 'Origin', s: 'ADE', t: 'Country-of-origin marking and substantial-transformation analysis', d: 'Ask for a CBP ruling before claiming "Assembled in USA" (D) or Vietnamese origin (E). FTC rules govern "Made in USA" claims.' },
+  { k: 'uflpa', area: 'Trade', s: 'ABCDE', t: 'UFLPA supply-chain tracing file for Chinese inputs (cells, panels, PCBs)', d: 'CBP can detain goods without traceability; this applies to imported components too.' },
+  { k: 'ftz', area: 'Customs', s: 'CDE', t: 'FTZ / bonded warehouse evaluated', d: 'Worth it only with large inventories, re-exports or inverted tariffs. Below ~10k units/yr, skip it.' },
+  { k: '3pl', area: 'Logistics', s: 'ABCDE', t: 'US 3PL able to ship UN3481 (lithium-ion in equipment), with Shopify/DTC integration and returns handling', d: '' },
+  { k: 'li', area: 'Logistics', s: 'ABCDE', t: 'Lithium battery shipping: UN38.3 test summary, SDS, trained packers (49 CFR / IATA PI 967)', d: '' },
+  { k: 'ins', area: 'Finance', s: 'ABCDE', t: 'Cargo insurance (all-risk, 110% CIF) + product-liability insurance', d: '' },
+  { k: 'terms', area: 'Finance', s: 'ABCDE', t: 'Payment terms agreed and in the cash model', d: 'CN/VN: 30% deposit / 70% before shipment is the norm for new buyers; US/MX EMS: net 30 after credit approval; moulds 50/50 or 40/30/30.' },
+  { k: 'fx', area: 'Finance', s: 'BCE', t: 'USD-denominated POs or an FX hedge for MXN / CNY / VND labour content', d: '' },
+  { k: 'qms', area: 'Quality', s: 'ABCDE', t: 'Quality system level set', d: 'Pilot: ISO 9001-aligned procedures (no certificate needed). Require ISO 9001 at EMS/CM, IPC-A-610 Class 2 workmanship, J-STD-001 soldering.' },
+  { k: 'fai', area: 'Quality', s: 'ABCDE', t: 'FAI + PPAP-lite package required in every PO (see Expert adds)', d: '' },
+  { k: 'iqc', area: 'Quality', s: 'ABCDE', t: 'Incoming inspection with an AQL plan (Z1.4 level II) at the final-assembly site', d: '' },
+  { k: 'nda', area: 'Suppliers', s: 'ABDE', t: 'Mutual NDA with each supplier', d: '' },
+  { k: 'nnn', area: 'Suppliers', s: 'CDE', t: 'China/VN: NNN agreement (non-disclosure, non-use, non-circumvention), Chinese-language, governed by PRC law, enforceable in a PRC court', d: 'A US NDA is close to unenforceable in Shenzhen.' },
+  { k: 'tm', area: 'IP', s: 'CDE', t: 'Trademark registered in China (first-to-file) before showing the brand to factories', d: '' },
+  { k: 'onb', area: 'Suppliers', s: 'ABCDE', t: 'Supplier onboarding: W-9 / W-8BEN-E, sanctions screening, bank-detail verification by call-back', d: 'Bank-change fraud is the top payment risk with overseas suppliers.' },
+  { k: 'tool', area: 'Suppliers', s: 'ABCDE', t: 'Tooling ownership agreement: title, marking, location, insurance, release on request', d: '' },
+  { k: 'flash', area: 'IP', s: 'ABCDE', t: 'Firmware images and keys flashed at a controlled station; image hash logged per serial', d: '' },
+  { k: 'fcc', area: 'Compliance', s: 'ABCDE', t: 'FCC Part 15B SDoC with a US responsible party; label and manual statements', d: '' }
+];
+
+// ===================== UI =====================
+const $ = id => document.getElementById(id);
+const money0 = (v, d) => v == null || isNaN(v) ? '—' : '$' + (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString('en-US') : v.toFixed(d == null ? (Math.abs(v) < 100 ? 2 : 0) : d));
+const money = (v, d) => (v < 0 ? '−' : '') + money0(Math.abs(v), d);
+const P = { qi: 2, mode: 'air', fx: 0, expedite: 0, usmca: true, nreInUnit: true, mouldAt: 1000, price: 299, preorder: 30, sellWeeks: 12,
+  w: { geo: 30, single: 25, logi: 20, ip: 25 }, sel: 'D' };
+const CATS = ['Parts', 'PCBA', 'Enclosure', 'Assembly', 'Freight', 'Duty', 'NRE'];
+const RISKTXT = {
+  geo: 'Geopolitical / tariff exposure', single: 'Single-source dependency', logi: 'Logistics length & variability', ip: 'IP / design leakage'
+};
+
+function riskScore(st) {
+  const w = P.w, sum = w.geo + w.single + w.logi + w.ip || 1;
+  return (st.risk.geo * w.geo + st.risk.single * w.single + st.risk.logi * w.logi + st.risk.ip * w.ip) / sum;
+}
+
+// ---------- cash curve (weekly) ----------
+function cashCurve(st, ev) {
+  const Q = QS[P.qi], wk = d => d / 7;
+  const ev2 = ev;
+  const events = []; // [week, amount]
+  const mfgW = wk(ev2.mfgDone), arrW = wk(ev2.days);
+  const prepay = st.id === 'A' ? (Q < 1000 ? 0.5 : 0) : st.id === 'B' ? 0.3 : st.id === 'D' ? 1 : 0.3;
+  const goods = (ev2.parts + ev2.pcba + ev2.encl + ev2.fa + PACK[P.qi]) * Q;
+  if (ev2.mould) { events.push([0, -TOOLING[st.encl] * 0.5]); events.push([6, -TOOLING[st.encl] * 0.5]); }
+  // distributor-bought parts are prepaid at PO in A and D
+  if (st.id === 'A' || st.id === 'D') events.push([0, -ev2.parts * Q]);
+  const rest = goods - ((st.id === 'A' || st.id === 'D') ? ev2.parts * Q : 0);
+  events.push([0, -rest * prepay]);
+  const balanceAt = st.id === 'A' ? mfgW + 4.3 : st.id === 'B' ? mfgW + 4.3 : mfgW; // net-30 for US/MX EMS; before-ship for CN/VN
+  events.push([balanceAt, -rest * (1 - prepay)]);
+  events.push([mfgW, -(ev2.freight) * Q]);
+  events.push([arrW, -(ev2.duty) * Q]);
+  // revenue: pre-orders at week 0, remainder sold evenly over sellWeeks after arrival (DTC, ~2-day payout)
+  const pre = Math.min(1, P.preorder / 100);
+  events.push([0, P.price * Q * pre]);
+  for (let i = 0; i < P.sellWeeks; i++) events.push([arrW + i + 0.3, P.price * Q * (1 - pre) / P.sellWeeks]);
+  events.sort((a, b) => a[0] - b[0]);
+  const horizon = Math.ceil(arrW + P.sellWeeks + 2);
+  const pts = []; let cum = 0, j = 0, peak = 0;
+  for (let w = 0; w <= horizon; w += 0.5) {
+    while (j < events.length && events[j][0] <= w) { cum += events[j][1]; j++; }
+    pts.push([w, cum]); peak = Math.min(peak, cum);
+  }
+  // CCC: DIO = days from paying for goods (weighted) to selling; DSO ~ 2; DPO = credit days from supplier
+  const dpo = st.id === 'A' && Q >= 1000 ? 30 : st.id === 'B' ? 30 * (1 - prepay) : 0;
+  const dio = ev2.days + P.sellWeeks * 7 / 2;
+  return { pts, peak, ccc: dio + 2 - dpo, dio, dpo, horizon };
+}
+
+// ---------- generic SVG helpers ----------
+const svgEl = (w, h, label, inner) => `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${label}">${inner}</svg>`;
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+
+function render() {
+  const evs = STRATS.map(st => evaluate(st, P.qi, P));
+  renderTiles(evs); renderCompare(evs); renderCrossover(); renderSankey(evs); renderLegs(evs); renderCash(evs); renderRisk();
+  $('qLabel').textContent = QS[P.qi].toLocaleString('en-US');
+}
+
+function renderTiles(evs) {
+  const best = Math.min(...evs.map(e => e.unit));
+  $('tiles').innerHTML = STRATS.map((st, i) => {
+    const e = evs[i], cash = cashCurve(st, e), r = riskScore(st);
+    return `<button class="stile ${P.sel === st.id ? 'on' : ''}" data-s="${st.id}" style="--c:var(--s${st.color})">
+      <div class="sname"><i></i>${st.name}</div>
+      <div class="sv">${money(e.unit, 0)}<span>/unit landed</span>${e.unit === best ? ' <b class="badge">lowest</b>' : ''}</div>
+      <div class="sgrid">
+        <span>NRE</span><b>${money(e.nre, 0)}</b>
+        <span>Lead to US 3PL</span><b>${Math.round(e.days)} d</b>
+        <span>Peak cash need</span><b>${money(-cash.peak, 0)}</b>
+        <span>CO₂e/unit (freight)</span><b>${e.co2.toFixed(2)} kg</b>
+        <span>Duty/unit</span><b>${money(e.duty)}</b>
+        <span>Risk (1–5)</span><b>${r.toFixed(1)}</b>
+      </div></button>`;
+  }).join('');
+  document.querySelectorAll('.stile').forEach(b => b.onclick = () => { P.sel = b.dataset.s; render(); });
+}
+
+function renderCompare(evs) {
+  const W = 900, rowH = 34, L = 330, R = 70, H = 30 + STRATS.length * rowH + 30;
+  const max = Math.max(...evs.map(e => e.unit)) * 1.05;
+  const X = v => L + (W - L - R) * v / max;
+  let s = '';
+  [0, 0.25, 0.5, 0.75, 1].forEach(f => { const v = max * f, x = X(v); s += `<line x1="${x}" x2="${x}" y1="20" y2="${H - 26}" class="grid"/><text x="${x}" y="${H - 10}" class="ax" text-anchor="middle">${money(v, 0)}</text>`; });
+  evs.forEach((e, i) => {
+    const y = 26 + i * rowH; let x0 = L;
+    s += `<text x="${L - 8}" y="${y + 15}" class="tn" text-anchor="end">${STRATS[i].name}</text>`;
+    CATS.forEach((c, k) => {
+      const v = e.lines.filter(l => l.cat === c).reduce((a, l) => a + l.v, 0);
+      if (v <= 0) return;
+      const w = X(v) - L;
+      s += `<rect x="${x0}" y="${y}" width="${Math.max(w - 2, 0.5)}" height="${rowH - 12}" rx="2" fill="var(--c${k + 1})"><title>${STRATS[i].short} · ${c}: ${money(v)} (${Math.round(v / e.unit * 100)}%)</title></rect>`;
+      x0 += w;
+    });
+    s += `<text x="${x0 + 6}" y="${y + 15}" class="ax">${money(e.unit, 0)}</text>`;
+  });
+  $('compareChart').innerHTML = svgEl(W, H, 'Landed cost per unit by strategy, stacked by category', s);
+  $('compareLegend').innerHTML = CATS.map((c, k) => `<span><i style="background:var(--c${k + 1})"></i>${c}</span>`).join('');
+}
+
+function renderCrossover() {
+  const W = 900, H = 300, L = 70, R = 120, T = 14, B = 34;
+  const data = STRATS.map(st => QS.map((q, qi) => evaluate(st, qi, P).unit));
+  const maxV = Math.max(...data.flat()), minV = Math.min(...data.flat());
+  const lmin = Math.log10(Math.max(20, minV * 0.8)), lmax = Math.log10(maxV * 1.1);
+  const X = qi => L + (W - L - R) * qi / (QS.length - 1);
+  const Y = v => T + (H - T - B) * (1 - (Math.log10(v) - lmin) / (lmax - lmin));
+  let s = '';
+  [30, 50, 100, 200, 300, 500, 1000, 2000].filter(v => Math.log10(v) >= lmin && Math.log10(v) <= lmax).forEach(v => s += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" class="grid"/><text x="${L - 6}" y="${Y(v) + 4}" class="ax" text-anchor="end">$${v}</text>`);
+  QS.forEach((q, qi) => s += `<text x="${X(qi)}" y="${H - 12}" class="ax" text-anchor="middle">${q.toLocaleString('en-US')}</text>`);
+  s += `<line x1="${X(P.qi)}" x2="${X(P.qi)}" y1="${T}" y2="${H - B}" class="cur"/>`;
+  const ends = [];
+  data.forEach((row, i) => {
+    const c = `var(--s${STRATS[i].color})`;
+    s += `<path d="${row.map((v, qi) => (qi ? 'L' : 'M') + X(qi) + ' ' + Y(v)).join(' ')}" fill="none" stroke="${c}" stroke-width="2"/>`;
+    row.forEach((v, qi) => s += `<circle cx="${X(qi)}" cy="${Y(v)}" r="4" fill="${c}" stroke="var(--card)" stroke-width="2"><title>${STRATS[i].short} @ ${QS[qi]}: ${money(v)}</title></circle>`);
+    ends.push({ y: Y(row[row.length - 1]), t: STRATS[i].short, c });
+  });
+  ends.sort((a, b) => a.y - b.y); for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 13) ends[i].y = ends[i - 1].y + 13;
+  ends.forEach(e => s += `<text x="${W - R + 8}" y="${e.y + 4}" class="lg" fill="${e.c}">${e.t}</text>`);
+  s += `<text x="${L}" y="${H - 1}" class="ax">units per batch (log-spaced) · y: landed $/unit (log)</text>`;
+  $('cross').innerHTML = svgEl(W, H, 'Landed cost per unit against quantity for each strategy', s);
+}
+
+// ---------- Sankey ----------
+function renderSankey(evs) {
+  const st = STRATS.find(s => s.id === P.sel), e = evs[STRATS.indexOf(st)];
+  const qi = P.qi;
+  const val = id => MATERIAL.find(m => m.id === id).p[qi];
+  const site = k => SITES[k].name.split(' (')[0];
+  const cols = [
+    [{ id: 'pb2', t: 'PocketBeagle 2 · Seeed, CN', v: val('pb2') }, { id: 'disp', t: 'Bar LCD · CN', v: val('disp') }, { id: 'batt', t: 'LiPo · CN', v: val('batt') },
+     { id: 'keys', t: 'Switches + caps · CN', v: val('keys') }, { id: 'smd', t: 'ICs + passives · LCSC (CN)', v: val('smd') + val('hw') }, { id: 'resin', t: 'Resin / pellets · ' + site(st.encl), v: e.encl * 0.35 }],
+    [{ id: 'pcba', t: 'PCB + PCBA · ' + site(st.pcba), v: e.pcba + val('smd') }, { id: 'encl', t: (e.mould ? 'Moulding · ' : 'Printing · ') + site(st.encl), v: e.encl }],
+    [{ id: 'fa', t: 'Final assy + EOL test · ' + site(st.fa), v: e.parts + e.pcba + e.encl + e.fa }],
+    [{ id: 'pack', t: 'Pack-out · ' + site(st.fa), v: e.parts + e.pcba + e.encl + e.fa + PACK[qi] }],
+    [{ id: 'tpl', t: 'US 3PL · landed', v: e.unit - OUTBOUND - (P.nreInUnit ? e.nre / QS[qi] : 0) }],
+    [{ id: 'cust', t: 'Customer (US)', v: e.unit - (P.nreInUnit ? e.nre / QS[qi] : 0) }]
+  ];
+  const links = [
+    ['smd', 'pcba', val('smd'), false], ['pb2', 'fa', val('pb2'), st.fa !== 'CN'], ['disp', 'fa', val('disp'), st.fa !== 'CN'], ['batt', 'fa', val('batt'), st.fa !== 'CN'],
+    ['keys', 'fa', val('keys'), st.fa !== 'CN'], ['smd', 'fa', val('hw'), st.fa !== 'CN'], ['resin', 'encl', e.encl * 0.35, false],
+    ['pcba', 'fa', e.pcba + val('smd'), st.pcba !== st.fa], ['encl', 'fa', e.encl, st.encl !== st.fa],
+    ['fa', 'pack', e.parts + e.pcba + e.encl + e.fa, false], ['pack', 'tpl', e.parts + e.pcba + e.encl + e.fa + PACK[qi], st.fa !== 'US'],
+    ['tpl', 'cust', e.unit - OUTBOUND - (P.nreInUnit ? e.nre / QS[qi] : 0), false]
+  ];
+  const W = 1300, H = 470, nodeW = 14, colX = i => 20 + i * ((W - 120) / (cols.length - 1));
+  const maxCol = Math.max(...cols.map(c => c.reduce((a, n) => a + n.v, 0)));
+  const k = (H - 90 - 14 * 6) / maxCol;
+  const pos = {};
+  cols.forEach((c, ci) => {
+    const gap = ci === 0 ? 14 : 40;
+    const tot = c.reduce((a, n) => a + n.v * k, 0) + (c.length - 1) * gap;
+    let y = 50 + (H - 80 - tot) / 2;
+    c.forEach(n => { pos[n.id] = { x: colX(ci), y, h: Math.max(2, n.v * k), out: 0, in: 0, n, ci }; y += Math.max(2, n.v * k) + gap; });
+  });
+  let s = '';
+  links.forEach(([a, b, v, border]) => {
+    const A = pos[a], Bn = pos[b], w = Math.max(1, v * k);
+    const y0 = A.y + A.out + w / 2, y1 = Bn.y + Bn.in + w / 2; A.out += w; Bn.in += w;
+    const x0 = A.x + nodeW, x1 = Bn.x, mx = (x0 + x1) / 2;
+    s += `<path d="M${x0} ${y0} C${mx} ${y0} ${mx} ${y1} ${x1} ${y1}" fill="none" stroke="${border ? 'var(--crit)' : 'var(--s' + st.color + ')'}" stroke-opacity="${border ? 0.35 : 0.28}" stroke-width="${w}"><title>${esc(A.n.t)} → ${esc(Bn.n.t)}: ${money(v)}/unit${border ? ' · crosses a border' : ''}</title></path>`;
+  });
+  Object.values(pos).forEach(p => {
+    s += `<rect x="${p.x}" y="${p.y}" width="${nodeW}" height="${p.h}" rx="2" fill="var(--ink)"><title>${esc(p.n.t)}: ${money(p.n.v)}/unit</title></rect>`;
+    if (p.ci === 0) {
+      s += `<text x="${p.x + nodeW + 5}" y="${p.y + Math.min(p.h / 2, 30) + 4}" class="tn">${esc(p.n.t)}</text>`;
+      s += `<text x="${p.x + nodeW + 5}" y="${p.y + Math.min(p.h / 2, 30) + 17}" class="ax">${money(p.n.v)}</text>`;
+    } else {
+      const last = p.ci === cols.length - 1, words = p.n.t.split(' · ');
+      const ax = last ? p.x + nodeW : p.x, anc = last ? 'text-anchor="end"' : '';
+      s += `<text x="${ax}" y="${p.y - 20}" class="tn" ${anc}>${esc(words[0])}</text>`;
+      s += `<text x="${ax}" y="${p.y - 6}" class="ax" ${anc}>${esc(words.slice(1).join(' · '))}${words.length > 1 ? ' · ' : ''}${money(p.n.v)}</text>`;
+    }
+  });
+  ['Raw materials & parts', 'Fab / PCBA / enclosure', 'Sub-assy, final, test', 'Pack-out', 'Fulfilment', 'Customer'].forEach((t, i) => s += `<text x="${i === 5 ? colX(i) + nodeW : colX(i)}" y="16" class="ph" ${i === 5 ? 'text-anchor="end"' : ''}>${t}</text>`);
+  $('sankey').innerHTML = svgEl(W, H, 'Material and value flow for strategy ' + st.name, s);
+  $('sankeyTitle').textContent = st.name + ' · ' + QS[qi].toLocaleString('en-US') + ' units · ' + money(e.unit, 0) + '/unit landed';
+}
+
+function renderLegs(evs) {
+  const st = STRATS.find(s => s.id === P.sel), e = evs[STRATS.indexOf(st)];
+  $('legs').innerHTML = '<thead><tr><th>Leg</th><th>Goods</th><th>Mode</th><th>Incoterm / regime</th><th class="n">Days (P50)</th><th class="n">Freight $/unit</th><th class="n">Duty $/unit</th><th class="n">Entry $/unit</th><th class="n">CO₂e kg/unit</th></tr></thead><tbody>' +
+    e.legs.map(L => `<tr><td>${L.from} → ${L.to}${L.note ? `<div class="note">${L.note}</div>` : ''}</td><td>${{ comp: 'components', pcba: 'PCBA', fg: 'finished goods' }[L.goods]}</td><td>${L.legMode}</td><td>${L.incoterm}</td><td class="n">${L.days.toFixed(0)}</td><td class="n">${money(L.cost)}</td><td class="n">${money(L.duty)}</td><td class="n">${money(L.entry)}</td><td class="n">${L.co2.toFixed(3)}</td></tr>`).join('') +
+    `</tbody><tfoot><tr><td colspan="4"><b>${st.name}</b> · ${st.notes}</td><td class="n"><b>${Math.round(e.days)}</b> to 3PL</td><td class="n">${money(e.freight)}</td><td class="n">${money(e.duty)}</td><td></td><td class="n">${e.co2.toFixed(2)}</td></tr></tfoot>`;
+}
+
+function renderCash(evs) {
+  const st = STRATS.find(s => s.id === P.sel), e = evs[STRATS.indexOf(st)], c = cashCurve(st, e);
+  const W = 900, H = 260, L = 80, R = 20, T = 14, B = 34;
+  const ys = c.pts.map(p => p[1]), lo = Math.min(0, ...ys), hi = Math.max(0, ...ys);
+  const X = w => L + (W - L - R) * w / c.horizon, Y = v => T + (H - T - B) * (1 - (v - lo) / (hi - lo || 1));
+  let s = '';
+  for (let i = 0; i <= 4; i++) { const v = lo + (hi - lo) * i / 4; s += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" class="grid"/><text x="${L - 6}" y="${Y(v) + 4}" class="ax" text-anchor="end">${money(v, 0)}</text>`; }
+  for (let w = 0; w <= c.horizon; w += Math.max(1, Math.round(c.horizon / 12))) s += `<text x="${X(w)}" y="${H - 14}" class="ax" text-anchor="middle">wk ${w}</text>`;
+  s += `<line x1="${L}" x2="${W - R}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--ink2)"/>`;
+  s += `<path d="${c.pts.map((p, i) => (i ? 'L' : 'M') + X(p[0]) + ' ' + Y(p[1])).join(' ')}" fill="none" stroke="var(--s${st.color})" stroke-width="2"/>`;
+  const pk = c.pts.find(p => p[1] === c.peak);
+  if (pk) s += `<circle cx="${X(pk[0])}" cy="${Y(pk[1])}" r="5" fill="var(--crit)"/><text x="${X(pk[0]) + 8}" y="${Y(pk[1]) + 4}" class="lg">peak need ${money(-c.peak, 0)}</text>`;
+  $('cash').innerHTML = svgEl(W, H, 'Cumulative cash position over time', s);
+  $('cashStats').innerHTML = `<b>${st.name}</b>: peak working capital <b>${money(-c.peak, 0)}</b> · cash-conversion cycle ≈ <b>${Math.round(c.ccc)} days</b> (DIO ${Math.round(c.dio)} + DSO 2 − DPO ${Math.round(c.dpo)}) · break-even week ${(c.pts.find(p => p[0] > 0.5 && p[1] >= 0) || [NaN])[0]}`;
+}
+
+function renderRisk() {
+  $('riskTable').innerHTML = '<thead><tr><th>Strategy</th>' + Object.keys(RISKTXT).map(k => `<th class="n">${RISKTXT[k]}</th>`).join('') + '<th class="n">Weighted</th></tr></thead><tbody>' +
+    STRATS.map(st => `<tr><td>${st.name}</td>${Object.keys(RISKTXT).map(k => `<td class="n"><span class="pip" style="--v:${st.risk[k]}"></span>${st.risk[k]}</td>`).join('')}<td class="n"><b>${riskScore(st).toFixed(2)}</b></td></tr>`).join('') + '</tbody>';
+}
+
+// ---------- Monte Carlo ----------
+const MCV = [
+  { k: 'parts', name: 'Bought-part prices', tri: [0.92, 1, 1.15] },
+  { k: 'process', name: 'PCBA + enclosure quotes', tri: [0.8, 1, 1.35] },
+  { k: 'labour', name: 'Labour rates', tri: [0.9, 1, 1.25] },
+  { k: 'freight', name: 'Freight rates', tri: [0.7, 1, 1.9] },
+  { k: 'tariffPts', name: 'Tariff change (± pts)', tri: [-10, 0, 25] },
+  { k: 'fxPts', name: 'FX (local vs USD, %)', tri: [-10, 0, 10] },
+  { k: 'transit', name: 'Transit time', tri: [0.85, 1, 1.7] },
+  { k: 'supplier', name: 'Supplier lead time', tri: [0.8, 1, 1.5] },
+  { k: 'customsHold', name: 'Customs hold (days)', tri: [0, 0.5, 10] },
+  { k: 'slip', name: 'Schedule slip (days)', tri: [0, 2, 20] }
+];
+function tri([a, m, b]) { const u = Math.random(), f = (m - a) / (b - a || 1); return u < f ? a + Math.sqrt(u * (b - a) * (m - a)) : b - Math.sqrt((1 - u) * (b - a) * (b - m)); }
+const pct = (arr, p) => { const s = [...arr].sort((a, b) => a - b); return s[Math.min(s.length - 1, Math.floor(p * s.length))]; };
+function runMC() {
+  const N = +$('mcN').value;
+  const res = STRATS.map(st => { const c = [], d = []; for (let i = 0; i < N; i++) { const mc = {}; MCV.forEach(v => mc[v.k] = tri(v.tri)); const e = evaluate(st, P.qi, P, mc); c.push(e.unit); d.push(e.days); } return { c, d }; });
+  const W = 900, rowH = 30, L = 330, R = 150;
+  const band = (key, unit, el, label) => {
+    const all = res.flatMap(r => r[key]); const lo = pct(all, 0.02), hi = pct(all, 0.98);
+    const X = v => L + (W - L - R) * (v - lo) / (hi - lo || 1); const H = 30 + STRATS.length * rowH + 20;
+    let s = '';
+    for (let i = 0; i <= 4; i++) { const v = lo + (hi - lo) * i / 4; s += `<line x1="${X(v)}" x2="${X(v)}" y1="18" y2="${H - 24}" class="grid"/><text x="${X(v)}" y="${H - 8}" class="ax" text-anchor="middle">${unit(v)}</text>`; }
+    res.forEach((r, i) => {
+      const y = 24 + i * rowH, p10 = pct(r[key], .1), p50 = pct(r[key], .5), p90 = pct(r[key], .9);
+      const c = `var(--s${STRATS[i].color})`;
+      s += `<text x="${L - 8}" y="${y + 12}" class="tn" text-anchor="end">${STRATS[i].name}</text>`;
+      s += `<line x1="${X(p10)}" x2="${X(p90)}" y1="${y + 8}" y2="${y + 8}" stroke="${c}" stroke-width="10" stroke-linecap="round" opacity=".45"><title>P10 ${unit(p10)} · P90 ${unit(p90)}</title></line>`;
+      s += `<circle cx="${X(p50)}" cy="${y + 8}" r="6" fill="${c}" stroke="var(--card)" stroke-width="2"><title>P50 ${unit(p50)}</title></circle>`;
+      s += `<text x="${X(p90) + 10}" y="${y + 12}" class="ax">P50 ${unit(p50)} · P90 ${unit(p90)}</text>`;
+    });
+    $(el).innerHTML = svgEl(W, H, label, s);
+  };
+  band('c', v => money(v, 0), 'mcCost', 'Landed cost per unit, P10 to P90 band with P50 dot');
+  band('d', v => Math.round(v) + ' d', 'mcDays', 'Lead time in days, P10 to P90 band with P50 dot');
+  renderTornado();
+}
+function renderTornado() {
+  const st = STRATS.find(s => s.id === P.sel), metric = $('tornMetric').value;
+  const base = evaluate(st, P.qi, P)[metric];
+  const rows = MCV.map(v => {
+    const lo = {}, hi = {}; lo[v.k] = v.tri[0]; hi[v.k] = v.tri[2];
+    const a = evaluate(st, P.qi, P, lo)[metric], b = evaluate(st, P.qi, P, hi)[metric];
+    return { name: v.name, a, b, span: Math.abs(b - a) };
+  }).sort((x, y) => y.span - x.span);
+  const W = 900, rowH = 26, L = 220, R = 90, H = 20 + rows.length * rowH + 26;
+  const lo = Math.min(base, ...rows.map(r => Math.min(r.a, r.b))), hi = Math.max(base, ...rows.map(r => Math.max(r.a, r.b)));
+  const X = v => L + (W - L - R) * (v - lo) / (hi - lo || 1), fm = v => metric === 'unit' ? money(v, 0) : Math.round(v) + ' d';
+  let s = `<line x1="${X(base)}" x2="${X(base)}" y1="10" y2="${H - 20}" stroke="var(--ink2)"/><text x="${X(base)}" y="${H - 6}" class="ax" text-anchor="middle">base ${fm(base)}</text>`;
+  rows.forEach((r, i) => {
+    const y = 14 + i * rowH, x0 = X(Math.min(r.a, r.b)), x1 = X(Math.max(r.a, r.b));
+    s += `<text x="${L - 8}" y="${y + 13}" class="tn" text-anchor="end">${r.name}</text>`;
+    s += `<rect x="${Math.min(X(r.a), X(base))}" y="${y + 2}" width="${Math.abs(X(r.a) - X(base))}" height="${rowH - 8}" rx="2" fill="var(--s1)"><title>low input → ${fm(r.a)}</title></rect>`;
+    s += `<rect x="${Math.min(X(r.b), X(base))}" y="${y + 2}" width="${Math.abs(X(r.b) - X(base))}" height="${rowH - 8}" rx="2" fill="var(--s2)"><title>high input → ${fm(r.b)}</title></rect>`;
+    s += `<text x="${x1 + 6}" y="${y + 13}" class="ax">${fm(r.a)} … ${fm(r.b)}</text>`;
+  });
+  $('tornado').innerHTML = svgEl(W, H, 'Tornado chart of sensitivities', s);
+  $('tornTitle').textContent = st.name + ' · ' + QS[P.qi].toLocaleString('en-US') + ' units';
+}
+
+// ---------- tariff + parameter editors ----------
+function renderTariffEditor() {
+  $('tariffs').innerHTML = '<thead><tr><th>On</th><th>Layer</th><th class="n">Rate %</th><th>Applies to</th><th>Status / source</th></tr></thead><tbody>' +
+    TARIFF.layers.map((L, i) => `<tr><td><input type="checkbox" data-ti="${i}" ${L.on ? 'checked' : ''}></td><td><b>${L.name}</b>${L.note ? `<div class="note">${L.note}</div>` : ''}</td>
+      <td class="n"><input type="number" step="0.5" data-tr="${i}" value="${L.override != null ? L.override : L.rate}" style="width:64px"></td>
+      <td class="note">${Object.entries(L.applies).map(([o, a]) => o + ': ' + (a === true ? 'all goods' : a.join(', '))).join('<br>')}</td>
+      <td class="note"><span class="tag t-${L.st[0]}">${L.st[0]}</span> ${L.src}</td></tr>`).join('') + '</tbody>';
+  document.querySelectorAll('[data-ti]').forEach(c => c.onchange = () => { TARIFF.layers[+c.dataset.ti].on = c.checked; render(); });
+  document.querySelectorAll('[data-tr]').forEach(c => c.oninput = () => { TARIFF.layers[+c.dataset.tr].override = +c.value; render(); });
+}
+function bindControls() {
+  $('qSeg').innerHTML = QS.map((q, i) => `<button data-q="${i}" class="${i === P.qi ? 'on' : ''}">${q.toLocaleString('en-US')}</button>`).join('');
+  $('qSeg').querySelectorAll('button').forEach(b => b.onclick = () => { P.qi = +b.dataset.q; $('qSeg').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); render(); });
+  const bind = (id, key, fmt) => { const el = $(id); el.oninput = () => { P[key] = el.type === 'checkbox' ? el.checked : (el.tagName === 'SELECT' ? el.value : +el.value); if (fmt) $(id + 'V').textContent = fmt(P[key]); render(); }; if (fmt) $(id + 'V').textContent = fmt(P[key]); };
+  bind('mode', 'mode'); bind('fx', 'fx', v => (v > 0 ? '+' : '') + v + '%'); bind('exp', 'expedite', v => v + '%'); bind('usmca', 'usmca'); bind('nreIn', 'nreInUnit');
+  bind('mouldAt', 'mouldAt'); bind('price', 'price'); bind('pre', 'preorder', v => v + '%'); bind('sellW', 'sellWeeks');
+  ['US', 'MX', 'CN', 'VN'].forEach(c => { const el = $('lab' + c); el.value = LABOUR[c]; el.oninput = () => { LABOUR[c] = +el.value; render(); }; });
+  ['geo', 'single', 'logi', 'ip'].forEach(k => { const el = $('w_' + k); el.value = P.w[k]; el.oninput = () => { P.w[k] = +el.value; render(); }; });
+  $('mcRun').onclick = runMC; $('tornMetric').onchange = renderTornado;
+  Object.keys(FREIGHT).forEach(m => { const el = $('fr_' + m); if (!el) return; const key = FREIGHT[m].perKg != null ? 'perKg' : FREIGHT[m].perCbm != null ? 'perCbm' : 'perBox'; el.value = FREIGHT[m][key]; el.oninput = () => { FREIGHT[m][key] = +el.value; render(); }; });
+}
+function renderBuyAhead() {
+  const tb = $('buyahead');
+  const draw = () => {
+    let tot = 0;
+    tb.innerHTML = '<thead><tr><th>Buy</th><th>Item</th><th class="n">Qty</th><th class="n">Unit</th><th class="n">Line</th><th>Why now (risk retired)</th><th>Status</th></tr></thead><tbody>' +
+      BUYAHEAD.map((b, i) => { const line = b.q * b.u; if (b.on) tot += line; return `<tr><td><input type="checkbox" data-b="${i}" ${b.on ? 'checked' : ''}></td><td><b>${b.item}</b><div class="note">${b.where}</div></td><td class="n"><input type="number" min="0" data-bq="${i}" value="${b.q}" style="width:64px"></td><td class="n">${money(b.u)}</td><td class="n">${money(line)}</td><td class="note">${b.why}</td><td><span class="tag t-${b.s}">${b.s}</span></td></tr>`; }).join('') +
+      `</tbody><tfoot><tr><td></td><td><b>Week-0 buy-ahead total</b></td><td></td><td></td><td class="n"><b>${money(tot, 0)}</b></td><td colspan="2" class="note">Spent before design lock, so the build can't stall on parts. Everything here is reusable in Proto 1–2 or resellable.</td></tr></tfoot>`;
+    tb.querySelectorAll('[data-b]').forEach(c => c.onchange = () => { BUYAHEAD[+c.dataset.b].on = c.checked; draw(); });
+    tb.querySelectorAll('[data-bq]').forEach(c => c.onchange = () => { BUYAHEAD[+c.dataset.bq].q = +c.value; draw(); });
+  };
+  draw();
+}
+function renderInfra() {
+  const sel = $('infraSel');
+  sel.innerHTML = STRATS.map(s => `<option value="${s.id}" ${s.id === P.sel ? 'selected' : ''}>${s.name}</option>`).join('');
+  const draw = () => {
+    const id = sel.value, key = 'zm_infra_' + id; let done = {};
+    try { done = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) { }
+    const items = INFRA.filter(x => x.s.includes(id));
+    $('infraList').innerHTML = items.map((x, i) => `<label class="chk"><input type="checkbox" data-k="${x.k}" ${done[x.k] ? 'checked' : ''}><span><b>${x.area}</b> · ${x.t}${x.d ? `<span class="note"> ${x.d}</span>` : ''}</span></label>`).join('');
+    const n = items.filter(x => done[x.k]).length;
+    $('infraProg').textContent = `${n} / ${items.length} in place for ${STRATS.find(s => s.id === id).short} (saved in this browser)`;
+    $('infraList').querySelectorAll('input').forEach(c => c.onchange = () => { done[c.dataset.k] = c.checked; localStorage.setItem(key, JSON.stringify(done)); draw(); });
+  };
+  sel.onchange = draw; draw();
+}
+document.addEventListener('DOMContentLoaded', () => { bindControls(); renderTariffEditor(); render(); runMC(); renderBuyAhead(); renderInfra(); });
+
+</script>
+</body></html>

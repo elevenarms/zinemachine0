@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zine Machine v3 · release gates (agents execute, humans approve)</title>
+<link rel="icon" href="data:,">
+<style>:root{
+  color-scheme:light;
+  --bg:#f6f5f1;--card:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--ink3:#8a8984;--rule:#e2e0d9;--hl:#fff6d6;
+  --acc:#2a78d6;--crit:#c0262d;--good:#1a7f37;--warn:#b26b00;
+  --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#6250d6;
+  --v:#1a7f37;--a:#2a78d6;--e:#b26b00;--x:#8a8984;
+}
+@media (prefers-color-scheme:dark){:root{
+  color-scheme:dark;
+  --bg:#121211;--card:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--ink3:#8d8c85;--rule:#2f2e2b;--hl:#2d2a1c;
+  --acc:#3987e5;--crit:#ff6b6b;--good:#4cc76a;--warn:#e0a03a;
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#9085e9;
+  --v:#4cc76a;--a:#5b9ee9;--e:#e0a03a;
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Inter,Roboto,sans-serif}
+a{color:var(--acc)}
+nav.site{border-bottom:1px solid var(--rule);background:var(--card)}
+nav.site .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:8px;padding-bottom:8px;font-size:13.5px;white-space:nowrap;align-items:center}
+nav.site .brand{font-weight:700;margin-right:14px}
+nav.site a{text-decoration:none;color:var(--ink2);padding:4px 10px;border-radius:6px}
+nav.site a:hover{color:var(--ink);background:var(--bg)}
+nav.site a.on{background:var(--ink);color:var(--bg)}
+header.top{padding:40px 0 24px;border-bottom:1px solid var(--rule)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+h1{font:600 40px/1.1 ui-serif,Georgia,"Iowan Old Style",serif;margin:0 0 6px;letter-spacing:-.01em}
+h2{font:600 26px/1.2 ui-serif,Georgia,serif;margin:56px 0 10px;padding-top:12px;border-top:2px solid var(--ink)}
+h3{font-size:17px;margin:24px 0 8px}
+h4{font-size:13px;margin:16px 0 6px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2)}
+.sub{color:var(--ink2);font-size:16px;max-width:920px}
+nav.toc{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+nav.toc .wrap{display:flex;gap:18px;overflow-x:auto;padding-top:10px;padding-bottom:10px;font-size:13px;white-space:nowrap;align-items:center}
+nav.toc a{text-decoration:none;color:var(--ink2)} nav.toc a:hover{color:var(--ink)}
+nav.toc .sp{flex:1}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:18px 20px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+@media(max-width:900px){.tiles{grid-template-columns:1fr 1fr}}
+.tile{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:14px 16px}
+.tl{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink2)}
+.tv{font:600 34px/1.15 ui-serif,Georgia,serif;margin:4px 0}.tv span{font-size:15px;color:var(--ink2);font-family:ui-sans-serif,sans-serif;font-weight:400}
+.ts{font-size:12.5px;color:var(--ink2)}
+.callout{border-left:4px solid var(--warn);background:var(--card);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.callout.crit{border-color:var(--crit)} .callout.info{border-color:var(--acc)} .callout.good{border-color:var(--good)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;background:var(--card)}
+th,td{padding:7px 9px;border-bottom:1px solid var(--rule);vertical-align:top;text-align:left}
+th{font-weight:600;font-size:12px;color:var(--ink2);background:var(--card)}
+td.n,th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+.note{font-size:12px;color:var(--ink2)}
+.scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:10px}
+.tag{display:inline-block;font:600 10px/1 ui-monospace,Menlo,monospace;padding:2px 4px;border-radius:3px;color:#fff;vertical-align:1px}
+.t-V{background:var(--v)}.t-A{background:var(--a)}.t-E{background:var(--e)}.t-X{background:var(--x)}.t-S{background:#7a5bbf}.t-R{background:#2f7d8c}.t-L{background:#a0522d}
+.controls{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin:12px 0;font-size:14px}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:7px;overflow:hidden}
+.seg button{border:0;background:var(--card);color:var(--ink);padding:6px 12px;font:inherit;cursor:pointer;border-right:1px solid var(--rule)}
+.seg button:last-child{border-right:0}.seg button.on{background:var(--ink);color:var(--bg)}
+.btn{border:1px solid var(--rule);background:var(--card);color:var(--ink);padding:8px 12px;border-radius:7px;font:inherit;font-size:13.5px;cursor:pointer}
+.btn:hover{border-color:var(--ink2)} .btn.pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.sm{padding:4px 9px;font-size:12.5px}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:12px;font:12px/1.45 ui-monospace,Menlo,monospace;overflow:auto;max-height:260px}
+code{font:12.5px ui-monospace,Menlo,monospace}
+svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--ink2);margin:8px 0}
+.legend i{display:inline-block;width:14px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px;background:var(--card)}
+ul.tight li{margin:3px 0} ol li{margin:4px 0}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:5px 14px;font-size:13.5px}.kv b{color:var(--ink2);font-weight:600}
+footer{margin:60px 0 40px;color:var(--ink3);font-size:12.5px}
+/* swimlane */
+#lane .lane-bg{fill:var(--card)} #lane .lane-bg.alt{fill:var(--bg)}
+#lane .lane-lbl{fill:var(--ink2);font-size:11.5px;font-weight:600}
+#lane .col-lbl{fill:var(--ink3);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em}
+#lane .edge{fill:none;stroke:var(--ink3);stroke-width:1.3}
+#lane .edge.eco{stroke:var(--crit);stroke-dasharray:5 4}
+#lane .edge.strat{stroke:var(--warn);stroke-dasharray:3 3}
+#lane .node{cursor:pointer}
+#lane .node rect{fill:var(--card);stroke-width:2}
+#lane .node.k2 rect{stroke:var(--crit)} #lane .node.k1 rect{stroke:var(--acc)} #lane .node.ka rect{stroke:var(--good)}
+#lane .node.strat rect{stroke-dasharray:4 3;stroke:var(--warn)}
+#lane .node:hover rect,#lane .node:focus rect{fill:var(--hl)}
+#lane .node.sel rect{fill:var(--hl);stroke-width:3.5}
+#lane .node text{fill:var(--ink);font-size:11px;pointer-events:none}
+#lane .node text.code{font-weight:700;font-size:11.5px}
+#lane .prog{fill:var(--good)} #lane .progbg{fill:var(--rule)}
+#lane .vary{fill:var(--warn)}
+#lane .eco-lbl{fill:var(--crit);font-size:11px}
+/* detail */
+#detail{margin-top:18px}
+#detail .hd{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:baseline;margin-bottom:8px}
+#detail .hd h3{margin:0;font:600 24px/1.2 ui-serif,Georgia,serif}
+.pill{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:20px;border:1px solid var(--rule);color:var(--ink2);margin:2px 4px 2px 0;background:var(--bg)}
+.pill.two{border-color:var(--crit);color:var(--crit)} .pill.one{border-color:var(--acc);color:var(--acc)} .pill.auto{border-color:var(--good);color:var(--good)}
+.chk{list-style:none;padding:0;margin:0}
+.chk li{display:flex;gap:9px;padding:6px 4px;border-bottom:1px dashed var(--rule);font-size:13.5px}
+.chk li input{margin-top:3px;flex:none}
+.chk li.done span{color:var(--ink3);text-decoration:line-through;text-decoration-color:var(--ink3)}
+.chk li .sx{font-size:10.5px;color:var(--warn);font-weight:600;white-space:nowrap}
+.ai li,.ev li,.fm li{font-size:13.5px;margin:4px 0}
+.fm li .hist{display:block;font-size:12.5px;color:var(--ink2);margin-top:2px}
+.bar{height:8px;background:var(--rule);border-radius:4px;overflow:hidden;min-width:120px}
+.bar i{display:block;height:100%;background:var(--good)}
+.st{font-size:11.5px;font-weight:600;white-space:nowrap}
+.st.s0{color:var(--ink3)} .st.s1{color:var(--warn)} .st.s2{color:var(--acc)} .st.s3{color:var(--good)}
+.ro input[type=text]{width:100%;min-width:90px;font:inherit;font-size:12.5px;padding:3px 6px;border:1px solid var(--rule);border-radius:5px;background:var(--bg);color:var(--ink)}
+.raci td.c{font:600 12px ui-monospace,Menlo,monospace}
+.raci .R{background:color-mix(in srgb,var(--acc) 18%,transparent)} .raci .A{background:color-mix(in srgb,var(--crit) 22%,transparent)}
+.raci .C{background:color-mix(in srgb,var(--warn) 16%,transparent)} .raci .I{color:var(--ink3)}
+.raci tr:hover td{outline:0;background-image:linear-gradient(var(--hl),var(--hl))}
+.raci tr.sel td:first-child{box-shadow:inset 4px 0 0 var(--crit)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:900px){.split{grid-template-columns:1fr}}
+.box{border:1px solid var(--rule);border-radius:8px;padding:10px 12px;background:var(--bg)}
+.box.g{border-left:4px solid var(--good)} .box.h{border-left:4px solid var(--crit)}
+@media print{nav.toc,nav.site{display:none}h2{break-before:page}}
+</style></head>
+<body>
+<nav class="site"><div class="wrap">
+  <span class="brand">Zine Machine v3</span>
+  <a href="index.html">Overview</a><a href="flow.html">Material flow</a><a href="proto10.html">10-day proto</a><a href="gates.html" class="on" aria-current="page">Release gates</a><a href="automation.html">AI execution</a><a href="expert.html">Expert adds</a>
+</div></nav>
+<header class="top"><div class="wrap">
+  <div class="tl">Zine Machine v3 · human-in-the-loop release gates · 7 November 2026</div>
+  <h1>Thirteen gates between a routed board and a shipped product</h1>
+  <p class="sub">AI agents generate, check and package every artefact. A named human signs each release, and two people sign where a mistake would cost a respin, a mould, a compliance failure or a customs penalty. Each gate below lists its owner, RACI, the artefacts the agents prepare, a product-specific checklist, the evidence required, what an agent may approve on its own and what it may not, the sign-off mechanism, SLA, escalation and rollback, and the failures it exists to catch. The failures are taken from this project's own history.
+  Sources are tagged:
+  <span class="tag t-A">A</span> <code>AGENTS.md</code> (v0/v2 handoff, 2026-11-05) ·
+  <span class="tag t-R">R</span> v3 repo (<code>README.md</code>, <code>pcb/bancouver40_pb2/README.md</code>, <code>DESIGN_v3.md</code>, <code>tools/zm_v3/</code>) ·
+  <span class="tag t-L">L</span> <code>mech/cover.log</code> / <code>mech/cover.py</code> ·
+  <span class="tag t-S">S</span> the <a href="index.html">overview page</a> ·
+  <span class="tag t-E">E</span> proposed limit or estimate. The limits tagged E are starting values for the quality lead to set. They are not taken from a standard or a quote.</p>
+</div></header>
+<nav class="toc"><div class="wrap">
+  <a href="#principles">Principles</a><a href="#map">Gate map</a><a href="#readiness">Readiness</a><a href="#raci">RACI</a><a href="#spend">Spend thresholds</a><a href="#strategy">Strategy differences</a><a href="#history">Failure history</a>
+  <span class="sp"></span>
+  <span class="note">Strategy</span> <span class="seg" id="stratSeg" role="group" aria-label="Manufacturing strategy"></span>
+</div></nav>
+
+<main class="wrap">
+<section id="principles">
+  <h2>Operating principles</h2>
+  <div id="tiles" class="tiles"></div>
+  <div class="grid2">
+    <div>
+      <ol class="tight">
+        <li><b>Agents execute and humans approve.</b> Agents run <code>make_fab.sh</code>, the routers, the FreeCAD scripts, stock and price pulls, report parsing and document drafting. They never hold a signing key, never place a PO above Tier 0, never accept a sample from a vendor, never sign an SDoC, a DoC or a commercial invoice, and never make a final tariff classification.</li>
+        <li><b>Evidence is tied to hashes.</b> Every approval names a git commit and the SHA-256 of each released file: the Gerber zip, BOM, CPL, STEP/STL and firmware image. The board routers are non-deterministic (<span class="tag t-A">A</span> Freerouting; <span class="tag t-R">R</span> KiCadRoutingTools), so the release is the <i>file</i>, not the script that made it.</li>
+        <li><b>Approval is measured against a baseline, not as an absolute.</b> Results are compared against the last signed baseline. v2 carried around 106 inherited <code>net_conflict</code> parity items, so a bare DRC count meant nothing (<span class="tag t-A">A</span>).</li>
+        <li><b>The two-person rule.</b> Two approvers. At least one did not write the change, and neither is an agent. It is required for every change that touches copper, steel, money above Tier 1, a legal declaration or the signed firmware.</li>
+        <li><b>A missed SLA never counts as approval.</b> A late gate escalates. It does not default to "go". Safety and compliance items cannot be auto-approved under any condition.</li>
+        <li><b>Auto-approval only narrows.</b> An agent may approve a re-release only when it is identical to, or a strict subset of, a change a human has already approved: same netlist, same parameters, same HTS line. It may never approve a first release.</li>
+      </ol>
+    </div>
+    <div>
+      <div class="callout crit"><b>Open blockers that keep gates shut today</b> (<span class="tag t-R">R</span>, <span class="tag t-S">S</span>)
+        <ul class="tight">
+          <li><b>G1 and G9:</b> no display software exists (DSS overlay, ST7701S init), and the panel pinout comes from the Maxen datasheet, not from the panel that will be ordered.</li>
+          <li><b>G1 and G10:</b> no battery cell has been chosen for the 9 × 40 × 70 mm envelope.</li>
+          <li><b>G3:</b> the fab stocks only 75 GCT USB1046 (2 per board).</li>
+          <li><b>G2 and G4:</b> the stack-up was checked only against the PB2 <b>EVT</b> STEP. v3 uses the <b>Industrial</b> board on 3.55 mm sockets.</li>
+          <li><b>G1:</b> the power budget is about 2.3 A worst case against the IP5306's 2.1–2.4 A.</li>
+        </ul></div>
+      <div class="callout info"><b>How to use this page.</b> Pick a manufacturing strategy in the bar above. Click a gate on the map to open its detail and tick its readiness items (saved in this browser). Export the state as JSON to attach to a review. Gates marked with an orange diamond differ by strategy, and dashed orange nodes exist only under some strategies.</div>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <h2>Gate map</h2>
+  <p>Six lanes and ten phases. Arrows are hard prerequisites: a gate cannot be signed until every gate feeding it has been signed. The red dashed loop is ECO change control, which reopens the gates a change touches. The bar under each node shows readiness for the selected strategy.</p>
+  <div class="legend">
+    <span><i style="border:2px solid var(--crit)"></i>two-person sign-off</span>
+    <span><i style="border:2px solid var(--acc)"></i>single human sign-off (two-person above a threshold)</span>
+    <span><i style="border:2px dashed var(--warn)"></i>strategy-specific step</span>
+    <span><svg width="12" height="12" style="display:inline;width:12px;vertical-align:-1px"><path d="M6 0L12 6L6 12L0 6Z" fill="var(--warn)"/></svg> differs by strategy</span>
+    <span><i style="background:var(--good)"></i>readiness ticked</span>
+  </div>
+  <div class="card" style="padding:10px"><svg id="lane" viewBox="0 0 1240 520" role="img" aria-label="Swimlane diagram of the 13 release gates"></svg></div>
+  <div id="detail" class="card"></div>
+</section>
+
+<section id="readiness">
+  <h2>Gate readiness</h2>
+  <p>Readiness is the share of checklist items ticked for the selected strategy. Items that apply only to other strategies are left out of the count. Sign-off fields record who approved, and against which tag or e-signature envelope. Everything is stored in this browser's <code>localStorage</code> (<code>zm3.gates.v1</code>) and nothing is uploaded. A gate shows <i>ready for sign-off</i> when every item is ticked and every upstream gate is signed.</p>
+  <div class="controls">
+    <button class="btn pri" id="exportBtn">Export JSON</button>
+    <label class="btn" style="cursor:pointer">Import JSON <input type="file" id="importFile" accept="application/json" style="display:none"></label>
+    <button class="btn" id="resetBtn">Reset all</button>
+    <span class="note" id="saveNote"></span>
+  </div>
+  <div class="scroll ro"><table id="readyTable"></table></div>
+</section>
+
+<section id="raci">
+  <h2>RACI matrix</h2>
+  <p><b>R</b> responsible (does the work) · <b>A</b> accountable (signs, exactly one per gate) · <b>C</b> consulted before sign-off · <b>I</b> informed after. The AI agents are <b>R</b> for preparing artefacts on every gate and <b>never A</b>. Click a row to open that gate.</p>
+  <div class="scroll"><table class="raci" id="raciTable"></table></div>
+  <p class="note" id="roleKey"></p>
+</section>
+
+<section id="spend">
+  <h2>Spend and PO release thresholds (G6)</h2>
+  <p>Amounts are per PO, in USD, including freight and expected duty. Tiers apply to the <i>committed</i> amount, so a tooling deposit counts at the full tool value. Splitting a purchase to get under a tier is blocked: the agent sums all POs to the same vendor for the same budget line within 14 days.</p>
+  <div class="scroll"><table id="spendTable"></table></div>
+  <p class="note">Worked examples from the overview page (<span class="tag t-S">S</span>): 5 JLC 4-layer proto boards with 2 assembled ≈ Tier 1. 100 × PocketBeagle 2 Industrial at $51.03 = $5,103 → Tier 2. Compliance NRE about $12.5k → Tier 2, but the lab is a new vendor, so the "first purchase" rule also applies. Aluminium lid, tray and chassis tools about $26k → Tier 3. The ~720-set tool payback point is a PO-level decision, not an agent's.</p>
+</section>
+
+<section id="strategy">
+  <h2>Where the gates differ by strategy</h2>
+  <p><b>Domestic:</b> US PCBA, moulding and box build. The PB2, panel and cells are still imported, so this is not "Made in USA" under the FTC's "all or virtually all" standard. <b>USMCA:</b> moulding and box build in Mexico (maquila/IMMEX), PCBA in Mexico or the US, preferential duty only if the product rule of origin is met. <b>Global:</b> Shenzhen contract manufacturer, PCBA at JLC, a Chinese moulder, and finished goods imported. <b>Hybrid:</b> PCBA and mould build in China, with the moulds transferred to a US or Mexico moulder, and final box build, eMMC flash, functional test and pack-out in the US. The selected strategy is highlighted.</p>
+  <div class="scroll"><table id="stratTable"></table></div>
+</section>
+
+<section id="history">
+  <h2>Failure history these gates are built on</h2>
+  <p>Every item happened in this project or is an open item in the repo. Each one maps to the gate whose checklist now catches it.</p>
+  <div class="scroll"><table id="histTable"></table></div>
+</section>
+
+<footer>
+  Zine Machine v3 · release gates · built 2026-11-07 from the <code>zinemachine0-v3</code> repo (<code>README.md</code>, <code>pcb/bancouver40_pb2/{README,DESIGN_v3}.md</code>, <code>tools/zm_v3/make_fab.sh</code>, <code>mech/cover.py</code>, <code>mech/cover.log</code>, <code>mech/*.fab.json</code>) and <code>AGENTS.md</code>. The v3 repo has no <code>AGENTS.md</code> of its own, so the v0/v2 handoff in <code>zinemachine0/AGENTS.md</code> was used for project history. Regulatory and customs items (FCC, IEC 62368-1, UN38.3, HTS, ECCN, USMCA, tariffs, de minimis) are summaries for planning. They are not legal advice: confirm them with the test lab, a licensed customs broker and trade counsel. Limits tagged E are proposals.
+</footer>
+</main>
+
+<script>
+// ---------------------------------------------------------------- data
+const STRATS = [
+  {id:'domestic', name:'Domestic'},
+  {id:'usmca', name:'USMCA'},
+  {id:'global', name:'Global'},
+  {id:'hybrid', name:'Hybrid'},
+];
+const ROLES = [
+  ['PO','Product owner / founder','Owns scope, schedule and P&L. US responsible party for the SDoC.'],
+  ['HWL','Hardware lead (EE)','Owns the schematic, PCB and bring-up.'],
+  ['EER','Independent EE reviewer','A second EE who did not author the copper. Contract hire is fine.'],
+  ['ME','Mechanical engineer','Owns the tray, display chassis, lid and tooling.'],
+  ['FW','Firmware / Linux lead','Owns the DT overlay, M4F scanner, image and signing.'],
+  ['QL','Quality lead','Owns FAI, AQL, NCR/MRB and the ECO process. Holds a veto at the pilot.'],
+  ['OPS','Ops / supply chain','Buyer. Owns the AVL, stock and logistics.'],
+  ['FIN','Finance','Approves budget and payments.'],
+  ['CMP','Compliance engineer','EMC and product safety (in-house or consultant).'],
+  ['TC','Trade compliance / customs broker','Licensed broker or trade counsel.'],
+  ['CM','Vendor / CM','JLC, the moulder, the contract manufacturer or the test lab.'],
+  ['AI','AI agents','Prepare, check and package artefacts. Never accountable.'],
+];
+// src tags: A AGENTS.md, R v3 repo, L cover.log/cover.py, S overview page, E estimate/proposal
+const GATES = [
+{id:'G1', name:'Requirements & design freeze', short:['Requirements','& design freeze'], lane:0, col:0, kind:'k2', owner:'PO',
+ raci:{PO:'A',HWL:'R',EER:'C',ME:'R',FW:'C',QL:'C',OPS:'C',FIN:'I',CMP:'C',TC:'I',CM:'I',AI:'R'},
+ deps:[],
+ ai:['Requirements trace matrix: each line of the README "What it is" table and each <code>DESIGN_v3.md</code> rule mapped to a verification method and to the gate that closes it',
+     'Z stack-up table regenerated from <code>mech/zine_concept.py</code> and <code>mech/cover_assembly.py</code>, with each clearance traced back to its model',
+     'Vendor 3D model inventory: source, revision and date for the PB2 Industrial (Rev A dimension PDF), panel drawing, USB1046 and F32Q. Each dimension is flagged as <i>model</i>, <i>drawing</i> or <i>measured</i>',
+     'Decision log diff since the last freeze (plain IP5306, 4 layers, ROOF_RISE 0, soldered switches, Industrial PB2)',
+     'Open items from README "Status / open items", each with an owner and a closing gate'],
+ checklist:[
+  {t:'PB2 SKU frozen: <b>Industrial</b> (AM6254, 1 GB, 64 GB eMMC, $51.03) or plain PB2 ($39.53, 512 MB, microSD). Record the stack-height consequence of each.'},
+  {t:'PB2 mechanical baseline is <code>case/pocketbeagle2/models/industrial/pocketbeagle2 revA_dimension.pdf</code>, not the EVT STEP. The <b>3.55 mm</b> socket height is measured with calipers on a real Industrial board.'},
+  {t:'Panel part number frozen (BuyDisplay ER-TFT4.58-1, Maxen MX-046HS40FS-N01 or Adafruit 5805) and its outline measured: 118.8 × 41.57 × 2.5 mm, or the 117.9 × 40.37 × 2.0 mm seen in one snippet.'},
+  {t:'Panel FPC pinout metered on the panel that will be ordered. J3 contact side chosen: F32Q top contact or F32R bottom contact (same land pattern). The 30 mm tail folded on a printout.'},
+  {t:'Battery envelope frozen at ≤ 9 × 40 × 70 mm including a 4 mm PCM on 0.5 mm foam, with a named cell or pack vendor, a 2.5–3 Ah target and a connector polarity.'},
+  {t:'Power budget closed: PB2 ~1 A peak + 2 × 0.5 A USB-A + ~0.15 A backlight + hub/codec ≈ 2.3 A against the IP5306\'s 2.1–2.4 A. Either derate the USB-A ports or change the boost.'},
+  {t:'Charger variant frozen: plain IP5306, where the charge LED works with the device off, or IP5306-I2C, where the LED pins become SCL/SDA/IRQ.'},
+  {t:'Functions of the three mode keys (red, yellow, blue at KiCad x 233.375) defined. Firmware depends on this.'},
+  {t:'Lid material class chosen (clear PC, PMMA or tinted MABS), because it sets the lifter count and snap strain limits. Enclosure route chosen for each phase: MJF/SLA, urethane cast or moulded.'},
+  {t:'Lid roof decision recorded: <code>ROOF_RISE = 0.0</code> (flat), giving a 4.01° cradle tilt. 5.0 gave 4.4°.'},
+  {t:'Z stack signed: board top 6.1, legend tops 15.9, lid low-roof underside 16.5, display chassis frame 21.1, lid high-roof underside 21.6, top of lid 23.2.'},
+  {t:'Rear I/O x-ranges frozen: slide switch 115.8–127.8, TRRS 130.8–136.8, TRS 139.8–145.8, charge USB-C 149.8–158.8, USB-A 188.3–201.4 / 203.4–216.5. ECAD and the tray cut-outs share these numbers.'},
+  {t:'Target markets declared (US only, or US + EU/UK). This fixes the compliance scope: FCC 15B, CE EMC + LVD, and EU Battery Regulation Art. 11 user-replaceability from 18 Feb 2027.'},
+  {t:'Environmental spec: operating temperature (the PB2 Industrial is rated −40…85 °C, but LiPo charging is typically limited to 0–45 °C), drop height, lid life ≥ 500 slides <span class="tag t-E">E</span>.'},
+  {t:'Every dimension taken from a datasheet drawing rather than a 3D model or a measured part is listed, with a plan to measure it.'},
+  {t:'Product owner confirms the agent did not choose any product-level part or feature without an explicit human decision.'},
+  {t:'USMCA: a draft product rule of origin for the expected HTS heading is reviewed before freezing which parts come from China.', s:['usmca']},
+  {t:'Domestic: a marketing-claim review is done. "Made in USA" is not available with a Chinese PB2, panel and cells.', s:['domestic']},
+ ],
+ evidence:['Requirements PDF with its SHA-256','Signed Z-stack table','Caliper photos of the PB2 Industrial sockets and the panel outline','Decision log commit','Open-items list with owners'],
+ auto:'None for a first freeze. A re-freeze may be auto-approved only for editorial changes to the requirements text, with the trace matrix unchanged byte for byte.',
+ human:'Every functional requirement. A freeze locks in cost, schedule and the stack-up. The PB2 socket miss shows what one unmeasured dimension costs: a full deck raise.',
+ mech:'E-signature on the requirements PDF, plus <code>git tag -s req/v3-freeze-r1</code> carrying the PDF hash. <b>Two-person: PO + HWL</b>. ME consulted.',
+ sla:'3 business days from the agent posting the freeze packet.',
+ esc:'Day 3: PO decides alone and records the dissent. Day 5: the program is paused.',
+ rollback:'After freeze, raise an ECR. The agent produces an impact analysis listing the gates to reopen, the parts on order and the tooling affected. The requirement is re-signed as <code>req/v3-freeze-r2</code>.',
+ fails:[
+  {t:'Stack-up frozen against documentation instead of a vendor model', h:'The PB2\'s 8.5 mm factory sockets appeared only in the official STEP, not in the docs. The deck was raised from 17.0 to 21.1 mm, J3 moved from 206.0 to 210.5, and the fit-check STEP went stale.', src:'A'},
+  {t:'Wrong source part for a pinout', h:'The panel pinout came from the Maxen datasheet, while the BOM lists BuyDisplay, whose site blocks scripted fetches.', src:'A'},
+  {t:'Agent-chosen product features', h:'In v1 the agent picked the 2" Waveshare display unprompted. It was replaced because the user wanted a display that fills the rear section.', src:'A'},
+  {t:'Variant drift', h:'v3 changed to the PB2 Industrial on 3.55 mm sockets, but the case was checked only against the EVT STEP.', src:'S'},
+ ],
+ strat:{domestic:'Same gate. Add the marketing-claim review: the PB2, panel and cells are all imported.', usmca:'Add an origin-planning step. Whether China-origin content (PB2, panel) still lets the finished unit qualify depends on the product-specific rule for its HTS heading, so freeze the sourcing with the broker\'s input.', global:'Standard gate.', hybrid:'Freeze which moulds will be transferred, and design every mould for the target press (platen size, tonnage) from the start.'}},
+
+{id:'G2', name:'ECAD release', short:['ECAD release','sch · DRC · Gerber'], lane:1, col:1, kind:'k2', owner:'HWL',
+ raci:{PO:'I',HWL:'A',EER:'R',ME:'C',FW:'C',QL:'I',OPS:'I',FIN:'',CMP:'C',TC:'',CM:'C',AI:'R'},
+ deps:['G1'],
+ ai:['<code>tools/zm_v3/make_fab.sh</code> run log with the <code>kicad-cli version</code> line. ERC and DRC reports, plus JSON diffs against the last signed baseline',
+     '<code>checknet.py</code> comparison of the netlist against <code>design.py</code>',
+     '<code>gnd_islands.py</code> report on a board refilled with <code>kicad-cli pcb drc --refill-zones</code>',
+     'Track-width histogram for each net class, with the 10 narrowest segments and their XY',
+     'Via and annular-ring table. Copper-to-edge scan',
+     'USB differential impedance calculation from the stack-up in the board file (F.Cu over In1, 0.2104 mm prepreg, εr 4.4)',
+     'Gerber and drill render for each layer (<code>plot.py</code>), layer-order and extent check, and the drill map',
+     '<code>git status</code>/<code>git diff --stat</code> after the checks, showing no stray changes to <code>.kicad_pro</code>, <code>.kicad_prl</code> or <code>bancouver40_cfx/</code>',
+     'Schematic review packet: one pin table per IC, checked against the vendor datasheet, not the KiCad symbol'],
+ checklist:[
+  {t:'<code>make_fab.sh</code> exits 0 with kicad-cli 10.99.0-bp.6 recorded: ERC 0 errors and 0 warnings, DRC 0 violations, 0 unconnected pads, schematic parity clean.'},
+  {t:'The DRC report\'s ignored-check list matches the baseline (6 ignores, including "Footprint has no courtyard" and "PTH/NPTH inside courtyard"). Any new ignore needs a human.'},
+  {t:'<code>checknet.py</code>: every design net maps to exactly one netlist net, with no merged or split nets.'},
+  {t:'GND: <code>gnd_islands.py</code> reports 0 isolated fragments on the refilled board. In1 is a solid plane with clearance holes only. Every SMD GND pad has a via.'},
+  {t:'Net classes read back from <code>bancouver40_pb2.kicad_pro</code> <i>after the last save</i>: clearance 0.127 mm on every class, Default 0.15, Supply 0.3, GND 0.4, Power 0.6 (via 0.8/0.4), USB 0.3 with a 0.15 gap.'},
+  {t:'Narrowest copper ≥ 0.15 mm (the rule) and never below 0.127 mm (comfortable) or 0.10 mm (fab absolute). Neck-downs at the 0.5 mm-pitch J3 pads are listed.'},
+  {t:'The KiCadRoutingTools log shows <code>--escalation off --fab-tier standard</code>. Without it, the router drops below fab limits.'},
+  {t:'USB upstream pair is a 0.3/0.15 mm coupled pair on F.Cu over In1, ≈ 86 Ω differential, within 90 Ω ±10% (81–99). Skew ≤ 0.15 mm <span class="tag t-E">E</span>. No plane split or via under the pair. Downstream pairs are coupled too.'},
+  {t:'The stack-up in the board file matches the fab\'s standard 4-layer 7628 build (prepreg 0.2104 mm, core 1.065 mm, 1.6 mm total), and <code>bancouver40_pb2.fab.json</code> says 4 layers, 1.6 mm, lead-free HASL.'},
+  {t:'Annular ring: 0.6/0.3 mm vias → 0.15 mm. The codec exposed-pad vias at 0.5/0.3 mm → <b>0.10 mm</b>, which must be checked against the fab\'s 4-layer capability or upsized.'},
+  {t:'Edge.Cuts closed, 170 × 126 mm, R1 corners, matching <code>fab.json</code> width and height. Copper ≥ 0.3 mm from the edge.'},
+  {t:'Gerber set complete: F/In1/In2/B.Cu, mask ×2, paste ×2, silk ×2, Edge.Cuts. Excellon PTH and NPTH separate, decimal mm, absolute origin, drill map. Minimum drill 0.3 = <code>fab.json</code>.'},
+  {t:'Layer order checked in a viewer: In1 is the solid plane, not swapped with In2. B.Paste is empty because the board is single-sided SMD.'},
+  {t:'Datasheet pin review: IP5306 ESOP-8, TPS61165 SOT-23-6 (VIN, CTRL, SW, GND, COMP, FB), TPS2051B OC#, FE1.1s SSOP-28, ES8388, AO3401A, and J5 pin 1 = VBAT.'},
+  {t:'Power-switch circuit reviewed: Q1 AO3401A soft start (10k/100 nF), and the ~0.4 s KEY pulse through C30/R29/Q2 wakes the sleeping IP5306 boost. OFF drops +5V_SYS while charging continues.'},
+  {t:'Under the PB2: every part checked against <code>mech/pb2_underside_keepout.csv</code> with 0.3 mm margin. The 74HC165 TSSOP-16s are ≤ 1.2 mm tall. 2.2 mm part-free lanes beside the header rows.'},
+  {t:'Header map checked against <code>pb2_header_pinout.csv</code>: P1.06 backlight PWM, P2.01 I2S BCLK, M4F pins P1.26/P1.28/P2.05, VOUT0 D10/D11 on P1.36/P1.33 with I2C1 left unmuxed.'},
+  {t:'Board STEP fits <code>mech/zine_concept</code> through <code>mech/fitcheck_board.py</code> at the same commit.'},
+  {t:'Working tree clean after the checks. The tag message carries the commit and the SHA-256 of <code>bancouver40_pb2-gerbers.zip</code>.'},
+ ],
+ evidence:['ERC and DRC reports and their diff against the baseline','checknet and gnd_islands output','Track-width histogram','Gerber renders','Impedance calculation','Reviewer comments, all resolved','Tag message with hashes'],
+ auto:'A silkscreen- or fab-layer-only re-release: Gerber diff confined to F/B.SilkS and F.Fab, netlist identical to the signed baseline, DRC and ERC 0/0, no new footprint. The agent tags it <code>ecad/…-silkN</code> and the reviewer is informed.',
+ human:'Any copper, drill, mask, paste, footprint or netlist change. A clean DRC does not mean the board is correct: the J1 ground break and a datasheet pin-order error would both pass DRC.',
+ mech:'PR with CODEOWNERS and branch protection requiring 2 approvals. <b>Two-person: HWL + independent EER</b>, where the EER did not route the board. HWL runs <code>git tag -s ecad/v3-revB</code> with the zip SHA-256. The agent has no signing key.',
+ sla:'2 business days for review once the packet is complete.',
+ esc:'Backup EE reviewer (contract) at day 2, PO at day 4.',
+ rollback:'Never re-tag. Supersede with revC. If boards are already ordered or built: an ECO and a deviation for the built lot, with rework instructions (bodge wire or cut trace) and photos.',
+ fails:[
+  {t:'Removing a part silently cut grounds', h:'Removing J1 (USB-C) disconnected C3 and the crystal-cap grounds, which reached ground only through J1\'s pads and R3. Caught by the unconnected-items and pour-island checks.', src:'A'},
+  {t:'The tool rewrote project files during a check', h:'<code>kicad-cli drc</code> on the upstream project rewrote <code>bancouver40_cfx/*.kicad_prl</code>. In v3, Backplane\'s headless KiCad writes its in-memory settings back to <code>.kicad_pro</code> on every save, so clearance rules can drift.', src:'A'},
+  {t:'Autorouter neck-downs', h:'Freerouting necked down to 0.1874 mm (35 segments), and to 0.125 mm on one run, entering the 0.5 mm-pitch FPC pads against a 0.12 mm rule minimum.', src:'A'},
+  {t:'Router defaults below fab limits', h:'KiCadRoutingTools escalates below the fab limits unless run with <code>--escalation off --fab-tier standard</code>.', src:'R'},
+  {t:'Non-deterministic copper', h:'Each rebuild gives different but valid copper (Freerouting in v2, KRT in v3). Release pins the file hash.', src:'A'},
+  {t:'Overly broad cleanup scripts', h:'A whole-board orphan-via pass removed keyboard-area vias and broke ground. <code>ImportSpecctraSES</code> replaces every track on the board.', src:'A'},
+  {t:'Routing infeasible on 2 layers', h:'About 13 decoupling-cap GND pads were walled in on 2 layers, which led to the 4-layer board with a solid In1.', src:'R'},
+ ],
+ strat:{domestic:'A US fab may use a different 4-layer stack (for example 0.2 mm FR408 prepreg). Recompute the USB impedance against <i>that</i> fab\'s stack before release.', usmca:'Same as domestic if the PCBA is done in Mexico or the US: confirm that fab\'s standard stack.', global:'JLC JLC04161H-7628 (prepreg 0.2104 mm) is already the board\'s stack.', hybrid:'JLC stack. Same as global.'}},
+
+{id:'G3', name:'PCBA release', short:['PCBA release','BOM · CPL · stock'], lane:3, col:2, kind:'k1', owner:'OPS',
+ raci:{PO:'I',HWL:'C',EER:'',ME:'',FW:'',QL:'R',OPS:'A',FIN:'I',CMP:'',TC:'',CM:'C',AI:'R'},
+ deps:['G2'],
+ ai:['BOM and CPL from <code>fab_lists.py</code> (45 lines, 130 top-side placements), plus <code>parts-hand-fit.csv</code>',
+     'Stock and price snapshot with timestamps: LCSC product API, DigiKey and Mouser (manual where they block scripts)',
+     'Alternates matrix comparing package, land pattern, pinout and ratings for each single-source line',
+     'Lifecycle report (active / NRND / EOL) and vendor PCN watch',
+     'JLC placement preview screenshots for every polarised or asymmetric part, overlaid on the KiCad F.Fab outline',
+     'Polarity and pin-1 table. Consignment list. Cost roll-up against budget'],
+ checklist:[
+  {t:'BOM, CPL and board come from the commit tagged at G2. Refdes sets are identical across BOM, CPL and <code>.kicad_pcb</code>.'},
+  {t:'No v2 files: the repo\'s <code>bom/</code> and <code>jlcpcb_*.csv</code> describe the v2 32U4/hot-swap board and must not be uploaded.'},
+  {t:'Every line has an MPN and an LCSC number, and the LCSC number resolves (via the API) to the same MPN and package.'},
+  {t:'Stock ≥ order quantity × (1 + attrition) on every line, from a snapshot ≤ 24 h old. <b>GCT USB1046: 75 at LCSC</b>, 2 per board, so add a second source or consign before more than 30 boards.'},
+  {t:'Lifecycle: no NRND or EOL. Each single-source line has a named alternate (the board already uses FNR4030S for SRN4018 and B5819W for MBR0540).'},
+  {t:'Alternates checked on rating, not just footprint: inductor Isat ≥ TPS61165 peak switch current, and diode V<sub>RRM</sub> and I<sub>F</sub> adequate for the ~13 V LED string.'},
+  {t:'Rotation of every polarised or asymmetric part checked in <b>JLC\'s placement preview</b>: IP5306, ES8388, FE1.1s, 6 × 74HC165, TPS61165, TPS2051B, SOT-23 FETs, diodes, LEDs, crystal and oscillator, J3 F32Q, USB-C.'},
+  {t:'Polarity: J5 pin 1 = VBAT (square pad, "+" on the silk), LED cathodes, B5819W cathode, and polarised caps.'},
+  {t:'Exposed-pad parts (ES8388, IP5306 EP): paste windowpane or aperture reduction, and the fab\'s handling of vias in the EP stated.'},
+  {t:'MSL ratings for the ICs captured, with bake requirements if parts are consigned.'},
+  {t:'Hand-fit list confirmed: 43 Choc v1, PB2 + 2 × 2x18 male headers (inserted from below, trimmed so they don\'t bottom in the 3.55 mm sockets), J10, SW44, J5. All THT is kept off the SMT order.'},
+  {t:'Consigned parts (F32R from DigiKey or Newark, any second-source USB-A) have consignment IDs and arrival dates before the build date.'},
+  {t:'Service options: Economic or Standard (single-sided top only), AOI on, X-ray for the QFN if available. Panelisation noted: 2-up at 2 × 126 = 252 mm is over the 250 mm limit.'},
+  {t:'Basic/extended part count and loading fees within ±10% of the budget line.'},
+  {t:'USMCA or domestic PCBA: the BOM is converted to the assembler\'s format, with MPNs cross-referenced to DigiKey or Mouser stock, because LCSC numbers mean nothing there.', s:['domestic','usmca']},
+ ],
+ evidence:['JLC order preview screenshots (rotations)','Stock snapshot JSON','SHA-256 of the BOM and CPL','Signed polarity table','Alternates matrix'],
+ auto:'Re-ordering a BOM/CPL pair whose hashes match a build that already passed FAI (G8), with every line in stock, price within +5%, no lifecycle change, and the order within Tier 0/1 of G6.',
+ human:'The first build of any BOM/CPL hash, any alternate, and any rotation change. KiCad and JLC disagree on some package zero orientations, and the only check is a visual one in the fab\'s preview.',
+ mech:'E-signature on the release package. <b>OPS signs alone</b> for re-orders without alternates. <b>Two-person (OPS + QL, with HWL for any alternate)</b> for a first build.',
+ sla:'1 business day. The stock snapshot expires after 24 h, after which the agent re-pulls it and the packet restarts.',
+ esc:'HWL for alternates. PO if a shortage moves the build date by more than 1 week.',
+ rollback:'Cancel at the fab before production starts. After that: an ECO with a part swap and a deviation for the affected lot, with MRB disposition of the boards.',
+ fails:[
+  {t:'Placement rotations never checked', h:'The v2 <code>jlcpcb_cpl.csv</code> rotations were never corrected against JLC\'s preview.', src:'A'},
+  {t:'Zero stock', h:'Bourns SRN4018-220M had 0 LCSC stock (substituted with Taiyo Yuden, then FNR4030S). MBR0540 went to B5819W. Choc hot-swap sockets and F32R were at 0. USB1046 has only 75.', src:'A'},
+  {t:'Footprint collisions only found late', h:'The first USB-A pick\'s 2.3 mm shell holes collided at the 15.1 mm port pitch, and the SMD jacks\' side pads collided at a 9 mm pitch.', src:'R'},
+  {t:'Stale purchasing files', h:'<code>bom/</code> and <code>pcb/…/fab/</code> once described the v2 board, and a stale <code>fab.json</code> still said 2 layers.', src:'S'},
+  {t:'Battery connector polarity', h:'LiPo packs with JST-PH plugs come in both polarities.', src:'R'},
+ ],
+ strat:{domestic:'US assembler (quick-turn). Higher setup cost. BOM keyed on DigiKey/Mouser MPNs. Turnkey parts are bought in the US.', usmca:'Mexico or US EMS. The BOM is converted, and origin data is collected for each line (needed for the USMCA certification in G12).', global:'JLC PCBA as designed (LCSC numbers). Basic/extended fees apply.', hybrid:'JLC PCBA. The assembled boards ship to the US box-build site, which needs its own import (G12).'}},
+
+{id:'G4', name:'MCAD release', short:['MCAD release','tol · detent · mat\'l'], lane:2, col:1, kind:'k2', owner:'ME',
+ raci:{PO:'I',HWL:'C',EER:'',ME:'A',FW:'',QL:'R',OPS:'I',FIN:'',CMP:'C',TC:'',CM:'C',AI:'R'},
+ deps:['G1'],
+ ai:['<code>mech/cover.log</code> regenerated: solid validity, volumes, bounding boxes, lid–tray overlap in both modes, slide sweeps, gaps, cradle pose',
+     'Interference matrix of every body in cover and cradle modes, including the board STEP, PB2 envelope, keycaps, panel and battery',
+     'Tolerance stack sheet (worst case and RSS) for the lid-to-tray fit, the rail in its groove, and the detent preload',
+     'Snap-fit calculation: finger strain and deflection force for each candidate material',
+     'Print-orientation study: overhang map, support contact on cosmetic faces, layer direction through the detent fingers',
+     'STEP/STL exports with SHA-256, <code>*.fab.json</code> refreshed with measured volumes, TechDraw drawing set with critical-to-function (CTF) dimensions'],
+ checklist:[
+  {t:'All solids valid and single: <b>Tray_slide 40.57 cm³</b>, bbox x −1.50…176.70, y 0…131.20, z 0…12.50. <b>Lid 52.32 cm³</b>, x −3.30…178.50, y −1.80…131.20, z 0.50…23.20.'},
+  {t:'Static interference: lid ∩ tray = <b>0.000 mm³</b> in both cover and cradle modes, and "no interference with any part" in both.'},
+  {t:'Slide sweep: <b>HITS 5:2.18, 10:2.18 mm³</b> in both modes (the detent nub riding the wall over the last 16 mm). Confirm this is the intended preload, re-run the sweep at 0.5 mm steps (the default is 5 mm), and confirm there are no hits at the other offsets.'},
+  {t:'Detent geometry as released: nub R1.2 protruding 0.6 past the lid\'s inner face, so <b>0.4 mm interference</b> with the wall across the 0.2 mm cavity gap. Dimple R1.4 × 0.7 deep, ±0.3 pad. Finger y 4→18 (<b>14 mm free length</b>), z 0.5–3.9 (3.4 mm tall), 1.6 mm thick, 0.6 mm slots.'},
+  {t:'Finger strain at 0.4 mm deflection: ε = 1.5·t·y/L² = 1.5 × 1.6 × 0.4 / 14² ≈ <b>0.49%</b>. Check against the chosen material\'s allowable repeated-use strain (for PC, typically ~2% repeated and ~4% one-off <span class="tag t-E">E</span>).'},
+  {t:'Deflection force P = b·t³·E·y / 4L³ ≈ <b>1.2 N per finger</b> for PC (E ≈ 2.3 GPa). Engagement force with μ 0.4 and an effective 45° ramp ≈ 2.7 N per finger, ~5 N per lid <span class="tag t-E">E</span>. Recompute for PA12 MJF (E ≈ 1.7 GPa) and the SLA resin.'},
+  {t:'Clearances: lid to keycaps 0.90, lid to display chassis/panel/mode keys 0.50, legends 15.90 to lid low roof 16.5 → 0.60, step-wall inner face 72.5 to battery fence y 73.2 → 0.70.'},
+  {t:'<b>Tolerance stack, lid cavity versus tray width (178.2 mm):</b> 0.2 mm per side nominal. At MJF PA12 ±0.3% (≈ ±0.53 mm at 178 mm), RSS over the two parts is ≈ ±0.75 mm, which exceeds the 0.4 mm total clearance. Either fit-select prototypes, scale the lid using the vendor\'s shrink data, or wait for moulded tolerances.'},
+  {t:'Rail in groove: groove z 4.5–6.5 × 1.2 mm deep, rail clearance 0.2 mm top, bottom and floor, groove lead-in 3 × 0.7, rail taper 3 × 0.5, rails symmetric about Z_G = 5.5 so they fit both ways up.'},
+  {t:'Fasteners: 4 display-chassis M2 posts and 6 tray bosses at the <code>DESIGN_v3.md</code> positions. 10 M2 thread-forming screws. Boss OD 4.4 and pilot diameter set for each material.'},
+  {t:'Rear I/O cut-outs match the KiCad x-ranges (G1). The USB1046 height of 7.0 mm is an assumption until a part is measured.'},
+  {t:'Material declared for each part and phase with a datasheet (E, HDT, UL 94 at the actual thickness, UV stability). The tray and chassis <code>fab.json</code> say MJF PA12 black. Lid: SLA clear, cast PU or PC.'},
+  {t:'Print orientation chosen for each part: no layer boundary running across the detent finger\'s bending direction, no supports on the lid top or window face, grooves and detents printed vertically.'},
+  {t:'Cradle stability: tilt 4.01°, rear up. COM 3.9 mm inside the nearer contact, with a ≥ 3 mm margin target <span class="tag t-E">E</span>. Device ~305 g + lid ~66 g.'},
+  {t:'Thermal: PB2 and boost hot spots under a closed lid. Plastic HDT above the measured worst-case internal temperature (from Proto 1).'},
+  {t:'<code>tray.fab.json</code> volume (36.3 cm³) reconciled with Tray_slide (40.57 cm³, thickened walls), so the quote is for the right part.'},
+  {t:'All exports (<code>tray_slide.step/.stl</code>, <code>cover.step/.stl</code>, <code>display_chassis.step</code>) and the fit-check assembly regenerated from the tagged script commit. No stale assembly is committed.'},
+  {t:'Drawings carry CTF dimensions with tolerances: groove width and depth, cavity width, nub protrusion, dimple, rail height. The inspection plan (G8) references them.'},
+ ],
+ evidence:['cover.log','Interference matrix','Tolerance stack sheet','Snap-fit calculation','Drawings PDF','Fit photos of a printed lid on a printed tray, both modes'],
+ auto:'A re-export with an identical script and parameter hash and volumes within ±0.01 cm³, or a cosmetic-only change (colour, render). Tagged by the agent, ME informed.',
+ human:'Any parameter change in <code>cover.py</code>, <code>tray.py</code> or <code>display_chassis.py</code>, any new interference, and any material change. The geometry is computed, but creep, stress cracking, shrink and snap feel are not.',
+ mech:'<code>git tag -s mcad/v3-revB</code> with export hashes. <b>Two-person: ME + QL.</b>',
+ sla:'2 business days.',
+ esc:'PO at day 4. External ME review for the first lid release <span class="tag t-E">E</span>.',
+ rollback:'Supersede the tag. After tooling has started, every change goes through ECO and G7, and must be steel-safe.',
+ fails:[
+  {t:'Stale assembly committed beside a changed design', h:'<code>bancouver40_pb2_fitcheck.step</code> still had the 17 mm deck (max z 18.5) after the case moved to 21.1, and it lacked the PB2.', src:'A'},
+  {t:'Deck raise forced by a late model', h:'The deck went from 17.0 to 21.1 after the PB2 STEP showed its sockets. The skirt, bezel and holes all moved.', src:'A'},
+  {t:'Detent preload versus sweep', h:'The nub rides the wall over the last 16 mm (2.18 mm³ swept interference), which means sliding drag and wear on a clear part.', src:'L'},
+  {t:'Roof geometry against slide direction', h:'A low roof strip behind the bump would hit the chassis while sliding, so the bump runs out the open rear end. ROOF_RISE 5.0 → 0.0.', src:'L'},
+  {t:'Quoting the wrong volume', h:'<code>tray.fab.json</code> says 36.3 cm³ while <code>cover.log</code> gives 40.57 cm³ for the slide tray.', src:'R'},
+ ],
+ strat:{domestic:'Same gate.', usmca:'Same gate. Drawings bilingual or with an agreed English master <span class="tag t-E">E</span>.', global:'Same gate. Drawings must stand alone, because the moulder works from them across time zones.', hybrid:'Design the moulds for the <i>receiving</i> press: platen, tonnage, ejector pattern, water fittings.'}},
+
+{id:'G5', name:'DFM / DFA review', short:['DFM / DFA','vendor report'], lane:2, col:2, kind:'k2', owner:'ME',
+ raci:{PO:'I',HWL:'C',EER:'',ME:'A',FW:'',QL:'R',OPS:'C',FIN:'I',CMP:'',TC:'',CM:'R',AI:'R'},
+ deps:['G2','G4'],
+ ai:['Vendor DFM report parsed into a findings log (ID, feature, severity, vendor proposal, cost and lead impact), each finding linked to a drawing balloon',
+     'Mould-flow summary (fill, weld lines, sink, warp) and a draft-analysis colour map',
+     'JLC PCB DFM summary (slivers, acid traps, mask dams at J3)',
+     'DFA time study and assembly sequence with error-proofing (poka-yoke) points',
+     'Test-access map for the functional-test fixture'],
+ checklist:[
+  {t:'Every vendor finding has a disposition: change (ECO), accept as is with a rationale, or reject with a rationale.'},
+  {t:'Tray parting line: at the groove centre z 5.5, so the rails form in the two halves, or two side-action slides along 131 mm (≈ $8–20k difference <span class="tag t-S">S</span>).'},
+  {t:'Lid detent nubs are internal undercuts. Choose between 2 lifters, a window behind each nub for a straight-pull core, or MABS with a 30–45° ramped bump-off. Protolabs says PC bump-offs are "not likely to work very well".'},
+  {t:'Lid rails run the full length as internal features: lifters or collapsing cores, or move them to the parting plane.'},
+  {t:'Draft: outer walls 1–2°, polished faces ≥ 1° (1.5–2° preferred), textured faces 3° (PM-T1) or 5° (PM-T2).'},
+  {t:'Wall uniformity: lid 1.6 mm throughout. Tray thickened side walls (SIDE_ADD 1.5 → ~3.5 mm locally) cored to 2–2.2 mm.'},
+  {t:'Gates: lid at the open rear end (tab or fan gate), tray on the underside centre behind the keyboard area, nothing on visible faces.'},
+  {t:'Mould flow in PC at 1.6 mm over ~178 mm (L/t ≈ 110): fill pressure margin, weld lines at the display-bump step, vents placed there.'},
+  {t:'Predicted tray warp: flatness of the PCB seating ≤ 0.3 mm <span class="tag t-E">E</span> across the 6 bosses.'},
+  {t:'Bosses: OD 4.4 mm for M2 thread-forming, wall ≤ 60% of nominal, coring pin, gussets. Screw type and torque specified for each material.'},
+  {t:'Cosmetic classes: SPI A-1/A-2 on the lid cavity, A-2/A-3 on the core. Grain spec for the tray.'},
+  {t:'PCB DFM: solder-mask dams between the 0.5 mm-pitch J3 pads, no silk on pads, no acid traps.'},
+  {t:'DFA sequence: 43 switches (86 joints) hand-soldered, PB2 headers inserted from below and trimmed, panel taped or glued into the chassis, battery on foam, 10 screws from below, lid slid on.'},
+  {t:'Error-proofing: keyed battery connector orientation, FPC orientation mark, PB2 pin-1 marker on the silk.'},
+  {t:'FPC fold: 30 mm tail budget, fold radius, and access to the F32Q actuator in the assembly sequence.'},
+  {t:'Test access: pogo pads for USB enumeration, audio loopback, the 165-chain walk, charge current and the panel pattern, plus the eMMC flash path.'},
+  {t:'Hybrid: the receiving moulder reviews the tool design before steel is cut (press fit, hot-runner controller, cooling-fitting standards).', s:['hybrid']},
+ ],
+ evidence:['Findings log signed by ME, QL and the vendor','Mould-flow PDF','Revised drawings','DFA sequence with photos'],
+ auto:'None for a first DFM. On a repeat DFM of an unchanged design, the agent may close findings whose feature and text hash match an earlier disposition.',
+ human:'Every new finding. DFM decisions trade cost against cosmetics and schedule, and vendor boilerplate can hide the real issue.',
+ mech:'E-signature on the findings log by <b>ME + QL (two-person)</b>. The vendor counter-signs the agreed changes, and the signed log is attached to the tooling PO (G6/G7).',
+ sla:'3 business days from receipt of the vendor report.',
+ esc:'PO for cost-driving trades over $5k <span class="tag t-E">E</span>.',
+ rollback:'Reopen G4 with an MCAD revision, then re-run DFM on the delta.',
+ fails:[
+  {t:'Undercuts in a stiff resin', h:'Lid nubs and rails are internal undercuts. Rail and detent DFM is "the single biggest tooling cost driver".', src:'S'},
+  {t:'Clear parts show every flaw', h:'Sink, flow marks and knit lines are visible in clear PC. SLA prototypes yellow over time.', src:'S'},
+  {t:'Panelisation limit', h:'2-up panel at 252 mm is just over JLC\'s 250 mm limit.', src:'S'},
+ ],
+ strat:{domestic:'US moulder\'s DFM (often automated and quick).', usmca:'Mexico moulder\'s DFM. Hold a joint review call with ME present.', global:'Shenzhen moulder DFM plus a mould-flow report. Ask for a T0 video.', hybrid:'DFM from both the building toolmaker and the receiving moulder.'}},
+
+{id:'G6', name:'Spend / PO release', short:['Spend / PO','thresholds'], lane:3, col:3, kind:'k1', owner:'FIN',
+ raci:{PO:'C',HWL:'C',EER:'',ME:'C',FW:'',QL:'I',OPS:'R',FIN:'A',CMP:'',TC:'C',CM:'I',AI:'R'},
+ deps:['G3','G5'],
+ ai:['Draft PO with the quote attached, quote age, incoterm and payment terms',
+     'Three-bid comparison where more than one vendor is qualified',
+     'Budget-line consumption and a cash-flow schedule (deposits, NRE, balances)',
+     'Landed-cost calculation (freight, brokerage, duty for the selected strategy)',
+     'Vendor onboarding pack: W-9 or W-8BEN-E, bank-letter verification task, restricted-party screen',
+     'Weekly report of cumulative Tier 0 auto-approvals'],
+ checklist:[
+  {t:'Quote ≤ 30 days old, quote number on the PO, incoterm stated (EXW, FCA, DAP or DDP).'},
+  {t:'Price within +5% of the agent\'s verified snapshot (for example, PB2 Industrial $51.03 at DigiKey on 2026-11-07).'},
+  {t:'Quantity = build plan × (1 + attrition), with MOQ and pack rounding shown.'},
+  {t:'Budget line named and its remaining balance shown.'},
+  {t:'Vendor on the AVL. A new vendor is onboarded and approved by a human first.'},
+  {t:'Any new or changed bank details verified out of band (a call to a number on file) by two people.'},
+  {t:'Tooling terms: 50% deposit at kickoff, 50% <b>only after T1 approval (G7)</b>. Customer owns the tool. No use for third parties. Transfer rights. Shot-life guarantee. Storage and maintenance.'},
+  {t:'NCNR items flagged: custom battery pack, panel at MOQ, PB2 factory order (14–15 weeks once DigiKey\'s 3,442 are exceeded).'},
+  {t:'Lithium: cells or packs only from vendors with a UN38.3 test summary and an IEC 62133-2 report on file.'},
+  {t:'Landed cost includes duty and tariffs for the selected strategy. The overview page does not model these.'},
+  {t:'FX exposure noted for CNY or MXN invoices.'},
+  {t:'Order date ≤ need date − lead time − buffer. Chinese New Year (6 Feb 2027) adds about 3 weeks for China-sourced lines.'},
+  {t:'Cumulative Tier 0 auto-approvals this week are under the cap.'},
+  {t:'USMCA: supplier origin declarations requested with the PO for each regional line.', s:['usmca']},
+  {t:'Hybrid: the PO with the receiving moulder covers the transfer, the re-T1 and tool storage before the China toolmaker ships the tool.', s:['hybrid']},
+ ],
+ evidence:['PO PDF','Quote','Bid comparison','Bank verification record','Approval log in the purchasing system'],
+ auto:'<b>Tier 0 only</b> (see the thresholds table): ≤ $250, on the AVL, in budget, price ≤ +5% of the snapshot, catalogue part, not lithium, not tooling or NRE, cumulative ≤ $1,000 per week.',
+ human:'Everything else. Money committed to the wrong revision, or to a fraudulent account, cannot be recovered.',
+ mech:'E-signature in the purchasing or accounting system. <b>Two-person at Tier 2 and above.</b> Tier 3 adds the PO, and the ME for tooling.',
+ sla:'Tier 1: 4 business hours. Tier 2: 1 business day. Tier 3: 3 business days.',
+ esc:'The backup approver for the same role, then the PO. A lapsed quote sends the PO back to the agent for a re-quote.',
+ rollback:'Cancel or amend the PO in writing within the vendor\'s window. Partial cancellation charges are approved under the same tier as the PO.',
+ fails:[
+  {t:'Single-source stock evaporates', h:'USB1046: 75 at LCSC. PB2 factory lead time 14–15 weeks.', src:'S'},
+  {t:'Prices recorded are not quotes', h:'The 2026-11-05 prices in AGENTS.md and the 2026-11-07 overview figures are snapshots and estimates, not quotes.', src:'A'},
+  {t:'Tooling payback misjudged', h:'Aluminium tools at about $26k pay back at about 720 sets, and steel at about 1,400.', src:'S'},
+ ],
+ strat:{domestic:'USD, net-30 common. Duty only on imported components.', usmca:'MXN/USD, IMMEX temporary-import paperwork, supplier origin declarations.', global:'T/T prepayment common: deposits commit cash early. Tariff exposure on the whole unit.', hybrid:'Two tooling POs (build and transfer/re-T1). Freight and import of the tools themselves.'}},
+
+{id:'G7', name:'Tooling kickoff → T0/T1 approval', short:['Tool kickoff','DFM → steel'], lane:2, col:4, kind:'k2', owner:'ME',
+ raci:{PO:'C',HWL:'',EER:'',ME:'A',FW:'',QL:'R',OPS:'R',FIN:'C',CMP:'I',TC:'',CM:'R',AI:'R'},
+ deps:['G6'],
+ ai:['Tooling specification sheet: tool material, cavities, gate, ejection, slides and lifters, SPI polish, texture, shrink factor for the resin grade, cycle-time target',
+     'Review checklist for the vendor\'s 2D tool layout',
+     'T0/T1 report parsing: process sheet (melt and mould temperatures, pressures, hold, cycle) and CMM or scan colour maps against CAD',
+     'Cosmetic photo set under standard lighting, defects classified against the boundary samples',
+     'Snap-force and slide-cycle test data, with charts'],
+ checklist:[
+  {t:'<b>Kickoff:</b> DFM disposition signed (G5). Final STEP hash = MCAD tag.'},
+  {t:'<b>Kickoff:</b> tool class and guaranteed shots: aluminium (Protolabs ≥ 2k prototype, ≥ 10k on-demand), P20 (~100k) or S136/H13 (millions, holds a mirror polish).'},
+  {t:'<b>Kickoff:</b> resin grade frozen with its datasheet. Clear PC: UV-stabilised, dried at 120 °C for 4–6 h to < 0.02% moisture, mould at 80–100 °C.'},
+  {t:'<b>Kickoff:</b> tool layout approved: gate location, ejector pins off cosmetic faces, slide and lifter count, cooling.'},
+  {t:'<b>Kickoff:</b> shrink factor agreed in writing (PC ~0.5–0.7%, ABS ~0.4–0.7%). CTF dimensions cut steel-safe.'},
+  {t:'<b>Kickoff:</b> colour standard (physical chip or Pantone/RAL), masterbatch ratio, 3–5 lid colours.'},
+  {t:'<b>T1 dimensional:</b> CTF dimensions on 5 shots per cavity: groove 2.0 × 1.2, rail height, lid cavity width (X1 − X0 + 2·GAP = 178.6), nub protrusion 0.6, dimple depth 0.7.'},
+  {t:'<b>T1 gloss:</b> 60° gloss on the lid top within ±10 GU of the approved sample <span class="tag t-E">E</span>.'},
+  {t:'<b>T1 clarity:</b> haze and luminous transmittance (ASTM D1003) on a flat coupon area. No flow lines visible over the display window.'},
+  {t:'<b>T1 sink:</b> none visible on the lid. Tray side-wall sink ≤ 0.05 mm deep <span class="tag t-E">E</span>.'},
+  {t:'<b>T1 flash:</b> ≤ 0.1 mm at the parting line, none on rails, grooves or the detent nub <span class="tag t-E">E</span>.'},
+  {t:'<b>T1 gate vestige:</b> ≤ 0.2 mm proud, only on the lid\'s open rear end <span class="tag t-E">E</span>.'},
+  {t:'<b>T1 weld lines</b> at the display-bump step: not visible at 450 mm under D65 for 10 s (Class A face) <span class="tag t-E">E</span>.'},
+  {t:'<b>T1 snap force:</b> engagement and release measured with a force gauge, against the predicted ~5 N per lid. 500 slide cycles in both modes with no whitening, cracking or loss of click.'},
+  {t:'<b>T1 stress cracking:</b> IPA wipe and 24 h on flexed snap fingers (PC is solvent-sensitive).'},
+  {t:'<b>T1 fit:</b> the real board seats on all 6 bosses without rocking. The lid slides in both modes over the real keycaps, chassis and panel.'},
+  {t:'<b>Golden and boundary samples</b> signed and split: one set at the vendor, one with QL.'},
+  {t:'Hybrid: tool export and import paperwork, re-T1 on the receiving press, and the process window re-validated (the same resin lot if possible).', s:['hybrid']},
+  {t:'Global: a T0 video and a remote witness of T1 before samples ship. CNY closure covered in the schedule.', s:['global','hybrid']},
+ ],
+ evidence:['Tool spec signed','T1 report and CMM data','Photo set','Force and cycle data','Signed golden sample with a tag and serial'],
+ auto:'None for acceptance. When CTF dimensions are outside tolerance, the agent may request a T2 (no spend, no acceptance) and draft the tool-change list.',
+ human:'Kickoff spend and T1 acceptance. Cosmetic acceptance is visual and subjective, and the golden sample becomes the contractual reference for every later lot.',
+ mech:'Kickoff: PO e-signed by <b>PO + FIN + ME</b>. T1: e-signature on the approval plus a physically signed golden sample, by <b>ME + QL (two-person)</b>. The balance payment is released only after T1.',
+ sla:'Kickoff decision within 2 business days. T1 decision within 3 business days of samples arriving.',
+ esc:'PO. A T3 or later round triggers a vendor corrective-action meeting.',
+ rollback:'Steel-safe tool modification, then T2. A geometry change outside steel-safe margins needs an ECO through G4/G5 and a cost approval through G6.',
+ fails:[
+  {t:'Wrong resin and ejection assumptions', h:'PC bump-offs are unlikely to work, so lifters or windows are needed.', src:'S'},
+  {t:'Colour sprawl', h:'15 colourways means 15 batches or masterbatch changeovers. Production should offer 3–5.', src:'S'},
+  {t:'Factory closures', h:'Chinese New Year on 6 Feb 2027 closes factories for about 3 weeks in the middle of Proto 2.', src:'S'},
+ ],
+ strat:{domestic:'US rapid tooling (aluminium, T1 in 2–6 weeks). Easy witnessing. Highest piece price.', usmca:'Mexico moulder. Tool built locally or imported under IMMEX. Witness T1 on site.', global:'Shenzhen toolmaker. Remote witness, courier samples, CNY risk. The tool stays in China.', hybrid:'Tool built in China (cost), T1 there, then <b>transferred</b> and re-T1\'d at the US or Mexico moulder. Re-T1 is a second full approval (shown as a separate node).'}},
+
+{id:'G8', name:'FAI & receiving inspection', short:['FAI & receiving','inspection'], lane:4, col:5, kind:'k1', owner:'QL',
+ raci:{PO:'I',HWL:'C',EER:'',ME:'C',FW:'',QL:'A',OPS:'R',FIN:'',CMP:'',TC:'',CM:'R',AI:'R'},
+ deps:['G6','G7'],
+ ai:['Ballooned FAI drawings and characteristic accountability (AS9102-style forms 1–3)',
+     'Inspection plan per part (characteristic, method, gauge, sample size) with ANSI/ASQ Z1.4 sampling tables',
+     'Receiving checklists per part number, with CoC, CoA and declaration matching against the PO',
+     'Data entry, SPC charts and Cpk tracking',
+     'NCR drafts with photos, and MRB disposition suggestions'],
+ checklist:[
+  {t:'FAI on the first lot of each new part number or revision: 100% of ballooned characteristics on 1–5 pieces.'},
+  {t:'PCBA FAI: every placement on board 1 checked against BOM value, orientation and polarity, with photos.'},
+  {t:'PCBA: X-ray of the ES8388 and IP5306 exposed-pad joints, voiding ≤ 25% <span class="tag t-E">E</span>. AOI report reviewed.'},
+  {t:'PCBA: unpowered resistance checks on +5V_SYS, VBAT and 3V3 to GND, then a current-limited power-up: VBAT → IP5306 boost → +5V_SYS → PB2 3V3.'},
+  {t:'Bring-up order: rails, PB2 boot, 165-chain loopback, hub + 2 USB-A, ES8388 playback and record, panel.'},
+  {t:'Bare board: thickness 1.6 mm ±10%, bow and twist ≤ 0.75%, TDR or coupon on the USB pair if ordered.'},
+  {t:'Moulded or printed parts: CTF dimensions against the drawing, cosmetics against the golden and boundary samples.'},
+  {t:'Panel receiving: part-number label, measured outline (118.8 × 41.57 × 2.5?), FPC pinout spot-check on 1 per lot, dead and stuck pixels within spec, backlight current 39 mA ±10%.'},
+  {t:'PB2 receiving: revision marking (Rev A1 / Industrial, not EVT), socket height 3.55 mm, eMMC size.'},
+  {t:'Battery receiving: UN38.3 test summary and IEC 62133-2 certificate match the cell or pack part number. OCV within window. JST-PH polarity (pin 1 = VBAT) checked on every pack.'},
+  {t:'Switches and keycaps: count, Choc v1 variant, CFX legend registration.'},
+  {t:'Fasteners: M2 thread-forming length. Pull-out test in the plastic bosses for each material.'},
+  {t:'CoC from each vendor. RoHS and REACH declarations filed.'},
+  {t:'AQL plan: Z1.4 General Level II, AQL 0.65 major / 2.5 minor, Class A cosmetics on the lid <span class="tag t-E">E</span>.'},
+  {t:'Traceability: PB2, panel and cell date codes recorded against the unit serial.'},
+  {t:'NCR flow working: hold tags, MRB disposition (use as is, rework, return to vendor, scrap), and vendor 8D for repeats.'},
+  {t:'Global: third-party pre-shipment inspection at the source against this same plan before payment or loading.', s:['global']},
+  {t:'Hybrid: PCBA pre-shipment inspection in China, and enclosure FAI at the receiving moulder.', s:['hybrid']},
+  {t:'USMCA: FAI at the Mexico contract manufacturer, witnessed remotely or on site.', s:['usmca']},
+ ],
+ evidence:['FAI forms 1–3 signed','X-ray images','Measurement data','Receiving records','NCRs'],
+ auto:'Lot acceptance at receiving when the part and supplier have a passed FAI, the CoC is present and matches the PO, every sample result is in spec with zero defects, and there is no open NCR on the part. The agent releases the lot to stock and QL is informed.',
+ human:'Every FAI, any reject, every lithium lot, and the first lot after any ECO. An FAI defines what "good" means for every later lot.',
+ mech:'FAI e-signed by QL, with ME for mechanical parts and HWL for PCBA. <b>QL signs alone</b> for receiving exceptions, and <b>two-person (QL + domain owner)</b> for FAI.',
+ sla:'Receiving: 1 business day. FAI: 2 business days after the parts arrive.',
+ esc:'MRB within 3 business days of an NCR. PO if a line stops.',
+ rollback:'Quarantine, MRB, return to vendor, vendor corrective action. Recall built units by serial if the defect is latent.',
+ fails:[
+  {t:'Dimensions taken on trust', h:'Panel outline 118.8 × 41.57 × 2.5 (datasheet) versus 117.9 × 40.37 × 2.0 (snippet). USB1046 height assumed to be 7.0 mm.', src:'S'},
+  {t:'Wrong board revision', h:'The case was checked only against the EVT STEP. Production ships Rev A1 or Industrial.', src:'A'},
+  {t:'Polarity', h:'JST-PH LiPo packs come in both polarities.', src:'R'},
+ ],
+ strat:{domestic:'All inspection at your own receiving dock.', usmca:'FAI at the Mexico contract manufacturer. Certificates collected for the USMCA file.', global:'Pre-shipment inspection at the source is mandatory, because rejecting after ocean freight is expensive.', hybrid:'Split: PCBA pre-shipment inspection in China, enclosure FAI at the receiving moulder.'}},
+
+{id:'G9', name:'Firmware release', short:['Firmware release','DT · M4F · image'], lane:1, col:4, kind:'k2', owner:'FW',
+ raci:{PO:'I',HWL:'C',EER:'',ME:'',FW:'A',QL:'C',OPS:'I',FIN:'',CMP:'I',TC:'C',CM:'I',AI:'R'},
+ deps:['G2'],
+ ai:['Device-tree overlay source and a <code>dtc</code> log with no warnings',
+     'Pinmux table generated from the SysConfig file and diffed against <code>pb2_header_pinout.csv</code>',
+     'ST7701S init sequence annotated register by register',
+     'M4F key-scan firmware build and the RPMsg-to-uinput daemon',
+     'Hardware-in-the-loop logs on a real board: panel pattern, 43-key walk and rollover, audio loopback, USB enumeration, battery ADC',
+     'SBOM (SPDX or CycloneDX), reproducible-build hash comparison, GPL source archive, release notes'],
+ checklist:[
+  {t:'DT overlay: VOUT0 parallel <b>RGB565 DPI</b>, PCLK on P2.17, 320×960 timings at 60 Hz within the ST7701S limits. Pixel clock = h<sub>total</sub>·v<sub>total</sub>·60.'},
+  {t:'Pinmux: VOUT0_D10/D11 share balls with I2C1 on P1.36/P1.33, so <b>I2C1 is not muxed</b>. The main-domain balls shorted to the M4F pins (GPIO0_44, GPIO0_43, GPIO1_24) stay unmuxed inputs in Linux.'},
+  {t:'Panel init: 3-wire 9-bit SPI on SPI0 (P2.25 SDA, P2.29 SCK, P2.31 CS), RESET on P2.10, 18-bit mode (MDT=1) with the R/B LSBs tied. Based on Linux <code>panel-sitronix-st7701</code> plus the vendor sequence.'},
+  {t:'Backlight PWM on <b>P1.06 (EHRPWM0_A)</b>, not P2.01, which is now I2S BCLK. Default brightness and a PWM frequency within the TPS61165 CTRL range.'},
+  {t:'Audio: McASP0 as slave, ES8388 as I2S master on its 12.288 MHz oscillator, I2C3 (P2.09/P2.11) at 0x10. The plain IP5306 is not on I2C, so there is no 0x75 driver.'},
+  {t:'Key scan: M4F remoteproc firmware reads 6 × 74HC165 (CLK P1.26, SH/LD P1.28, QH P2.05), 43 inputs plus 5 spares tied high, with debounce, then RPMsg → uinput. Full 43-key walk and n-key rollover pass. Mode keys mapped as defined in G1.'},
+  {t:'QMK/Vial: the stock <code>sporewoh_bancouver40_*.hex</code> only applies to a 32U4 board. For any QMK-based SKU, pin the qmk_firmware commit, keymap and toolchain, and build in CI.'},
+  {t:'VBAT divider on AIN0 calibrated. Low-battery warning and shutdown thresholds set.'},
+  {t:'Boot LED on P1.35. FE1.1s enumerates both ports. TPS2051B over-current flag handled.'},
+  {t:'Versions pinned: kernel tag, U-Boot, TI firmware blobs, Debian image date, overlay commit, MCU SDK and toolchain versions, build-container digest.'},
+  {t:'Reproducible: two independent builds produce byte-identical images, or the deltas are documented.'},
+  {t:'SBOM generated. GPL corresponding source and written offer prepared (bancouver40 is GPL-3.0, and Linux is GPL-2.0).'},
+  {t:'Image manifest (SHA-256) signed with minisign or cosign, using a key on a hardware token held by a human. Agents cannot sign.'},
+  {t:'Secure boot: confirm whether the PB2 Industrial SoC is GP or HS-FS before planning. <b>No OTP or eFuse writes</b> before production release.'},
+  {t:'Factory flash: eMMC write and hash verification at the functional-test station, serial provisioning, first-boot self-test.'},
+  {t:'No universal default password. Vulnerability-disclosure contact and a support-period statement ready (needed for the UK PSTI regime if sold there).'},
+  {t:'Recovery path documented: the Industrial board has eMMC and no microSD, so recovery is via USB boot. The previous signed image is retained.'},
+ ],
+ evidence:['Signed tag','Signed image and manifest','HIL logs','SBOM','Reproducibility diff','Pinmux diff'],
+ auto:'A userland security-patch release: only package version bumps from the pinned repository, no kernel, DT, M4F or bootloader change, all HIL tests passing, and an SBOM diff limited to versions. Signing is still done by a human with the token.',
+ human:'Any DT overlay, pinmux, kernel, bootloader or M4F change, and every signature. A pinmux error can drive a pin that is shorted to another ball on the header and damage the hardware.',
+ mech:'<code>git tag -s fw/v3.0.0</code> plus a signed image. <b>Two-person: FW + HWL</b> for DT and pinmux changes. FW plus QL for patch releases.',
+ sla:'1 business day.',
+ esc:'HWL, then PO. A security fix can use an expedited 4 h path with the same two signatures.',
+ rollback:'Re-flash the previous signed image at the factory. In the field, a signed rollback image. Revoke the bad image\'s signature in the manifest.',
+ fails:[
+  {t:'The software does not exist yet', h:'No DSS overlay or ST7701S init has been written. This is the largest open risk.', src:'A'},
+  {t:'Shared balls', h:'VOUT0_D10/D11 share header pins with I2C1. Muxing I2C1 breaks the display.', src:'A'},
+  {t:'Pin moved between revisions', h:'Backlight PWM moved from P2.01 to P1.06 because P2.01 became I2S BCLK.', src:'R'},
+  {t:'Unpinned tooling', h:'Freerouting needed Java ≥ 25. The scripts had hardcoded macOS paths. It is unknown whether the Backplane KiCad fork keeps SWIG.', src:'A'},
+  {t:'Release plumbing', h:'An orphan gitlink broke the Pages deploy, and <code>.gitignore</code> silently ignored <code>/site</code>.', src:'A'},
+ ],
+ strat:{domestic:'Flash station at the US box-build site.', usmca:'Flash station at the Mexico contract manufacturer. Signing keys stay in the US, and only signed images are transferred.', global:'Flash at the Shenzhen contract manufacturer with signed images only. Consider an encrypted image distribution channel. No signing keys at the contract manufacturer.', hybrid:'Flash in the US at box build. The boards arrive blank.'}},
+
+{id:'G10', name:'Compliance pre-scan & labelling', short:['Compliance','pre-scan · labels'], lane:4, col:6, kind:'k2', owner:'CMP',
+ raci:{PO:'C',HWL:'R',EER:'',ME:'C',FW:'C',QL:'C',OPS:'I',FIN:'I',CMP:'A',TC:'I',CM:'C',AI:'R'},
+ deps:['G8','G9'],
+ ai:['Test plan for each standard, with the operating modes for the device under test',
+     'Pre-scan data parsing: margin table against the Class B limits, peaks matched to likely sources',
+     'IEC 62368-1 hazard-based safety engineering table (energy-source classification and safeguards)',
+     'Battery document check (UN38.3 summary fields, IEC 62133-2 certificate scope against the cell part number)',
+     'Label artwork, manual safety and compliance text, SDoC and EU DoC drafts, technical-file index'],
+ checklist:[
+  {t:'Scope: the PB2 has no radio, so the device is an FCC Part 15 <b>Subpart B Class B</b> unintentional radiator → SDoC. Nothing carries over from the PB2, which has no published declaration.'},
+  {t:'Radiated measurements up to the 5th harmonic of the highest internal frequency (AM6254 at 1.4 GHz → 7 GHz) per 47 CFR 15.33(b). ANSI C63.4 set-up with the panel active, audio playing, USB loads attached and charging.'},
+  {t:'Pre-scan margin ≥ 6 dB below the Class B limits across the band <span class="tag t-E">E</span>.'},
+  {t:'Known emitters identified in the scan: DPI PCLK and its harmonics on the FPC, the 12 MHz hub crystal, 12.288 MHz audio, the boost converters, DDR4. Mitigations ready to fit: VOUT0 series resistors, FPC ferrite, stitching.'},
+  {t:'Conducted emissions on the charge port through a representative AC charger (15.107 applies when the device is connected to the mains through a charger).'},
+  {t:'CE (if EU is in scope): EN 55032 Class B, EN 55035 immunity with ESD ±4 kV contact / ±8 kV air on keys, USB shells and lid seams, and EN 62368-1.'},
+  {t:'IEC 62368-1 energy sources: ES1 throughout (including the ~13 V LED string). PS classification by available power after 3 s (PS1 ≤ 15 W): the LiPo short-circuit path before the PCM trips is likely PS2 or higher, which drives the fire-enclosure decision.'},
+  {t:'Annex M (batteries): charge voltage and current within the cell spec. The IP5306 has no NTC input, so the pack PCM or a thermistor must enforce charge temperature limits.'},
+  {t:'Enclosure materials: UL 94 rating at the actual wall thickness (1.6 mm lid, MJF PA12 tray) meets what the fire-enclosure assessment requires.'},
+  {t:'Touch temperatures of keys, lid and tray under worst-case load inside the closed lid, against the 62368-1 TS1 limits.'},
+  {t:'Battery: UN38.3 test summary for the exact cell or pack (required by 38.3.5), IEC 62133-2 CB report, SDS.'},
+  {t:'EU Battery Regulation Art. 11 (from 18 Feb 2027): a pack behind 4 screws and a connector is confirmed as user-replaceable, or an exemption is documented.'},
+  {t:'Labels: FCC compliance statement (15.19; e-label allowed under 2.935 because the device has a display), model number, 2.1077 compliance information in the manual with the US responsible party, CE mark and manufacturer address, WEEE bin, battery markings.'},
+  {t:'Label location (tray underside) and durability: 62368-1 rub test with water and petroleum spirit.'},
+  {t:'RoHS: supplier declarations for every BOM line. REACH SVHC check. California Prop 65 assessment.'},
+  {t:'UK (if in scope): PSTI security requirements met, UKCA optional because GB accepts CE.'},
+  {t:'Country-of-origin marking on the unit and carton matches the G12 determination.'},
+ ],
+ evidence:['Pre-scan report and margin table','62368-1 HBSE table','Battery reports','Label proofs','Signed SDoC / DoC','Technical-file index'],
+ auto:'None. The agent may re-run and re-plot pre-scans and flag regressions, but cannot declare compliance.',
+ human:'All of it. These are legal declarations, and the US responsible party is personally named on the SDoC.',
+ mech:'CMP e-signs the test review. The SDoC is e-signed by the US responsible party (PO), and the EU DoC by the manufacturer (PO). <b>Two-person: CMP + PO.</b>',
+ sla:'3 business days after the lab report.',
+ esc:'External compliance consultant. If the margin is under 3 dB, fixes go back through G2 or G4 as an ECO.',
+ rollback:'Stop-ship if a production audit fails, followed by corrective action, a re-test and an amended DoC.',
+ fails:[
+  {t:'Assuming module certification carries over', h:'BeagleBoard publishes no FCC or CE declaration for the PB2 (the support page returned 404). The whole product is tested.', src:'S'},
+  {t:'Plastic case, wide parallel bus', h:'The parallel RGB bus and the SoC sit in an unshielded printed case. Pre-scan at EVT.', src:'S'},
+  {t:'Battery undefined', h:'No cell is chosen, and no off-the-shelf cell fits 9 × 40 × 70 mm.', src:'S'},
+ ],
+ strat:{domestic:'US lab. SDoC by the US company.', usmca:'US or Mexico lab. NOM (for example NOM-019) only if the product is sold in Mexico. Origin marking per the USMCA marking rules.', global:'A Shenzhen lab is cheaper and fine for an SDoC (accreditation not required), but the US importer is still the responsible party.', hybrid:'US lab near the box-build site, where the final configuration is tested.'}},
+
+{id:'G11', name:'Pilot build go / no-go', short:['Pilot build','go / no-go'], lane:0, col:7, kind:'k2', owner:'PO',
+ raci:{PO:'A',HWL:'C',EER:'',ME:'C',FW:'C',QL:'R',OPS:'R',FIN:'C',CMP:'C',TC:'I',CM:'R',AI:'R'},
+ deps:['G3','G8','G9','G10'],
+ ai:['Readiness dashboard: every upstream gate with its tag or envelope ID and date',
+     'Kitting report (percentage kitted per line for 100 units plus attrition)',
+     'Functional-test fixture validation (GR&R) and a yield model',
+     'Travellers and work instructions with photos for each station',
+     'Open NCR and ECO list with severity. Updated risk register'],
+ checklist:[
+  {t:'G2, G3, G4, G5, G8, G9 and G10 are signed, and their tags and IDs are printed on the pilot traveller.'},
+  {t:'100% kitted for 100 units plus attrition, including 100 × PB2 Industrial and the hand-fit parts.'},
+  {t:'The image hash on the flash station equals the signed G9 image.'},
+  {t:'Functional-test fixture validated: USB enumeration, audio loopback, 165-chain walk, charge current, backlight current, panel pattern. GR&R ≤ 10% on the measured parameters <span class="tag t-E">E</span>.'},
+  {t:'2 h burn-in under load inside the closed lid, with temperatures logged.'},
+  {t:'Work instructions cover the header trim length, FPC fold, panel tape (3M 9495LE), battery on foam, screw torque and lid fit check.'},
+  {t:'ESD controls at every station. Lithium storage and handling procedure, with shipping at ≤ 30% SOC.'},
+  {t:'Serial-number scheme and per-unit test log (device history record) storage working.'},
+  {t:'Cosmetic audit plan: 10% of lids checked against the boundary samples.'},
+  {t:'Yield target: first-pass yield ≥ 90% <span class="tag t-E">E</span>. Stop-build rule: 3 consecutive failures with the same cause.'},
+  {t:'No open critical NCR. Major NCRs contained.'},
+  {t:'Compliance: pre-scan margin ≥ 6 dB, or formal tests scheduled before shipment. Labels in stock.'},
+  {t:'Packaged drop test (ISTA 1A class <span class="tag t-E">E</span>) passed with the battery installed.'},
+  {t:'RMA and field-feedback path live. Spares (lids, keycaps, panels) stocked.'},
+  {t:'Power-budget validation on Proto 1 or EVT units: no brown-out with both USB-A ports at 500 mA while the panel and audio run.'},
+ ],
+ evidence:['Signed meeting minutes','Dashboard export','GR&R study','Drop-test report'],
+ auto:'None.',
+ human:'Go or no-go is a business, quality and safety decision. <b>QL holds an absolute veto</b> on quality and safety grounds.',
+ mech:'E-signed minutes by <b>four approvers: PO, QL, OPS and HWL</b>. Any one of them can block on their own domain.',
+ sla:'Decision in the scheduled meeting. If it slips, the build slips. It never defaults to "go".',
+ esc:'A no-go returns a dated list of the gates that must be reopened.',
+ rollback:'Hold the line, quarantine the built units, rework under MRB.',
+ fails:[
+  {t:'Schedule pressure', h:'Chinese New Year falls in the middle of Proto 2. Panel stock is thin (Adafruit had 8 in stock, DigiKey quotes 18 weeks).', src:'S'},
+  {t:'Power margin', h:'About 2.3 A worst case against a 2.1–2.4 A boost.', src:'R'},
+ ],
+ strat:{domestic:'Pilot at the US box-build site, witnessed in person.', usmca:'Pilot at the Mexico contract manufacturer. ME and QL on site for day 1.', global:'Pilot at the Shenzhen contract manufacturer. Remote witness plus a third-party inspector. Golden units hand-carried back.', hybrid:'Pilot at the US box-build site with China PCBA and the transferred tools.'}},
+
+{id:'G12', name:'Shipping & customs release', short:['Shipping &','customs'], lane:5, col:8, kind:'k2', owner:'TC',
+ raci:{PO:'I',HWL:'',EER:'',ME:'',FW:'C',QL:'',OPS:'R',FIN:'C',CMP:'C',TC:'A',CM:'C',AI:'R'},
+ deps:['G11'],
+ ai:['Classification memo: candidate HTS lines with GRI reasoning, and an ECCN self-classification memo',
+     'Country-of-origin analysis (substantial transformation, or USMCA rule of origin)',
+     'Draft commercial invoice and packing list. ISF data for ocean freight',
+     'Lithium shipping pack (UN3481, IATA PI 967 Section II, mark, UN38.3 summary)',
+     'Restricted-party screening results. Duty and tariff landed-cost calculation for the entry date'],
+ checklist:[
+  {t:'HTS: the finished unit is a portable automatic data-processing machine ≤ 10 kg with CPU, keyboard and display → candidate <b>8471.30.0100</b> (confirm with the broker). Spare lids → 8473.30. A keyboard-only variant → 8471.60.'},
+  {t:'Duty and additional tariffs (Section 301, any reciprocal or IEEPA-based duties, Section 232 if applicable) checked for each country of origin <i>on the entry date</i>. They change often.'},
+  {t:'Country of origin decided (where the PCBA and box build substantially transform the goods). Marking per 19 CFR 134.'},
+  {t:'ECCN: the device ships Linux with OpenSSH and TLS → likely <b>5A992.c</b> mass-market encryption. Counsel confirms whether a §740.17(b)(1) self-classification report applies.'},
+  {t:'Restricted-party screening (Consolidated Screening List) for every consignee and intermediate party.'},
+  {t:'Commercial invoice: seller, buyer, importer of record, consignee, HTS and origin per line, incoterm, currency, unit values <b>including assists</b>, signature, export-control statement.'},
+  {t:'Assists: customer-owned moulds used by a foreign moulder are apportioned into the customs value (19 CFR 152.103).', s:['global','hybrid','usmca']},
+  {t:'Packing list, carton marks, net and gross weights match the invoice.'},
+  {t:'Lithium: UN3481 (batteries contained in equipment), IATA PI 967 Section II (≈ 3.7 V × 3 Ah ≈ 11 Wh, under 100 Wh), lithium battery mark, UN38.3 summary available to the carrier. Ship at ≤ 30% SOC as policy.'},
+  {t:'US de minimis is no longer available for these imports (suspended in 2025; verify). Each import is a formal or informal entry.'},
+  {t:'Importer of record, continuous bond, ACE access and broker power of attorney in place.'},
+  {t:'Ocean: ISF 10+2 filed ≥ 24 h before vessel loading.', s:['global','hybrid']},
+  {t:'USMCA: certification of origin with the 9 minimum data elements, the product rule (tariff shift or regional value content) documented, records kept for 5 years.', s:['usmca']},
+  {t:'USMCA: IMMEX temporary-import reconciliation for the components (PB2, panel, cells) in Mexico.', s:['usmca']},
+  {t:'Domestic: imports are components only (PB2, panel, cells), each with its own HTS and duty. Outbound shipments follow domestic lithium rules (USPS Pub 52).', s:['domestic']},
+  {t:'Hybrid: the import of China PCBA and the moulds is a separate entry from the import of finished goods. Tool import valued correctly.', s:['hybrid']},
+  {t:'EU (if in scope): EORI, VAT/IOSS, WEEE and battery producer registration in each country before placing the product on the market.'},
+ ],
+ evidence:['Signed classification memo','Commercial invoice','Screening log','Lithium documents','Entry summary'],
+ auto:'A repeat shipment on an approved lane where the HTS, ECCN, origin and unit value (±10%) are identical to a signed classification, screening is clean, and the lithium configuration is unchanged.',
+ human:'The first shipment on each lane, any new HTS, a value change over 10%, any lithium change and any new consignee country. Misclassification brings penalties and prior-disclosure exposure.',
+ mech:'Classification memo e-signed by TC (licensed broker). Commercial invoice e-signed by OPS as shipper. <b>Two-person (TC + OPS)</b> for the first shipment on each lane.',
+ sla:'1 business day, and always before the cargo-ready date.',
+ esc:'Trade counsel.',
+ rollback:'Post-summary correction, or a prior disclosure if a declaration was wrong. Hold cargo at the forwarder.',
+ fails:[
+  {t:'Tariffs not modelled', h:'The cost model excludes duties. They can add 10–50% to China-sourced content.', src:'S'},
+  {t:'Lithium logistics', h:'USPS allows at most 2 batteries per package domestically. Couriers charge battery surcharges.', src:'S'},
+ ],
+ strat:{domestic:'Inbound components only. Simplest.', usmca:'Origin certification plus IMMEX. Preference depends on meeting the rule of origin. Check the status after the 2026 joint review.', global:'Full import of finished goods. Tariff exposure on the whole unit. Assists. ISF.', hybrid:'Two inbound flows (PCBA and tools from China, finished goods built in the US). Assists on the tools.'}},
+
+{id:'G13', name:'Production release & ECO control', short:['Production','release · ECO'], lane:0, col:9, kind:'k2', owner:'PO',
+ raci:{PO:'A',HWL:'R',EER:'C',ME:'R',FW:'R',QL:'R',OPS:'C',FIN:'C',CMP:'C',TC:'C',CM:'C',AI:'R'},
+ deps:['G11','G12'],
+ ai:['Release manifest: every tag and hash (ECAD, MCAD, firmware, BOM, CPL, drawings, work instructions, test limits)',
+     'Baseline BOM with revisions and a where-used report',
+     'ECO drafts with impact analysis (gates to reopen, inventory disposition, cost, cut-in by serial or date)',
+     'Vendor PCN and lifecycle watch (LCSC, DigiKey, BeagleBoard revision notes)',
+     'Configuration audit comparing as-built (serials) with as-designed (manifest)'],
+ checklist:[
+  {t:'Release manifest complete. Every artefact is referenced by hash and signed tag.'},
+  {t:'Pilot results: first-pass yield and Pareto of failures. The top causes are closed or have ECOs.'},
+  {t:'Cpk ≥ 1.33 on the moulded CTF dimensions (groove width, cavity width, nub height) from ≥ 30 pieces <span class="tag t-E">E</span>.'},
+  {t:'Functional-test limits frozen from pilot data (charge current, backlight current, audio level).'},
+  {t:'Formal compliance tests passed. SDoC and DoC signed. Labels final.'},
+  {t:'PB2 volume PO placed against the 14–15 week lead time. Buffer-stock policy set.'},
+  {t:'AVL has second sources for the single-source lines (USB-A, F32R, panel) or documented risk acceptances.'},
+  {t:'ECO classes defined. <b>Class I</b> (form, fit, function, safety or compliance): change control board, two-person, affected gates reopened. <b>Class II</b> (documentation only): single approver. <b>Deviation</b>: limited in time or quantity. <b>Waiver</b>: accepts a nonconforming lot.'},
+  {t:'ECO impact map: board revision → G2, G3, G8. Firmware → G9. Mould → G4, G5, G7 (steel-safe). Battery → G10 and G12. Origin change → G12.'},
+  {t:'Inventory disposition on every ECO (use up, rework or scrap) and a serial or date cut-in.'},
+  {t:'RMA and field data feed CAPA (8D).'},
+  {t:'Change notification process with the contract manufacturer and vendors. PCNs are triaged within 2 business days.'},
+  {t:'Device history record per unit: test log, image hash, PB2, panel and cell lot codes.'},
+  {t:'Toolchain pinned for sustaining work: the exact kicad-cli build (10.99.0-bp.6), FreeCAD 1.1.4, router versions.'},
+ ],
+ evidence:['Signed production tag','Manifest','Cpk study','ECO procedure','Configuration audit'],
+ auto:'Class II documentation-only ECOs where no hashed release artefact changes. Vendor PCN triage. QL is informed of each.',
+ human:'Production release, all Class I ECOs, deviations and waivers.',
+ mech:'<code>git tag -s prod/v3.0</code> by the PO. ECO e-signature workflow. <b>Class I is two-person (QL + domain owner)</b>, plus the PO if cost changes by more than $1k or the schedule by more than 1 week <span class="tag t-E">E</span>.',
+ sla:'Class I: 3 business days. Class II: 1 business day. Emergency stop-ship: 4 h.',
+ esc:'Change control board chaired by the PO.',
+ rollback:'Revert to the previous production tag. Quarantine affected stock. Field rollback through the previous signed image.',
+ fails:[
+  {t:'Configuration drift', h:'A stale fit-check STEP. v2 BOM files left in <code>bom/</code>. KiCad moved from 10.0.7 to the 10.99 fork. The SolidCraft-only case became unreadable after migration.', src:'A'},
+  {t:'Unrecorded edits', h:'"A later JSON edit to the .kicad_pro was made inline (content not recorded)."', src:'A'},
+ ],
+ strat:{domestic:'ECOs implemented on site. Quickest cut-in.', usmca:'ECO notice to the Mexico contract manufacturer, and an origin re-check for any part change.', global:'ECO through the contract manufacturer, which acknowledges it in writing. Longer cut-in (ocean pipeline of 4–6 weeks of stock).', hybrid:'ECO split across China PCBA, the US/Mexico moulder and US box build. Three cut-in points.'}},
+];
+// strategy-specific extra nodes on the map
+const EXTRA = [
+  {id:'G7b', gate:'G7', short:['T0 / T1 sample','approval'], lane:2, col:5, kind:'k2', strats:['domestic','usmca','global','hybrid'], deps:['G7']},
+  {id:'G7t', gate:'G7', short:['Tool transfer','+ re-T1 (hybrid)'], lane:2, col:6, kind:'strat', strats:['hybrid'], deps:['G7b']},
+  {id:'G8p', gate:'G8', short:['Pre-shipment','inspection'], lane:4, col:4, kind:'strat', strats:['global','hybrid'], deps:['G6']},
+  {id:'G12o', gate:'G12', short:['USMCA origin','determination'], lane:5, col:3, kind:'strat', strats:['usmca'], deps:['G1']},
+  {id:'G12m', gate:'G12', short:['Marketing claim','/ CoO review'], lane:5, col:2, kind:'strat', strats:['domestic'], deps:['G1']},
+];
+const LANES = ['Product & program','Electrical & firmware','Mechanical & tooling','Supply & spend','Quality & compliance','Trade & logistics'];
+const COLS = ['Freeze','Design rel.','Make-ready','Commit $','Build / tool','Verify','Certify','Pilot','Ship','Sustain'];
+const VARIES = new Set(['G1','G3','G5','G6','G7','G8','G9','G10','G11','G12','G13']);
+
+const SPEND = [
+  ['Tier 0','≤ $250 and ≤ $1,000 cumulative per week','Agent auto-approves','AVL vendor, catalogue part, in budget, price ≤ +5% of the snapshot, not lithium, not tooling or NRE, not NCNR, not a new vendor','Logged, OPS informed daily'],
+  ['Tier 1','$250 – $2,500','1 human: OPS','Agent packet complete, quote ≤ 30 d','4 business hours'],
+  ['Tier 2','$2,500 – $15,000','<b>2 humans:</b> OPS + FIN','Plus a 3-bid comparison or a sole-source justification','1 business day'],
+  ['Tier 3','> $15,000, <i>or</i> any tooling or NRE, <i>or</i> NCNR, <i>or</i> foreign prepayment','<b>3 humans:</b> PO + FIN + (ME for tooling / HWL for boards)','Plus the signed DFM log for tools and an ownership clause','3 business days'],
+  ['Always human','Any amount','OPS + FIN, verified out of band','New vendor, changed bank details, lithium cells or packs, any lot after a rejected FAI','Same as the tier'],
+];
+
+// ---------------------------------------------------------------- state
+const KEY = 'zm3.gates.v1';
+let S = {strategy:'global', checks:{}, signoff:{}, sel:'G1'};
+try { Object.assign(S, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch(e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); note('Saved ' + new Date().toLocaleTimeString()); } catch(e) { note('Could not save (localStorage unavailable)'); } }
+function note(t){ const n = document.getElementById('saveNote'); if (n) n.textContent = t; }
+const G = Object.fromEntries(GATES.map(g => [g.id, g]));
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const SRCN = {A:'AGENTS.md', R:'v3 repo', L:'cover.log / cover.py', S:'overview page', E:'estimate'};
+
+function items(g){ return g.checklist.map((c,i) => ({...c, key: g.id + ':' + i})).filter(c => !c.s || c.s.includes(S.strategy)); }
+function prog(g){ const it = items(g); const d = it.filter(c => S.checks[c.key]).length; return {d, n: it.length}; }
+function signed(g){ const so = S.signoff[g.id] || {}; return !!(so.a1 && so.ref && (g.kind !== 'k2' || so.a2)); }
+function status(g){
+  if (signed(g)) return [3,'signed'];
+  const p = prog(g); const upOk = g.deps.every(d => signed(G[d]));
+  if (p.d === p.n && upOk) return [2,'ready for sign-off'];
+  if (p.d === p.n) return [1,'items done · upstream open'];
+  if (p.d > 0) return [1,'in progress'];
+  return [0,'not started'];
+}
+
+// ---------------------------------------------------------------- strategy seg
+function renderSeg(){
+  $('#stratSeg').innerHTML = STRATS.map(s => `<button data-s="${s.id}" class="${s.id===S.strategy?'on':''}" aria-pressed="${s.id===S.strategy}">${s.name}</button>`).join('');
+  $('#stratSeg').querySelectorAll('button').forEach(b => b.onclick = () => { S.strategy = b.dataset.s; save(); renderAll(); });
+}
+
+// ---------------------------------------------------------------- swimlane
+const LX = 132, TOPY = 30, LH = 78, CW = (1240 - LX - 8) / COLS.length, NW = CW - 12, NH = 52;
+function nodePos(n){ return {x: LX + n.col * CW + 6, y: TOPY + n.lane * LH + (LH - NH) / 2}; }
+function renderLane(){
+  const svg = $('#lane'); const H = TOPY + LANES.length * LH + 34; svg.setAttribute('viewBox', `0 0 1240 ${H}`);
+  let o = `<defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L8,4L0,8z" fill="var(--ink3)"/></marker>
+    <marker id="ahr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L8,4L0,8z" fill="var(--crit)"/></marker></defs>`;
+  LANES.forEach((l,i) => { o += `<rect class="lane-bg ${i%2?'alt':''}" x="0" y="${TOPY+i*LH}" width="1240" height="${LH}"/>
+    <text class="lane-lbl" x="10" y="${TOPY+i*LH+LH/2+4}">${esc(l)}</text>`; });
+  COLS.forEach((c,i) => { o += `<text class="col-lbl" x="${LX+i*CW+CW/2}" y="18" text-anchor="middle">${esc(c)}</text>`; });
+  const nodes = GATES.map(g => ({...g, gate:g.id, strats:null})).concat(EXTRA.filter(e => e.strats.includes(S.strategy)));
+  const pos = Object.fromEntries(nodes.map(n => [n.id, nodePos(n)]));
+  // remap deps: G8 depends on T1 (G7b); G10 depends on G7t in hybrid
+  const edges = [];
+  nodes.forEach(n => (n.deps||[]).forEach(d => { if (pos[d]) edges.push([d, n.id, !!n.strats && n.kind==='strat']); }));
+  if (pos.G7b) edges.push(['G7b','G8',false]);
+  if (pos.G7t) edges.push(['G7t','G11',true]);
+  if (pos.G8p) edges.push(['G8p','G8',true]);
+  if (pos.G12o) edges.push(['G12o','G12',true]);
+  if (pos.G12m) edges.push(['G12m','G10',true]);
+  edges.forEach(([a,b,st]) => {
+    const p = pos[a], q = pos[b]; let d;
+    if (q.x > p.x + 1) { const x1 = p.x + NW, y1 = p.y + NH/2, x2 = q.x, y2 = q.y + NH/2, m = Math.min(40, (x2-x1)/2);
+      d = `M${x1},${y1} C${x1+m},${y1} ${x2-m},${y2} ${x2},${y2}`; }
+    else { const x1 = p.x + NW/2, x2 = q.x + NW/2, down = q.y > p.y; const y1 = down ? p.y + NH : p.y, y2 = down ? q.y : q.y + NH;
+      d = `M${x1},${y1} C${x1},${(y1+y2)/2} ${x2},${(y1+y2)/2} ${x2},${y2}`; }
+    o += `<path class="edge ${st?'strat':''}" d="${d}" marker-end="url(#ah)"/>`;
+  });
+  // ECO loop G13 -> G2/G4
+  const a = pos.G13, t = pos.G2; const yb = TOPY + LANES.length * LH + 16;
+  o += `<path class="edge eco" d="M${a.x+NW/2},${a.y+NH} L${a.x+NW/2},${yb} L${t.x+NW/2},${yb} L${t.x+NW/2},${t.y+NH}" marker-end="url(#ahr)"/>
+    <text class="eco-lbl" x="${(a.x+t.x)/2+NW/2}" y="${yb-4}" text-anchor="middle">ECO (Class I) → reopen the affected gates: G2/G3/G8 board · G4/G5/G7 mould · G9 firmware · G10/G12 battery or origin</text>`;
+  nodes.forEach(n => {
+    const p = pos[n.id], g = G[n.gate]; const pr = prog(g); const st = status(g)[0];
+    const sel = S.sel === n.gate;
+    o += `<g class="node ${n.kind} ${sel?'sel':''}" data-g="${n.gate}" tabindex="0" role="button" aria-label="${esc(n.id+' '+n.short.join(' '))}">
+      <rect x="${p.x}" y="${p.y}" width="${NW}" height="${NH}" rx="7"/>
+      <text class="code" x="${p.x+7}" y="${p.y+15}">${n.id}${st===3?' ✓':''}</text>
+      <text x="${p.x+7}" y="${p.y+29}">${esc(n.short[0])}</text>
+      <text x="${p.x+7}" y="${p.y+41}" style="fill:var(--ink2);font-size:10px">${esc(n.short[1]||'')}</text>
+      <rect class="progbg" x="${p.x+6}" y="${p.y+NH-6}" width="${NW-12}" height="3" rx="1.5"/>
+      <rect class="prog" x="${p.x+6}" y="${p.y+NH-6}" width="${(NW-12)*(pr.n?pr.d/pr.n:0)}" height="3" rx="1.5"/>
+      ${VARIES.has(n.gate) && !n.strats ? `<path class="vary" d="M${p.x+NW-12},${p.y+5} l5,5 l-5,5 l-5,-5z"/>` : ''}
+    </g>`;
+  });
+  svg.innerHTML = o;
+  svg.querySelectorAll('.node').forEach(el => {
+    const go = () => { S.sel = el.dataset.g; save(); renderLane(); renderDetail(); renderRaci(); $('#detail').scrollIntoView({behavior:'smooth', block:'start'}); };
+    el.onclick = go; el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
+  });
+}
+
+// ---------------------------------------------------------------- detail
+function renderDetail(){
+  const g = G[S.sel] || GATES[0]; const it = items(g); const pr = prog(g); const st = status(g);
+  const role = Object.fromEntries(ROLES.map(r => [r[0], r[1]]));
+  const raci = ROLES.filter(r => g.raci[r[0]]).map(r => `<span class="pill" title="${esc(r[1])}"><b>${g.raci[r[0]]}</b> ${r[0]}</span>`).join('');
+  const kindPill = g.kind === 'k2' ? '<span class="pill two">two-person rule</span>' : '<span class="pill one">single human (two-person above threshold)</span>';
+  const stratName = STRATS.find(s => s.id === S.strategy).name;
+  const hidden = g.checklist.length - it.length;
+  $('#detail').innerHTML = `
+  <div class="hd"><h3>${g.id} · ${esc(g.name)}</h3>
+    <span class="pill">Owner: <b>${g.owner}</b> · ${esc(role[g.owner])}</span>${kindPill}
+    <span class="st s${st[0]}">${st[1]}</span>
+    <span class="note">Prerequisites: ${g.deps.length ? g.deps.map(d => `<a href="#" data-go="${d}">${d}</a>`).join(', ') : 'none'}</span></div>
+  <div class="note" style="margin-bottom:6px">RACI: ${raci}</div>
+  <div class="callout ${VARIES.has(g.id)?'':'info'}" style="margin:10px 0"><b>${stratName}:</b> ${g.strat[S.strategy]}</div>
+  <div class="grid2">
+    <div>
+      <h4>Readiness checklist · ${pr.d}/${pr.n}${hidden ? ` <span class="note" style="text-transform:none;letter-spacing:0">(${hidden} item${hidden>1?'s':''} for other strategies hidden)</span>` : ''}</h4>
+      <div class="bar" style="margin-bottom:6px"><i style="width:${pr.n?100*pr.d/pr.n:0}%"></i></div>
+      <ul class="chk">${it.map(c => `<li class="${S.checks[c.key]?'done':''}"><input type="checkbox" id="c_${c.key}" data-k="${c.key}" ${S.checks[c.key]?'checked':''}><label for="c_${c.key}"><span>${c.t}</span>${c.s?` <span class="sx">${c.s.map(x=>STRATS.find(s=>s.id===x).name).join(' / ')} only</span>`:''}</label></li>`).join('')}</ul>
+      <div class="controls"><button class="btn sm" id="allBtn">Tick all</button><button class="btn sm" id="noneBtn">Clear gate</button></div>
+    </div>
+    <div>
+      <h4>Artefacts the AI agents prepare</h4><ul class="ai">${g.ai.map(a => `<li>${a}</li>`).join('')}</ul>
+      <h4>Evidence required at sign-off</h4><ul class="ev">${g.evidence.map(a => `<li>${a}</li>`).join('')}</ul>
+      <h4>Auto-approve versus mandatory human sign-off</h4>
+      <div class="split"><div class="box g"><b>Agent may auto-approve</b><div class="note" style="font-size:13px;color:var(--ink)">${g.auto}</div></div>
+        <div class="box h"><b>Human must sign · why</b><div class="note" style="font-size:13px;color:var(--ink)">${g.human}</div></div></div>
+      <h4>Approval, SLA, escalation, rollback</h4>
+      <div class="kv"><b>Mechanism</b><span>${g.mech}</span><b>SLA</b><span>${g.sla}</span><b>Escalation</b><span>${g.esc}</span><b>Rollback / ECO</b><span>${g.rollback}</span></div>
+    </div>
+  </div>
+  <h4>Failure modes this gate catches (project history)</h4>
+  <ul class="fm">${g.fails.map(f => `<li><b>${esc(f.t)}</b> <span class="tag t-${f.src}" title="${SRCN[f.src]}">${f.src}</span><span class="hist">${f.h}</span></li>`).join('')}</ul>
+  ${g.id==='G6' ? '<p class="note">Thresholds: see the <a href="#spend">spend table</a>.</p>' : ''}
+  ${signBlock(g)}`;
+  $('#detail').querySelectorAll('input[type=checkbox]').forEach(cb => cb.onchange = () => { S.checks[cb.dataset.k] = cb.checked; if (!cb.checked) delete S.checks[cb.dataset.k]; save(); renderDetail(); renderLane(); renderReady(); renderTiles(); });
+  $('#detail').querySelectorAll('[data-go]').forEach(a => a.onclick = e => { e.preventDefault(); S.sel = a.dataset.go; save(); renderLane(); renderDetail(); renderRaci(); });
+  $('#allBtn').onclick = () => { it.forEach(c => S.checks[c.key] = true); save(); renderAll(); };
+  $('#noneBtn').onclick = () => { g.checklist.forEach((c,i) => delete S.checks[g.id+':'+i]); save(); renderAll(); };
+  bindSign($('#detail'));
+}
+function signBlock(g){
+  const so = S.signoff[g.id] || {};
+  return `<h4>Record sign-off</h4><div class="ro" style="display:grid;grid-template-columns:repeat(${g.kind==='k2'?4:3},1fr);gap:8px;max-width:900px">
+    <label class="note">Approver 1 (${g.owner})<input type="text" data-so="${g.id}" data-f="a1" value="${esc(so.a1||'')}"></label>
+    ${g.kind==='k2'?`<label class="note">Approver 2 (independent)<input type="text" data-so="${g.id}" data-f="a2" value="${esc(so.a2||'')}"></label>`:''}
+    <label class="note">Signed tag / e-sign envelope<input type="text" data-so="${g.id}" data-f="ref" value="${esc(so.ref||'')}" placeholder="${g.id==='G2'?'ecad/v3-revB':g.id==='G9'?'fw/v3.0.0':'envelope id or tag'}"></label>
+    <label class="note">Date<input type="text" data-so="${g.id}" data-f="date" value="${esc(so.date||'')}" placeholder="YYYY-MM-DD"></label></div>
+    <p class="note">This only records a sign-off for tracking. It is not an electronic signature. A gate counts as signed when approver 1, ${g.kind==='k2'?'approver 2 and ':''}the tag or envelope are filled in.</p>`;
+}
+function bindSign(root){
+  root.querySelectorAll('input[data-so]').forEach(inp => inp.onchange = () => {
+    const id = inp.dataset.so; S.signoff[id] = S.signoff[id] || {}; S.signoff[id][inp.dataset.f] = inp.value.trim();
+    save(); renderLane(); renderReady(); renderTiles(); if (S.sel === id && root.id !== 'detail') renderDetail();
+  });
+}
+
+// ---------------------------------------------------------------- readiness table
+function renderReady(){
+  let o = '<thead><tr><th>Gate</th><th>Owner</th><th>Rule</th><th>Readiness</th><th class="n">Items</th><th>Status</th><th>Approver 1</th><th>Approver 2</th><th>Tag / envelope</th><th>Date</th></tr></thead><tbody>';
+  GATES.forEach(g => { const p = prog(g), st = status(g), so = S.signoff[g.id] || {};
+    o += `<tr><td><a href="#map" data-go="${g.id}"><b>${g.id}</b></a> ${esc(g.name)}</td><td>${g.owner}</td><td class="note">${g.kind==='k2'?'two-person':'single / tiered'}</td>
+      <td><div class="bar"><i style="width:${p.n?100*p.d/p.n:0}%"></i></div></td><td class="n">${p.d}/${p.n}</td><td><span class="st s${st[0]}">${st[1]}</span></td>
+      <td><input type="text" data-so="${g.id}" data-f="a1" value="${esc(so.a1||'')}"></td>
+      <td>${g.kind==='k2'?`<input type="text" data-so="${g.id}" data-f="a2" value="${esc(so.a2||'')}">`:'<span class="note">—</span>'}</td>
+      <td><input type="text" data-so="${g.id}" data-f="ref" value="${esc(so.ref||'')}"></td>
+      <td><input type="text" data-so="${g.id}" data-f="date" value="${esc(so.date||'')}" placeholder="YYYY-MM-DD"></td></tr>`; });
+  $('#readyTable').innerHTML = o + '</tbody>';
+  $('#readyTable').querySelectorAll('[data-go]').forEach(a => a.onclick = () => { S.sel = a.dataset.go; save(); renderLane(); renderDetail(); renderRaci(); });
+  bindSign($('#readyTable'));
+}
+
+// ---------------------------------------------------------------- RACI
+function renderRaci(){
+  let o = '<thead><tr><th>Gate</th>' + ROLES.map(r => `<th class="c" title="${esc(r[1])}">${r[0]}</th>`).join('') + '</tr></thead><tbody>';
+  GATES.forEach(g => { o += `<tr data-g="${g.id}" class="${S.sel===g.id?'sel':''}" style="cursor:pointer"><td><b>${g.id}</b> ${esc(g.name)}</td>` +
+    ROLES.map(r => { const v = g.raci[r[0]] || ''; return `<td class="c ${v}">${v || '<span class="note">·</span>'}</td>`; }).join('') + '</tr>'; });
+  $('#raciTable').innerHTML = o + '</tbody>';
+  $('#raciTable').querySelectorAll('tr[data-g]').forEach(tr => tr.onclick = () => { S.sel = tr.dataset.g; save(); renderLane(); renderDetail(); renderRaci(); $('#map').scrollIntoView({behavior:'smooth'}); });
+  $('#roleKey').innerHTML = ROLES.map(r => `<b>${r[0]}</b> ${esc(r[1])}: ${esc(r[2])}`).join(' · ');
+}
+
+// ---------------------------------------------------------------- static tables
+function renderSpend(){
+  $('#spendTable').innerHTML = '<thead><tr><th>Tier</th><th>Amount</th><th>Approvers</th><th>Conditions</th><th>SLA</th></tr></thead><tbody>' +
+    SPEND.map(r => `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td></tr>`).join('') + '</tbody>';
+}
+function renderStrat(){
+  const rows = GATES.filter(g => VARIES.has(g.id));
+  $('#stratTable').innerHTML = '<thead><tr><th>Gate</th>' + STRATS.map(s => `<th${s.id===S.strategy?' style="background:var(--hl);color:var(--ink)"':''}>${s.name}</th>`).join('') + '</tr></thead><tbody>' +
+    rows.map(g => `<tr><td><b>${g.id}</b> ${esc(g.name)}</td>` + STRATS.map(s => `<td style="font-size:12.5px${s.id===S.strategy?';background:var(--hl)':''}">${g.strat[s.id]}</td>`).join('') + '</tr>').join('') + '</tbody>';
+}
+function renderHist(){
+  const rows = []; GATES.forEach(g => g.fails.forEach(f => rows.push([g, f])));
+  $('#histTable').innerHTML = '<thead><tr><th>Failure mode</th><th>What happened / open item</th><th>Source</th><th>Caught at</th></tr></thead><tbody>' +
+    rows.map(([g,f]) => `<tr><td><b>${esc(f.t)}</b></td><td style="font-size:13px">${f.h}</td><td><span class="tag t-${f.src}">${f.src}</span> <span class="note">${SRCN[f.src]}</span></td><td><a href="#map" data-go="${g.id}">${g.id}</a></td></tr>`).join('') + '</tbody>';
+  $('#histTable').querySelectorAll('[data-go]').forEach(a => a.onclick = () => { S.sel = a.dataset.go; save(); renderLane(); renderDetail(); renderRaci(); });
+}
+function renderTiles(){
+  const two = GATES.filter(g => g.kind === 'k2').length;
+  const tot = GATES.reduce((a,g) => a + prog(g).n, 0), done = GATES.reduce((a,g) => a + prog(g).d, 0);
+  const sg = GATES.filter(signed).length;
+  const name = STRATS.find(s => s.id === S.strategy).name;
+  $('#tiles').innerHTML = [
+    ['Gates', GATES.length, `+ ${EXTRA.filter(e=>e.strats.includes(S.strategy) && e.kind==='strat').length} strategy-specific steps (${name})`],
+    ['Two-person gates', two, `of ${GATES.length}; the rest are two-person above a threshold`],
+    ['Readiness items', `${done}<span> / ${tot}</span>`, `ticked for ${name}`],
+    ['Signed', `${sg}<span> / ${GATES.length}</span>`, 'gates with sign-off recorded'],
+  ].map(t => `<div class="tile"><div class="tl">${t[0]}</div><div class="tv">${t[1]}</div><div class="ts">${t[2]}</div></div>`).join('');
+}
+
+// ---------------------------------------------------------------- export / import
+$('#exportBtn').onclick = () => {
+  const out = {schema:'zm3-gates/1', product:'Zine Machine v3', exported_at:new Date().toISOString(), strategy:S.strategy,
+    gates: GATES.map(g => { const it = items(g), p = prog(g);
+      return {id:g.id, name:g.name, owner:g.owner, two_person:g.kind==='k2', status:status(g)[1], ticked:p.d, total:p.n,
+        prerequisites:g.deps, signoff:S.signoff[g.id]||null,
+        items: it.map(c => ({key:c.key, checked:!!S.checks[c.key], text:c.t.replace(/<[^>]+>/g,'')}))}; }),
+    raw:{checks:S.checks, signoff:S.signoff}};
+  const b = new Blob([JSON.stringify(out, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(b);
+  a.download = `zm3-gate-readiness-${S.strategy}-${new Date().toISOString().slice(0,10)}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+$('#importFile').onchange = e => {
+  const f = e.target.files[0]; if (!f) return; const r = new FileReader();
+  r.onload = () => { try { const j = JSON.parse(r.result); const raw = j.raw || j;
+      S.checks = raw.checks || {}; S.signoff = raw.signoff || {}; if (j.strategy && STRATS.some(s => s.id === j.strategy)) S.strategy = j.strategy;
+      save(); renderAll(); note('Imported ' + f.name); } catch(err) { note('Import failed: ' + err.message); } };
+  r.readAsText(f); e.target.value = '';
+};
+$('#resetBtn').onclick = () => { if (confirm('Clear every tick and sign-off stored in this browser?')) { S.checks = {}; S.signoff = {}; save(); renderAll(); } };
+
+function renderAll(){ renderSeg(); renderTiles(); renderLane(); renderDetail(); renderReady(); renderRaci(); renderSpend(); renderStrat(); renderHist(); }
+renderAll();
+</script>
+</body></html>

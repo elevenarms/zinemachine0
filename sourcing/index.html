@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zine Machine v3 · sourcing &amp; manufacturing analysis</title>
+<link rel="icon" href="data:,">
+<style>:root{
+  color-scheme:light;
+  --bg:#f6f5f1;--card:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--ink3:#8a8984;--rule:#e2e0d9;--hl:#fff6d6;
+  --acc:#2a78d6;--crit:#c0262d;--good:#1a7f37;--warn:#b26b00;
+  --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#6250d6;
+  --v:#1a7f37;--a:#2a78d6;--e:#b26b00;--x:#8a8984;
+}
+@media (prefers-color-scheme:dark){:root{
+  color-scheme:dark;
+  --bg:#121211;--card:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--ink3:#8d8c85;--rule:#2f2e2b;--hl:#2d2a1c;
+  --acc:#3987e5;--crit:#ff6b6b;--good:#4cc76a;--warn:#e0a03a;
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#9085e9;
+  --v:#4cc76a;--a:#5b9ee9;--e:#e0a03a;
+}}
+*{box-sizing:border-box}
+
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Inter,Roboto,sans-serif}
+a{color:var(--acc)}
+header.top{padding:48px 0 24px;border-bottom:1px solid var(--rule)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+h1{font:600 40px/1.1 ui-serif,Georgia,"Iowan Old Style",serif;margin:0 0 6px;letter-spacing:-.01em}
+h2{font:600 26px/1.2 ui-serif,Georgia,serif;margin:56px 0 10px;padding-top:12px;border-top:2px solid var(--ink)}
+h3{font-size:17px;margin:28px 0 8px}
+.sub{color:var(--ink2);font-size:16px;max-width:900px}
+nav.toc{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+nav.toc .wrap{display:flex;gap:18px;overflow-x:auto;padding-top:10px;padding-bottom:10px;font-size:13px;white-space:nowrap}
+nav.toc a{text-decoration:none;color:var(--ink2)} nav.toc a:hover{color:var(--ink)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:18px 20px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+@media(max-width:900px){.tiles{grid-template-columns:1fr 1fr}}
+.tile{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:14px 16px}
+.tl{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink2)}
+.tv{font:600 34px/1.15 ui-serif,Georgia,serif;margin:4px 0}.tv span{font-size:15px;color:var(--ink2);font-family:ui-sans-serif,sans-serif;font-weight:400}
+.ts{font-size:12.5px;color:var(--ink2)}
+.callout{border-left:4px solid var(--warn);background:var(--card);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.callout.crit{border-color:var(--crit)} .callout.info{border-color:var(--acc)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;background:var(--card)}
+th,td{padding:7px 9px;border-bottom:1px solid var(--rule);vertical-align:top;text-align:left}
+th{font-weight:600;font-size:12px;color:var(--ink2);background:var(--card)}
+td.n,th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.hl,th.hl{background:var(--hl)}
+td.brk{box-shadow:inset 3px 0 0 var(--good)}
+td.grp{font-weight:600;color:var(--ink2);white-space:nowrap}
+td.src{font-size:12px;color:var(--ink2);max-width:260px}
+tr.opt td{opacity:.85;font-style:italic} tr.nre td:nth-child(2){color:var(--ink2)}
+tfoot td{border-top:2px solid var(--ink);font-size:14px}
+.note{font-size:12px;color:var(--ink2)}
+.risk{font-size:12px;color:var(--crit);margin-top:2px}
+.scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:10px}
+.tag{display:inline-block;font:600 10px/1 ui-monospace,Menlo,monospace;padding:2px 4px;border-radius:3px;color:#fff;vertical-align:1px}
+.t-V{background:var(--v)}.t-A{background:var(--a)}.t-E{background:var(--e)}.t-X{background:var(--x)}.t-S{background:#7a5bbf}
+.controls{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin:12px 0;font-size:14px}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:7px;overflow:hidden}
+.seg button{border:0;background:var(--card);color:var(--ink);padding:6px 12px;font:inherit;cursor:pointer;border-right:1px solid var(--rule)}
+.seg button:last-child{border-right:0}.seg button.on{background:var(--ink);color:var(--bg)}
+.btn{border:1px solid var(--rule);background:var(--card);color:var(--ink);padding:8px 12px;border-radius:7px;font:inherit;font-size:13.5px;cursor:pointer}
+.btn:hover{border-color:var(--ink2)} .btn.pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+pre{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:12px;font:12px/1.45 ui-monospace,Menlo,monospace;overflow:auto;max-height:260px}
+svg{width:100%;height:auto;display:block}
+svg .grid{stroke:var(--rule);stroke-width:1} svg .ax{fill:var(--ink2);font-size:11px} svg .lg{fill:var(--ink);font-size:12px}
+svg .tn{fill:var(--ink);font-size:12px} svg .ph{fill:var(--ink);font-size:12px;font-weight:700}
+svg .phase{fill:var(--rule);opacity:.55} svg .today{stroke:var(--crit);stroke-width:1.5;stroke-dasharray:4 3}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--ink2);margin:8px 0}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.legend i.cp{background:transparent;border:2px solid var(--crit)}
+figure{margin:0}figure img{width:100%;border-radius:10px;border:1px solid var(--rule);background:#fff}
+figcaption{font-size:12.5px;color:var(--ink2);margin-top:6px}
+ul.tight li{margin:3px 0} ol li{margin:4px 0}
+.phasecard h3{margin-top:0}.phasecard .meta{font-size:12.5px;color:var(--ink2);margin-bottom:6px}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;font-size:13.5px}.kv b{color:var(--ink2);font-weight:600}
+.sources li{font-size:13px;margin:3px 0;word-break:break-word}
+footer{margin:60px 0 40px;color:var(--ink3);font-size:12.5px}
+@media print{nav.toc{display:none}th{position:static}h2{break-before:page}}
+nav.site{background:var(--ink);color:var(--bg)}
+nav.site .wrap{display:flex;gap:4px;align-items:center;overflow-x:auto;white-space:nowrap;padding-top:8px;padding-bottom:8px;font-size:13.5px}
+nav.site .brand{font-weight:700;margin-right:14px;letter-spacing:.02em}
+nav.site a{color:var(--bg);text-decoration:none;padding:5px 10px;border-radius:6px;opacity:.78}
+nav.site a:hover{opacity:1;background:color-mix(in srgb,var(--bg) 14%,transparent)}
+nav.site a[aria-current=page]{opacity:1;background:var(--bg);color:var(--ink);font-weight:600}
+</style></head>
+<body>
+<nav class="site" aria-label="Zine Machine sourcing pages"><div class="wrap">
+  <span class="brand">Zine Machine v3 · realization</span>
+  <a href="index.html" data-page="index" aria-current="page">Overview</a>
+  <a href="flow.html" data-page="flow">Material flow</a>
+  <a href="proto10.html" data-page="proto10">10-day proto</a>
+  <a href="gates.html" data-page="gates">Release gates</a>
+  <a href="automation.html" data-page="automation">AI execution</a>
+  <a href="expert.html" data-page="expert">Expert adds</a>
+</div></nav>
+<header class="top"><div class="wrap">
+  <div class="tl">Zine Machine v3 · sourcing &amp; manufacturing analysis · 7 November 2026</div>
+  <h1>What it takes to build one, a hundred, or five thousand</h1>
+  <p class="sub">A 40% Choc keyboard with a PocketBeagle 2 Industrial, a 4.58″ 320×960 bar display, a battery and a translucent slide-on lid. This page covers costs at five quantity tiers, two or three vendors per part, ready-to-upload BOM files, enclosure and tooling routes, a timeline to a pilot run, and the risks. <b>Every figure is tagged:</b>
+  <span class="tag t-V">V</span> verified live on 2026-11-07 ·
+  <span class="tag t-A">A</span> from the repo / AGENTS.md (2026-11-05) ·
+  <span class="tag t-S">S</span> search snippet only ·
+  <span class="tag t-E">E</span> estimate. No figure here is a quote.</p>
+</div></header>
+<nav class="toc"><div class="wrap">
+  <a href="#summary">Summary</a><a href="#baseline">Design baseline</a><a href="#tiers">Cost tiers</a><a href="#sources">Sources</a><a href="#carts">Carts</a><a href="#enclosure">Enclosure &amp; tooling</a><a href="#timeline">Timeline</a><a href="#plan">Build plan</a><a href="#compliance">Compliance</a><a href="#risks">Cost-down &amp; risks</a><a href="#refs">References</a>
+</div></nav>
+
+<main class="wrap">
+<section id="summary">
+  <h2>Executive summary</h2>
+  <div id="headline" class="tiles"></div>
+  <div class="grid2">
+    <div>
+      <p><b>Headline per-unit cost</b>, landed and boxed, with tooling and compliance amortised:
+        <b><span data-tot="1"></span></b> at 10 units, <b><span data-tot="2"></span></b> at 100 and <b><span data-tot="3"></span></b> at 1,000.
+        Without the one-off costs (NRE) the figures are <span data-totx="1"></span>, <span data-totx="2"></span> and <span data-totx="3"></span>. At 1 and 10 units the price assumes you build them yourself, so no labour is charged and nothing is shipped to customers. That is why 100 units can cost more per unit than 10.</p>
+      <p><b>The PocketBeagle 2 Industrial ($51.03 at DigiKey, verified live today, no quantity breaks) is the largest single part cost at every tier.</b> (At 1 unit, JLC's one-off PCBA fees of ~$82 are larger still.) At 1,000 units it is about 30% of the cost. The other big items are the display, the main board, and switches plus keycaps. Below 100 units, fixed fees dominate: JLC PCBA setup and per-part loading, plus the minimum order of 5 boards. At 1,000, the tooling ($26k aluminium, estimate) and the compliance testing (~$12.5k) are what you amortise.</p>
+    </div>
+    <div>
+      <div class="callout crit"><b>Blockers before ordering anything</b>
+        <ol class="tight">
+          <li><b>No display software exists.</b> The DSS overlay and ST7701S init are unwritten, and the panel pinout comes from a <i>different</i> vendor's datasheet. Proto 0 exists to remove this risk.</li>
+          <li><b>GCT USB1046 USB-A: only 74 at LCSC</b> (2 per board, verified live today). 100 builds are not possible without a second source.</li>
+          <li><b>The battery cell is not chosen</b>, and no off-the-shelf cell fits 9 × 40 × 70 mm. Volume needs a custom pack with UN38.3.</li>
+          <li><b>The repo's <code>bom/</code> and <code>pcb/…/fab/</code> files describe the v2 board</b> (32U4, hot-swap). This page uses the v3 netlist from <code>tools/zm_v3/design.py</code>. The board's fab outputs are still listed as open in the README.</li>
+          <li>The case was checked only against the PB2 <b>EVT</b> STEP. v3 uses the <b>Industrial</b> variant on 3.55 mm sockets: check it against <code>case/pocketbeagle2/models/industrial/pocketbeagle2 revA_dimension.pdf</code>.</li>
+        </ol></div>
+    </div>
+  </div>
+<div class="callout info" style="margin-top:22px"><b>Realization study (new):</b> <a href="flow.html">Material flow</a>: 5 sourcing strategies with tariffs, freight, cash, CO₂e, Monte Carlo and a week-0 buy-ahead · <a href="proto10.html">10-day proto</a>: 3 validated units · <a href="gates.html">Release gates</a>: human-in-the-loop sign-offs · <a href="automation.html">AI execution</a>: PLM with hosted agents · <a href="expert.html">Expert adds</a>: test strategy, tolerance stacks, AQL, compliance matrix, should-cost, warranty, repairability.</div>
+</section>
+
+
+<section id="baseline">
+  <h2>Design baseline used for costing</h2>
+  <div class="grid2">
+    <div class="kv">
+      <b>Main board</b><span>v3, <b>4 layers</b>, 170 × 126 mm, all SMD on top; 48 assembled BOM lines and 133 placements (127 SMD + 6 THT), from <code>tools/zm_v3/design.py</code> and the board file. <code>bancouver40_pb2.fab.json</code> still says 2 layers and is stale.</span>
+      <b>Compute</b><span>PocketBeagle 2 Industrial (AM6254, 1 GB, 64 GB eMMC, so no microSD) face-down on 2 × 2×18 headers.</span>
+      <b>Keys</b><span>43 Choc v1 (40 + 3 mode keys) <b>soldered</b>, scanned by 6 × 74HC165 on the PB2's M4F. No diodes, no 32U4, no hot-swap. Hot-swap is costed only as an option.</span>
+      <b>Power / IO</b><span>IP5306 charger and boost, 1S LiPo, FE1.1s hub with 2 × USB-A, ES8388 audio with 2 jacks, rear USB-C for charging.</span>
+      <b>Enclosure</b><span><b>Tray_slide</b> 178.2 × 131.2 × 12.5 mm, 40.57 cm³ (<code>mech/cover.log</code>) · <b>display chassis</b> 12.52 cm³, which replaces the v2 bezel · <b>lid</b> 52.32 cm³, translucent, 1.6 mm walls, 2 snap detents, doubles as a cradle. No standoffs: 10 M2 screws. v2 case + bezel for comparison: 50.3 cm³.</span>
+    </div>
+    <figure><img src="../mech/renders/blender/catalog/00_index.png" alt="Grid of 15 Zine Machine colourways: solid tray plus translucent neon lid" loading="lazy"><figcaption>The 15 colourways from <code>mech/blender/render_lid.py</code> (COMBOS): a solid tray plus a translucent neon lid. Each extra lid colour is another resin batch (cast) or masterbatch changeover (moulded). See the cost-down table.</figcaption></figure>
+  </div>
+</section>
+
+<section id="tiers">
+  <h2>1 · Cost at each quantity tier</h2>
+  <p>Per-unit cost by line. One-off fees (stencils, setup, tooling, compliance) are divided across the units in that tier. A <span style="box-shadow:inset 3px 0 0 var(--good);padding:0 6px">green left edge</span> marks a <b>price break</b>, a drop of more than 20% from the previous tier; hover it for the size. Hover any tag for its meaning.</p>
+  <div class="controls">
+    <span>Highlight tier <span id="tierSel" class="seg"></span></span>
+    <label><input type="checkbox" id="optNre" checked> include NRE (tooling, compliance)</label>
+    <label><input type="checkbox" id="optHot"> add the hot-swap socket option</label>
+  </div>
+  <div class="scroll"><table id="costTable"></table></div>
+  <h3>Where the money goes</h3>
+  <div class="card"><div id="stack"></div></div>
+  <div class="grid3" style="margin-top:18px">
+    <div class="card"><b>Price breaks, 1 → 10</b><p class="note">The PCBA fixed fees (~$90) and the 5-board PCB minimum stop being carried by one unit: about −$120. Freight per unit falls by 80%.</p></div>
+    <div class="card"><b>10 → 100</b><p class="note">Moving to Standard PCBA (panel limit above 30 boards) changes little. The real cost at this tier is compliance, if the units are sold: ~$125 a unit. Printed parts barely get cheaper; the 3D-printed lid stays at ~$30.</p></div>
+    <div class="card"><b>100 → 1,000</b><p class="note">Moulded tray, chassis and lid fall from ~$43 to ~$7 per set. Custom battery: −$7. Direct PB2 and panel pricing (estimate): −$7. Bulk switches and custom-printed caps: −$9. Tooling adds back ~$26.</p></div>
+  </div>
+</section>
+
+<section id="sources">
+  <h2>2 · Sources: two or three vendors per part</h2>
+  <p>LCSC prices came from LCSC's product API, the same data its product pages show, fetched today. <b>BuyDisplay, Mouser, Farnell/Newark and Seeed blocked scripted fetches</b>, as did the keyboard Shopify stores after a few requests. Their figures are marked S (snippet), A (repo, 2026-11-05) or "listing" (the lowest variant price from a live store search, pack size not visible). DigiKey lead times are factory standard lead times, not ship dates.</p>
+  <div class="scroll"><table id="srcTable"></table></div>
+</section>
+
+<section id="carts">
+  <h2>3 · Prebuilt carts (BOM uploads)</h2>
+  <p>Each button builds a CSV in your browser. Nothing is uploaded anywhere. <b>Uploading the file is the way in for every vendor:</b> none of the add-to-cart URL formats could be verified.</p>
+  <ul class="tight note">
+    <li>DigiKey's <code>classic/ordering/fastadd.aspx?part1=…&amp;qty1=…</code> appears in third-party code (May 2026), but a test without a browser session showed an empty cart. Its myLists API (<code>/mylists/api/thirdparty</code>, used by DigiKey's own KiCad plugin) needs a POST, so it can't be a link.</li>
+    <li>Mouser's cart API needs an API key.</li>
+    <li>LCSC has no URL-based cart.</li>
+    <li>Kitspace 1-click BOM is archived.</li>
+  </ul>
+  <div class="controls"><label>Units to build <input id="cartQty" type="number" min="1" value="1" style="width:80px"></label><span class="note">Quantities = per-unit qty × units, packs rounded up. The JLC files are per design and don't depend on the unit count.</span></div>
+  <div class="grid2">
+    <div class="card">
+      <h3>JLCPCB PCBA (main board)</h3>
+      <p class="note">Columns <code>Comment, Designator, Footprint, LCSC Part #</code> / <code>Designator, Mid X, Mid Y, Layer, Rotation</code>, as in JLC's help articles. The CPL is generated from the v3 board file: KiCad origin, y negated (the same convention as <code>kicad-cli pcb export pos</code>). <b>Check every rotation in JLC's placement preview</b>; not done for v3. Switches, the PB2 and headers are excluded and hand-fitted.</p>
+      <button class="btn pri" data-dl="jlc_bom">Download JLC BOM (48 lines)</button> <button class="btn pri" data-dl="jlc_cpl">Download JLC CPL (133)</button>
+      <button class="btn" data-pv="jlc_bom">preview</button> <button class="btn" data-pv="jlc_cpl">preview</button>
+    </div>
+    <div class="card">
+      <h3>LCSC BOM Tool (hand-assembly kit)</h3>
+      <p class="note">LCSC BOM Tool: CSV under 4 MB, up to 800 lines. You map the columns on upload, and Quantity plus one part-number column are required (verified live). Includes every board part and the PB2 headers. Use it to stock a hand-assembly kit or to consign parts JLC lacks.</p>
+      <button class="btn pri" data-dl="lcsc">Download LCSC BOM</button> <button class="btn" data-pv="lcsc">preview</button>
+      <p class="note" style="margin-top:8px">Upload at <a href="https://www.lcsc.com/bom" target="_blank" rel="noopener">lcsc.com/bom</a>.</p>
+    </div>
+    <div class="card">
+      <h3>DigiKey (off-board parts)</h3>
+      <p class="note">PB2 Industrial, panel (Adafruit 5805; 8 in stock, 18 wk), proto LiPo, bumpons, panel tape, spare F32R. DigiKey part numbers are left blank so the upload matches on <i>Manufacturer Part Number</i>; you map columns on upload. No official header list was found.</p>
+      <button class="btn pri" data-dl="digikey">Download DigiKey CSV</button> <button class="btn" data-pv="digikey">preview</button>
+      <p class="note" style="margin-top:8px">Upload in <a href="https://www.digikey.com/en/mylists/" target="_blank" rel="noopener">myLists → Import</a> or <a href="https://www.digikey.com/BOM" target="_blank" rel="noopener">BOM Manager</a>.</p>
+    </div>
+    <div class="card">
+      <h3>Mouser (off-board parts)</h3>
+      <p class="note">Mouser BOM Tool: XLS/XLSX/CSV under 4 MB, 99 lines by default; map Mouser or Manufacturer Part Number (snippet, help page timed out). The same parts as the DigiKey file, minus the panel tape. Mouser part numbers are blank.</p>
+      <button class="btn pri" data-dl="mouser">Download Mouser CSV</button> <button class="btn" data-pv="mouser">preview</button>
+      <p class="note" style="margin-top:8px">Upload at <a href="https://www.mouser.com/bom/" target="_blank" rel="noopener">mouser.com/bom</a>.</p>
+    </div>
+  </div>
+  <h3>Not in any cart</h3>
+  <p class="note">BuyDisplay panel (order on the site, and choose "No Touch Panel"). Switches and CFX keycaps (Chosfox, splitkb). M2 thread-forming screws (an M2 kit or McMaster). Printed parts (JLC3DP upload). Each of these sells through its own storefront.</p>
+  <pre id="cartPrev"></pre>
+</section>
+
+<section id="enclosure">
+  <h2>4 · Enclosure and tooling</h2>
+  <div class="grid2">
+    <figure><img src="../mech/renders/blender/lid_usage_diagram.png" alt="Diagram of the lid used as a cover and flipped as a cradle" loading="lazy"><figcaption>The lid slides on from the front as a cover, or is flipped and slid on underneath as a cradle (~4° tilt). The rails and the two detent fingers set the moulding constraints.</figcaption></figure>
+    <figure><img src="../mech/render/out/zine-exploded.png" alt="Exploded render of the v3 assembly" loading="lazy"><figcaption>v3 stack: tray, main board, PB2, battery, display chassis, panel, keycaps.</figcaption></figure>
+  </div>
+  <h3>Prototype routes, per part (all estimates unless tagged)</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Route</th><th>Vendors</th><th class="n">Tray 40.6 cm³</th><th class="n">Chassis 12.5 cm³</th><th class="n">Lid 52.3 cm³</th><th>Lead</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><b>FDM</b> PETG / PC / ABS</td><td>your own printer, Craftcloud, Xometry</td><td class="n">$3–8 <span class="tag t-E">E</span></td><td class="n">$1–3</td><td class="n">$4–10</td><td>days</td><td>Good enough for fit. Translucent PETG prints hazy with visible layer lines, not "neon clear". Grooves and detents print well vertically.</td></tr>
+      <tr><td><b>MJF PA12</b> (dyed)</td><td><a href="https://jlc3dp.com/" target="_blank">JLC3DP</a>, PCBWay, Xometry, Protolabs</td><td class="n">~$11 + dye <span class="tag t-E">E</span></td><td class="n">~$3.5</td><td class="n">opaque only</td><td>5–10 d + ship</td><td>JLC3DP PA12 $0.275/g <span class="tag t-V">V</span> (Aug-2025 cut). Strongest prototype tray and chassis; screw bosses hold up better than resin.</td></tr>
+      <tr><td><b>SLA</b> clear resin</td><td>JLC3DP (8001 transparent / translucent), PCBWay (UTR-8100 + varnish), Protolabs, Xometry</td><td class="n">$8–15</td><td class="n">$3–6</td><td class="n">$15–25 raw; ~$30 polished <span class="tag t-E">E</span></td><td>5–10 d</td><td>"Transparent" 8001 at JLC is sanded and oiled by default; "translucent" gets no sanding. JLC warns of bubbles and that the resin is not UV-stable <span class="tag t-V">V</span>, and HDT is 53 °C. A dyed clear SLA lid is the cheapest real look.</td></tr>
+      <tr><td><b>Urethane / vacuum casting</b></td><td>HLH, PCBWay, Xometry, Protolabs, Star Rapid, Firstmold</td><td class="n">$25–40</td><td class="n">$15–25</td><td class="n">$45–65 incl. mould <span class="tag t-E">E</span></td><td>2–4 wk</td><td>Silicone mould $200–1,000 <span class="tag t-V">V</span> (HLH), ~15–30 shots <span class="tag t-S">S</span>. Tinted clear PU gives the real translucent neon look and any colour. The best route for Proto 2's colour lids (3 colours × 5).</td></tr>
+    </tbody></table></div>
+
+  <h3>Bridge and production: injection moulding</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Route</th><th>Who</th><th class="n">Tool, tray</th><th class="n">Tool, chassis</th><th class="n">Tool, lid</th><th class="n">Piece price set (1k / 5k)</th><th>T1 lead</th><th>Life</th></tr></thead>
+    <tbody>
+      <tr><td>Aluminium / rapid tool</td><td><a href="https://www.protolabs.com/services/injection-molding/" target="_blank">Protolabs</a> (prototype + on-demand), Xometry, Fictiv, HLH, Firstmold, Star Rapid</td><td class="n">$4–12k</td><td class="n">$2–6k</td><td class="n">$8–20k</td><td class="n">~$7 / ~$4.6 <span class="tag t-E">E</span></td><td>2–6 wk</td><td>Protolabs: ≥2,000 shots guaranteed (prototype); on-demand aluminium ≥10k <span class="tag t-V">V</span></td></tr>
+      <tr><td>P20 soft steel</td><td>HLH, Firstmold, Star Rapid, TEAM Rapid, Shenzhen moulders</td><td class="n">$6–15k</td><td class="n">$3–8k</td><td class="n">$12–25k</td><td class="n">similar</td><td>4–8 wk</td><td>~100k+</td></tr>
+      <tr><td>Hardened steel H13 / S136 (multi-cavity)</td><td>Chinese production moulders, Protolabs steel ($50k+ <span class="tag t-V">V</span>)</td><td class="n">$10–25k</td><td class="n">$5–12k</td><td class="n">$15–35k</td><td class="n">~$4 / ~$3</td><td>8–12 wk</td><td>millions; S136 holds a mirror polish</td></tr>
+    </tbody></table></div>
+  <p class="note">Tool ranges: Protolabs aluminium from $1,500 and steel from $50k <span class="tag t-V">V</span>; TEAM Rapid $2,500 rapid tool + $2.20/part at 1k and $12k steel + $1.20/part at 10k <span class="tag t-V">V</span>. A slide adds 15–25% and a lifter 20–35%, with $4–10k per slide <span class="tag t-S">S</span>; SPI A-1/A-2 polish costs $800–1,500 / $600–1,000 per cavity <span class="tag t-S">S</span>. The per-part ranges in the table combine these and are estimates. <b>JLC does not offer injection moulding</b> (no service found under JLCPCB, JLCCNC or JLCMC), so use HLH, Firstmold, Star Rapid or a Shenzhen moulder found through your contract manufacturer.</p>
+
+  <div class="callout info"><b>When tooling pays off.</b> Per set, printing costs ~$43 (SLA lid + MJF tray and chassis at 100) and moulding ~$7 (1k piece price). The ~$36 saving recovers ~$26k of aluminium tooling at <b>~720 sets</b>, or ~$50k of steel at ~1,400 (estimate). With a 100-unit pilot and no clear path to 1,000, keep printing and urethane casting. Commit to aluminium tools once pre-orders pass ~700. Steel only makes sense for 5k+ or multi-cavity work.</div>
+
+  <h3>DFM notes</h3>
+  <div class="grid2">
+    <div class="card"><b>Tray (opaque ABS or PC/ABS)</b>
+      <ul class="tight note">
+        <li><b>Draft:</b> 1–2° on the outer walls; 1° per inch of depth; 3° at shutoffs; 3° for light texture (PM-T1), 5°+ for medium (PM-T2) <span class="tag t-V">V</span> (Protolabs). The 12.5 mm walls need ~0.5–1°.</li>
+        <li><b>Side grooves are external undercuts along the full 131 mm length:</b> two side-action slides (one per side), or move the parting line to the groove centre z 5.5 so the rails form in the two halves. The second option removes both slides, about $8–20k (estimate).</li>
+        <li>Thickened side walls (SIDE_ADD 1.5 → ~3.5 mm locally) next to 2 mm walls will sink. Core them out to a uniform 2–2.2 mm.</li>
+        <li>Boss OD 4.4 mm for M2 thread-forming screws: wall ≤ 60% of nominal, with a coring pin. Gussets help.</li>
+        <li>Gate on the underside, centred, behind the keyboard area (hidden). One gate is enough for 175 mm in ABS at 2 mm.</li>
+      </ul></div>
+    <div class="card"><b>Lid (clear PC, PMMA or tinted MABS)</b>
+      <ul class="tight note">
+        <li><b>Snap detent nubs</b> sit on the inside of the side walls, which is an internal undercut. Protolabs: bump-offs work in TPE/PE/PP; <i>"polycarbonate… not likely to work very well"</i> <span class="tag t-V">V</span>. So PC needs <b>two lifters</b> (+20–35% each, <span class="tag t-S">S</span>). A cheaper alternative: put a window in the wall behind each nub so a straight-pull core forms it, or switch to MABS and test a bump-off with a 30–45° ramp on the nub.</li>
+        <li>The rails are internal features along the full length: these also need lifters or collapsing cores, unless they are moved to the parting plane. <b>A rail/detent DFM review with the moulder is the single biggest tooling cost driver.</b></li>
+        <li><b>Clarity:</b> SPI A-1/A-2 diamond polish on the cavity (the visible outside) and A-2/A-3 on the core. Draft ≥1° on polished faces, 1.5–2° preferred, or ejection scuffs the polish.</li>
+        <li><b>Gate on a hidden edge:</b> the open rear end of the lid, a tab or fan gate, so flow runs the long axis without jetting. Avoid pin-point gates on the top face. Expect knit lines around the display-bump step; vent there.</li>
+        <li><b>Wall uniformity:</b> 1.6 mm everywhere. Tie the 1.0 mm edge radii into the walls with no thick junctions at the step (clear parts show every sink and flow mark).</li>
+        <li>PC: dry at 120 °C for 4–6 h to &lt;0.02% moisture; mould at 80–100 °C. Watch stress cracking around the snap fingers and from cleaning solvents <span class="tag t-V">V</span>. Specify UV-stabilised grades (SLA prototypes yellow).</li>
+        <li>15 colourways = 15 tinted batches. Production should offer 3–5 lid colours with one or two neutral trays. Each colour change on a run costs purge time and scrap.</li>
+      </ul></div>
+  </div>
+</section>
+
+<section id="timeline">
+  <h2>5 · Lead times and timeline (from 2026-11-07)</h2>
+  <p>Critical path (red outline): <b>display bring-up → board order → Proto 1 → Rev B → tool kickoff → T1/T2 → DVT → certification → pilot</b>. Chinese New Year (6 Feb 2027) closes factories for ~3 weeks in the middle of Proto 2. The PB2 has a 14–15 week factory lead time once a volume order exceeds DigiKey's 3,442 in stock, so place that order no later than tool kickoff. Hover a bar for dates.</p>
+  <div class="card"><div class="legend" id="ganttLegend"></div><div id="gantt" style="overflow-x:auto"></div></div>
+  <div class="scroll" style="margin-top:14px"><table>
+    <thead><tr><th>Lead-time item</th><th>Lead</th><th>Basis</th></tr></thead><tbody>
+    <tr><td>PocketBeagle 2 Industrial</td><td>stock (3,442) · 14 wk factory</td><td>DigiKey <span class="tag t-V">V</span></td></tr>
+    <tr><td>Display panel</td><td>1–2 wk sample; ~6–8 wk at MOQ</td><td>Adafruit out of stock; DigiKey 18 wk <span class="tag t-V">V</span>; BuyDisplay unverified <span class="tag t-E">E</span></td></tr>
+    <tr><td>JLC PCBA, 4-layer</td><td>~2 wk build + 3–5 d DHL</td><td><span class="tag t-E">E</span></td></tr>
+    <tr><td>Urethane-cast lids</td><td>2–4 wk</td><td>Xometry 3–4 wk <span class="tag t-V">V</span></td></tr>
+    <tr><td>Aluminium mould to T1</td><td>2–6 wk (+1–3 wk T2)</td><td>Protolabs "as fast as 7 days" for simple parts <span class="tag t-V">V</span>; TEAM 2–4 wk <span class="tag t-V">V</span></td></tr>
+    <tr><td>Steel mould to T1</td><td>8–12 wk</td><td>TEAM Rapid <span class="tag t-V">V</span></td></tr>
+    <tr><td>Custom LiPo pack + UN38.3 report</td><td>6–10 wk</td><td><span class="tag t-E">E</span></td></tr>
+    <tr><td>FCC 15B + CE testing</td><td>2–4 wk lab + fixes</td><td><span class="tag t-E">E</span></td></tr>
+    </tbody></table></div>
+</section>
+
+<section id="plan">
+  <h2>6 · Manufacturing and prototype plan</h2>
+  <div class="grid2">
+    <div class="card phasecard"><h3>Proto 0 · display bring-up (Nov–Dec 2026)</h3><div class="meta">~$250: 3 PB2 Industrial, 2 panels (BuyDisplay + Adafruit, to compare pinouts), a JLC 2-layer FPC breakout with a TPS61165 backlight</div>
+      <ul class="tight note"><li>Write the AM62 DSS device-tree overlay: VOUT0 parallel RGB565, PCLK on P2.17, I2C1 left unmuxed, backlight PWM on <b>P1.06</b> (v3).</li>
+      <li>ST7701S init over 3-wire SPI0 (start from Linux <code>panel-sitronix-st7701</code> + the vendor sequence). Get a test pattern, then a console.</li>
+      <li>Meter the panel's FPC pinout and contact side (F32Q vs F32R), measure the outline (118.8 × 41.57 × 2.5 or 117.9 × 40.37 × 2.0?), and fold a real tail to check the 30 mm budget.</li>
+      <li>Exit: stable 320×960 at 60 Hz, backlight current within 10% of 39 mA, pinout documented.</li></ul></div>
+    <div class="card phasecard"><h3>Proto 1 · JLC PCBA + printed case (Dec 2026–Feb 2027)</h3><div class="meta">5 boards (2 assembled, or 5 if budget allows), MJF tray and chassis, SLA lid · ~$380/unit at qty 1</div>
+      <ul class="tight note"><li>Before ordering: finish the v3 README stage-4 items, regenerate fab outputs, check JLC's rotation preview, and lock in a second-source USB-A.</li>
+      <li>Bring-up order: power rails (IP5306 boost, the switch wake behaviour), PB2 boot, 165-chain loopback through the M4F, hub plus 2 USB-A ports, ES8388 playback and record, the panel.</li>
+      <li>Hand-solder the 43 switches, fit the PB2 on its headers, glue the panel into the chassis, place the battery on foam, screw up from below, slide on the lid.</li>
+      <li>Exit: everything works on 2 units; thermals under load inside the closed lid; battery life measured.</li></ul></div>
+    <div class="card phasecard"><h3>Proto 2 · fixes + colour lids (Feb–Apr 2027)</h3><div class="meta">Rev B board (10–20), urethane-cast lids in 3 colours × 5</div>
+      <ul class="tight note"><li>Roll in the Proto 1 fixes. Move the tray and lid geometry towards moulding (parting line, rails, detent windows, uniform walls) <i>now</i>, so the cast parts preview the moulded ones.</li>
+      <li>Snap-detent cycle test (500 slides), drop test with the lid as cover, keycap clearance under the lid.</li>
+      <li>Ten units to outside users; collect firmware and ergonomics feedback.</li></ul></div>
+    <div class="card phasecard"><h3>EVT → DVT → PVT (Apr–Sep 2027)</h3><div class="meta">EVT 10–20 printed · DVT ~50 moulded T1/T2 · PVT ~50 on the contract manufacturer's line</div>
+      <ul class="tight note"><li><b>EVT:</b> design freeze candidate, pre-compliance EMC scan (rent a chamber for a day), battery safety review.</li>
+      <li><b>DVT:</b> moulded parts, formal FCC/CE tests, UN38.3 on the final pack, environmental tests (thermal cycling, drop, keyswitch life sample).</li>
+      <li><b>PVT:</b> the CM's own process: ICT/flying probe on the PCBA (JLC can add AOI and X-ray), a pogo-pin <b>functional test fixture</b> (USB enumerate, audio loopback, 165 chain walk, charge current, panel pattern) and an image-flash station for the eMMC.</li></ul></div>
+    <div class="card phasecard"><h3>Pilot 100 (Sep 2027)</h3><div class="meta">≈ <span data-tot="2"></span>/unit incl. NRE, <span data-totx="2"></span> without</div>
+      <ul class="tight note"><li>Can use printed or cast enclosures if tooling isn't justified yet (see the payoff calculation).</li>
+      <li>100% functional test, 2 h burn-in, 10% audit of the cosmetic lid; serial number and per-unit test log.</li>
+      <li>Ship by courier under UN3481 (battery in equipment), at ≤30% state of charge for air.</li></ul></div>
+    <div class="card phasecard"><h3>Production 1,000+ (Q4 2027)</h3><div class="meta">≈ <span data-tot="3"></span>/unit at 1k incl. NRE</div>
+      <ul class="tight note"><li>Shenzhen CM does box build; PCBA at JLC or the CM; moulds at the CM's partner moulder.</li>
+      <li>Direct buys: PB2 from BeagleBoard/Seeed, panels from the maker, custom battery pack.</li>
+      <li>Packaging with an insert; warranty and RMA flow; spares (lids, keycaps).</li></ul></div>
+  </div>
+
+  <h3 id="compliance">Compliance and certification</h3>
+  <div class="grid2">
+    <div class="card note">
+      <p><b>The PocketBeagle 2 has no radio</b> (no Wi-Fi or BLE in the official spec <span class="tag t-V">V</span>), so the Zine Machine is an <b>unintentional radiator</b> under FCC Part 15 Subpart B. It needs a <b>Supplier's Declaration of Conformity</b>: no FCC ID, no TCB, an unaccredited lab is allowed, a US-based responsible party (the importer counts), a compliance statement and a model-number label <span class="tag t-V">V</span>.</p>
+      <p><b>What the module does and doesn't cover:</b> the PB2 is a board, not a certified module, and BeagleBoard publishes no FCC/CE declaration for it (the support page returned 404). <b>Nothing carries over:</b> the finished product is tested as a whole, with its 1.4 GHz SoC, DDR4, the 320×960 RGB bus to the panel (a typical emissions source), the USB hub and the boost converters. Even a certified <i>radio</i> module's grant only covers its transmitter; the host still owes Part 15B.</p>
+    </div>
+    <div class="card note">
+      <p><b>EU / UK:</b> CE under the EMC Directive (EN 55032 emissions + EN 55035 immunity), safety under the GPSR (Reg. 2023/988) with EN IEC 62368-1 as the basis (the LVD does not apply: this is a 5 V USB device, below its 75 V DC floor; see <a href="expert.html#comp">Expert adds</a>), RoHS (documented by supplier declarations), and WEEE producer registration in each country you sell to. UKCA is optional: GB accepts CE <span class="tag t-V">V</span>. <b>EU Battery Regulation Art. 11:</b> from 18 Feb 2027 portable batteries must be user-removable and replaceable (with exemptions under discussion <span class="tag t-S">S</span>). The battery behind four screws and a connector probably qualifies, but get that confirmed. Battery: the cell or pack needs <b>IEC 62133-2</b> and <b>UN38.3</b> (UN38.3 $0.3–1.7k <span class="tag t-S">S</span>). Buy packs that already have both reports.</p>
+      <p><b>Budget:</b> FCC 15B $1.9–5k <span class="tag t-V">V</span>; CE EMC €0.8–2k emissions plus immunity, up to ~$8k <span class="tag t-S">S</span>; 62368-1 safety assessment ~$2–4k <span class="tag t-E">E</span>. Model total: <b>~$12.5k</b> <span class="tag t-E">E</span>. The USB-IF logo is optional ($3.5k admin + testing <span class="tag t-S">S</span>), so skip it and don't use the logo.</p>
+    </div>
+  </div>
+</section>
+
+<section id="risks">
+  <h2>7 · Cost-down and risk</h2>
+  <h3>Cost-down levers</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Lever</th><th class="n">Saving/unit</th><th>Effort / trade-off</th><th>Status</th></tr></thead><tbody>
+    <tr><td>Plain PocketBeagle 2 (102110780, $39.53) instead of Industrial</td><td class="n">~$11.50</td><td>512 MB and microSD, not 1 GB and eMMC; −40 to 85 °C rating lost; different socket height may change the stack. Most of the value is the eMMC.</td><td><span class="tag t-V">V</span> prices</td></tr>
+    <tr><td>Volume PB2 quote direct from BeagleBoard / Seeed</td><td class="n">$5–8</td><td>Ask at EVT; 14-wk lead</td><td><span class="tag t-E">E</span></td></tr>
+    <tr><td>Panel direct from the maker (Maxen / Tailor Pixels / BuyDisplay factory) at MOQ</td><td class="n">$3–5</td><td>MOQ, and the pinout must match</td><td><span class="tag t-E">E</span></td></tr>
+    <tr><td>Drop the second USB-A, or use a cheaper USB-A than GCT USB1046</td><td class="n">$1–3</td><td>Also fixes the 74-in-stock problem</td><td><span class="tag t-V">V</span> USB1046 $2.07</td></tr>
+    <tr><td>JLC solders the switches (THT) instead of hand assembly</td><td class="n">$3–6 labour</td><td>~$1.41 per board in joints <span class="tag t-V">V</span>; switches must be consigned or bought by JLC</td><td><span class="tag t-E">E</span></td></tr>
+    <tr><td>Fewer colourways: 3–5 lid colours, 1–2 trays</td><td class="n">MOQ/scrap</td><td>Fewer batches and less stock</td><td><span class="tag t-E">E</span></td></tr>
+    <tr><td>Design the rails and detents to the parting line (no slides or lifters)</td><td class="n">$10–30k tooling</td><td>Changes the lid geometry; do it in Proto 2</td><td><span class="tag t-E">E</span></td></tr>
+    <tr><td>Combine the display chassis into the tray mould as a 2-cavity family tool</td><td class="n">$2–4k tooling</td><td>Both parts must use the same material and colour</td><td><span class="tag t-E">E</span></td></tr>
+    <tr><td>Panelise 2-up at JLC (Standard PCBA) above 30 boards</td><td class="n">~$1–2</td><td>Panel limit 250 × 250: 2 × 126 = 252 mm is just over, so it needs a 1-up board with rails or a tighter outline</td><td><span class="tag t-E">E</span></td></tr>
+    </tbody></table></div>
+
+  <h3>Risk register</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Risk</th><th>Impact</th><th>Likelihood</th><th>Mitigation</th></tr></thead><tbody>
+    <tr><td><b>Display software doesn't exist</b> (DSS overlay, ST7701S init)</td><td>No product</td><td>certain until done</td><td>Proto 0 before any board order; budget 4 weeks</td></tr>
+    <tr><td><b>Panel pinout from the Maxen datasheet</b>, not BuyDisplay; possible outline mismatch (snippet: 117.9 × 40.37 × 2.0)</td><td>Board respin, chassis change</td><td>medium</td><td>Buy both panels in Proto 0, meter them, measure outlines; F32R as the fallback footprint</td></tr>
+    <tr><td><b>F32R 0 stock at LCSC</b></td><td>JLC can't fit the bottom-contact fallback</td><td>low–medium</td><td>DigiKey 6,956 / Newark 5,400 <span class="tag t-V">V</span>: consign to JLC</td></tr>
+    <tr><td><b>GCT USB1046 only 74 at LCSC</b></td><td>Blocks 100 units</td><td>certain at 100</td><td>Second source now; global sourcing through JLC</td></tr>
+    <tr><td><b>Choc hot-swap sockets 0 at LCSC</b></td><td>Only affects a hot-swap SKU (v3 solders switches)</td><td>—</td><td>Hand-solder sockets from Chosfox/splitkb if a hot-swap SKU is wanted</td></tr>
+    <tr><td><b>M2×15 F-F standoffs: no verified source</b> (v2)</td><td>Retired in v3; new risk: M2 thread-forming into printed and moulded posts</td><td>medium</td><td>Pull-out test in Proto 1; heat-set inserts in printed parts if needed</td></tr>
+    <tr><td><b>PB2 Rev A1 / Industrial vs the EVT model</b></td><td>Socket height, USB-C position, keep-outs</td><td>medium</td><td>Check against the Rev A dimension PDF and measure a real board in Proto 0</td></tr>
+    <tr><td>PB2 single source, 14–15 wk lead</td><td>Production stall</td><td>medium</td><td>PO at tool kickoff; buffer stock; plain PB2 as a fallback SKU</td></tr>
+    <tr><td>Battery: no fitting off-the-shelf cell; lithium shipping</td><td>Schedule, compliance</td><td>high</td><td>Custom pack with UN38.3 + IEC 62133-2 reports; courier battery programmes</td></tr>
+    <tr><td>Power budget ~2.3 A worst case vs IP5306 2.1–2.4 A (README)</td><td>Brown-outs with USB loads</td><td>medium</td><td>Measure in Proto 1; limit the USB-A ports; consider a bigger boost</td></tr>
+    <tr><td>EMC: the parallel RGB bus and SoC in a plastic case</td><td>Fails FCC/CE</td><td>medium</td><td>Pre-scan at EVT; series resistors on VOUT0; ground-pour stitching; ferrite on the FPC</td></tr>
+    <tr><td>Clear lid cosmetics (flow lines, scuffs, UV yellowing)</td><td>Rework, scrap</td><td>medium</td><td>Polished cavity, hidden gate, ≥1.5° draft, UV-stable grade, a first-article cosmetic spec</td></tr>
+    <tr><td>Tariffs and duties (not in this page's totals; modelled on <a href="flow.html#tariffsec">Material flow</a>)</td><td>China: PCBA ~37.5%, Li-ion ~40.9%, finished 8471.30 12.5% (or 0% if exempt); USMCA 0%</td><td>volatile (litigation pending)</td><td>Broker-confirmed HTS; compare strategies on the Material flow page</td></tr>
+    <tr><td>EU Battery Regulation user-replaceability (Feb 2027)</td><td>Redesign for the EU</td><td>low–medium</td><td>Tool-free or common-tool access to the pack; confirm with a notified body</td></tr>
+    </tbody></table></div>
+</section>
+
+<section id="refs">
+  <h2>References</h2>
+  <p class="note">Status in brackets. "Live" = fetched on 2026-11-07. Repo files are relative to the repo root.</p>
+  <ul class="sources">
+    <li>Repo: <code>tools/zm_v3/design.py</code> (v3 BOM and LCSC numbers), <code>pcb/bancouver40_pb2/DESIGN_v3.md</code>, <code>bancouver40_pb2.kicad_pcb</code> (placements), <code>README.md</code> (v3 status), <code>mech/cover.py</code> + <code>mech/cover.log</code> (lid 52.32 cm³, Tray_slide 40.57 cm³), <code>mech/display_chassis.fab.json</code> (12.52 cm³), <code>mech/blender/render_lid.py</code> (COMBOS), <code>AGENTS.md</code> and <code>bom/BOM.csv</code> (v2 prices, 2026-11-05)</li>
+    <li>DigiKey PocketBeagle 2 Industrial — https://www.digikey.com/en/products/detail/beagleboard/100003007/28118583 (live)</li>
+    <li>DigiKey PocketBeagle 2 — https://www.digikey.com/en/products/detail/beagleboard/102110780/25927193 (live)</li>
+    <li>BeagleBoard PB2 docs, no radio — https://docs.beagleboard.org/boards/pocketbeagle-2/01-introduction.html (live); revisions — https://www.beagleboard.org/boards/pocketbeagle-2 (live)</li>
+    <li>cnx-software, PB2 Industrial launch — https://www.cnx-software.com/2026/02/24/pocketbeagle-2-sbc-gets-industrial-version-with-1gb-ram-64gb-emmc-flash/ (live)</li>
+    <li>Adafruit 5805 bar display — https://www.adafruit.com/product/5805 (live); DigiKey 5805 — https://www.digikey.com/en/products/detail/adafruit-industries-llc/5805/22165010 (live)</li>
+    <li>BuyDisplay ER-TFT4.58-1 — https://www.buydisplay.com/bar-type-4-58-inch-320x960-ips-tft-lcd-display-spi-rgb-interface (403; snippet + AGENTS.md)</li>
+    <li>LCSC product API (wmsc.lcsc.com/ftps/wm/product/detail?productCode=…) for C365736, C9359, C181692, C58756, C80696, C6307429, C22435630, C668605, C28038, C456012, C3168061, C3169456, C5333465 (live)</li>
+    <li>DigiKey F32Q-1A7H1-11040 — https://www.digikey.com/en/products/detail/amphenol-cs-fci/F32Q-1A7H1-11040/11564739 (live); FindChips F32R / 970150244 (live)</li>
+    <li>Adafruit 5113 Choc switches, 5118 sockets, 328 LiPo (live); Olimex BATTERY-LIPO3000mAh (live)</li>
+    <li>Chosfox, splitkb, typeractive, lowprokb store listings (live store search, starting prices only)</li>
+    <li>JLCPCB PCBA fee table — https://jlcpcb.com/help/article/pcb-assembly-price (live); PCBA FAQ — https://jlcpcb.com/help/article/98-pcb-assembly-faqs (live); cost example — https://jlcpcb.com/blog/reduce-pcb-assembly-cost-prototype (live); 4-layer rate — https://jlcpcb.com/news/discount-on-quality-4-layer-pcbs (snippet)</li>
+    <li>LCSC BOM tool help — https://www.lcsc.com/help-center/online-services/bom-list (live); DigiKey KiCad Push-to-DigiKey — https://github.com/Digi-Key/KiCad-Push-to-DigiKey (live); Mouser cart API — https://www.mouser.com/api-cart/ (snippet)</li>
+    <li>JLC3DP: price notice — https://jlc3dp.com/blog/drastic-material-price-cuts-and-adjusted-post-processing-service-fees (live); 8001 resin — https://jlc3dp.com/help/article/photosensitive-8001-resin (live); July 2026 update — https://jlc3dp.com/news/materials-finishing-pricing-update-july2026 (live)</li>
+    <li>HLH vacuum casting pricing — https://intercom.help/hlhrapid/en/articles/8646213-how-is-vacuum-casting-priced (live); Xometry urethane vs IM — https://www.xometry.com/resources/casting/urethane-casting-vs-injection-molding/ (live)</li>
+    <li>Protolabs aluminium vs steel — https://www.protolabs.com/resources/blog/aluminum-vs-steel-tooling/ (live); on-demand — https://www.protolabs.com/services/injection-molding/on-demand-manufacturing/ (live); draft — https://www.protolabs.com/injection-molding/fundamentals-of-molding/draft (live); bump-offs — https://www.protolabs.com/resources/design-tips/creating-complex-undercuts-with-bumpoffs (live)</li>
+    <li>TEAM Rapid Tooling cost table — https://www.teamrapidtooling.com/injection-molding-cost-1000-10000-parts-a-680.html (live); Xometry IM cost — https://www.xometry.com/resources/injection-molding/injection-molding-cost/ (live); slide/lifter premiums — https://zetarmold.com/?p=52305 (snippet); SPI polish — https://nylonplastic.com/spi-surface-finish/ (snippet); clear PC moulding — https://texasinjectionmolding.com/blog/polycarbonate-injection-molding/ (live)</li>
+    <li>USPS Pub 52 lithium batteries, domestic — https://pe.usps.com/text/pub52/pub52apxc_032.htm and international — …_033.htm (live); Packlane bulk — https://packlane.com/bulk-mailer-boxes (live)</li>
+    <li>FCC SDoC — https://compliancegate.com/fcc-sdoc (live); FCC test cost — https://compliancetesting.com/fcc-certification-faqs/fcc-certification-cost/ (live); UKCA/CE — https://www.gov.uk/government/publications/product-regulations-by-sector-and-current-approaches-to-product-marking-ukca-and-ce-regimes (live)</li>
+  </ul>
+</section>
+<footer>Generated 2026-11-07 for the Zine Machine v3 (repo zinemachine0-v3). Prices change daily: re-verify every V figure before ordering, and treat every E figure as a starting point for a real quote. Nothing here has been built.</footer>
+</main>
+
+<script>
+const BOMV3 = {"bom":[{"value":"74HC165","fp":"TSSOP-16_4.4x5mm_P0.65mm","mpn":"74HC165PW,118","lcsc":"C80696","refs":["U10","U11","U12","U13","U14","U15"],"tht":false},{"value":"4x10k","fp":"R_Array_Convex_4x0603","mpn":"4D03WGJ0103T5E","lcsc":"C29718","refs":["RN1","RN2","RN3","RN4","RN5","RN6","RN7","RN8","RN9","RN10","RN11","RN12"],"tht":false},{"value":"100nF","fp":"C_0402_1005Metric","mpn":"CL05B104KO5NNNC","lcsc":"C1525","refs":["C60","C61","C62","C63","C64","C65","C10","C12","C14","C16","C18","C27","C31","C40","C41","C42","C44","C46","C49","C52"],"tht":false},{"value":"33R","fp":"R_0402_1005Metric","mpn":"0402WGF330JTCE","lcsc":"C25105","refs":["R60","R61","R40","R41","R42","R43","R44"],"tht":false},{"value":"F32Q-1A7H1-11040","fp":"Amphenol_F32Q-1A7x1-11040_1x40-1MP_P0.5mm_Horizontal","mpn":"F32Q-1A7H1-11040","lcsc":"C3168061","refs":["J3"],"tht":false},{"value":"TPS61165DBVR","fp":"SOT-23-6","mpn":"TPS61165DBVR","lcsc":"C58756","refs":["U3"],"tht":false},{"value":"22uH","fp":"L_Changjiang_FNR4030S","mpn":"FNR4030S220MT","lcsc":"C167883","refs":["L1"],"tht":false},{"value":"B5819W","fp":"D_SOD-123","mpn":"B5819W SL","lcsc":"C8598","refs":["D1"],"tht":false},{"value":"4.7uF 25V","fp":"C_0805_2012Metric","mpn":"CL21A475KAQNNNE","lcsc":"C1779","refs":["C1"],"tht":false},{"value":"1uF 50V","fp":"C_0805_2012Metric","mpn":"CL21B105KBFNNNE","lcsc":"C28323","refs":["C2"],"tht":false},{"value":"220nF","fp":"C_0603_1608Metric","mpn":"CL10B224KA8NNNC","lcsc":"C21120","refs":["C3"],"tht":false},{"value":"5.1R 1%","fp":"R_0603_1608Metric","mpn":"0603WAF510KT5E","lcsc":"C25197","refs":["R1"],"tht":false},{"value":"100k","fp":"R_0402_1005Metric","mpn":"0402WGF1003TCE","lcsc":"C25741","refs":["R2","R26","R53"],"tht":false},{"value":"FE1.1s","fp":"SSOP-28_3.9x9.9mm_P0.635mm","mpn":"FE1.1S-BSOP28BCN","lcsc":"C9359","refs":["U4"],"tht":false},{"value":"12MHz","fp":"Crystal_SMD_3225-4Pin_3.2x2.5mm","mpn":"TAXM12M4RLBDDT2T","lcsc":"C133334","refs":["Y1"],"tht":false},{"value":"2.7k 1%","fp":"R_0603_1608Metric","mpn":"0603WAF2701T5E","lcsc":"C13167","refs":["R10"],"tht":false},{"value":"10k","fp":"R_0402_1005Metric","mpn":"0402WGF1002TCE","lcsc":"C25744","refs":["R11","R12","R13","R27","R47","R48"],"tht":false},{"value":"10uF","fp":"C_0603_1608Metric","mpn":"CL10A106KP8NNNC","lcsc":"C19702","refs":["C11","C13","C20","C21","C43","C45","C47","C48","C50","C51","C55","C58","C59","C66"],"tht":false},{"value":"TPS2051BDBVR","fp":"SOT-23-5","mpn":"TPS2051BDBVR","lcsc":"C24593","refs":["U5","U6"],"tht":false},{"value":"USBLC6-2SC6","fp":"SOT-23-6","mpn":"USBLC6-2SC6","lcsc":"C2687116","refs":["U7","U8"],"tht":false},{"value":"USB-A","fp":"USB_A_GCT_USB1046","mpn":"USB1046-GF-0190-L-B-A","lcsc":"C6307429","refs":["J7","J8"],"tht":true},{"value":"100uF","fp":"C_1206_3216Metric","mpn":"CL31A107MQHNNNE","lcsc":"C15008","refs":["C15","C17","C56","C57"],"tht":false},{"value":"USB-C 6P","fp":"USB_C_Receptacle_6P_ShouHan","mpn":"TYPE-C 6P","lcsc":"C456012","refs":["J6"],"tht":true},{"value":"5.1k","fp":"R_0402_1005Metric","mpn":"0402WGF5101TCE","lcsc":"C25905","refs":["R20","R21"],"tht":false},{"value":"IP5306","fp":"SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm","mpn":"IP5306","lcsc":"C181692","refs":["U9"],"tht":false},{"value":"1uH","fp":"L_Sunlord_MWSA0603S","mpn":"MWSA0603S-1R0MT","lcsc":"C112125","refs":["L2"],"tht":false},{"value":"2R","fp":"R_0603_1608Metric","mpn":"0603WAF200KT5E","lcsc":"C22977","refs":["R22"],"tht":false},{"value":"22uF","fp":"C_0805_2012Metric","mpn":"CL21A226MAQNNNE","lcsc":"C45783","refs":["C22","C23","C24","C25","C26","C28","C29"],"tht":false},{"value":"0.5R","fp":"R_0603_1608Metric","mpn":"FRL0603JR500TS","lcsc":"C2930046","refs":["R23"],"tht":false},{"value":"red CHG","fp":"LED_0603_1608Metric","mpn":"KT-0603R","lcsc":"C2286","refs":["D2"],"tht":false},{"value":"1k","fp":"R_0402_1005Metric","mpn":"0402WGF1001TCE","lcsc":"C11702","refs":["R24","R25","R30","R33","R51"],"tht":false},{"value":"green PWR","fp":"LED_0603_1608Metric","mpn":"XL-1608UGC-04","lcsc":"C965804","refs":["D3"],"tht":false},{"value":"LiPo 1S","fp":"JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical","mpn":"B2B-PH-K-S(LF)(SN)","lcsc":"C131337","refs":["J5"],"tht":true},{"value":"SK22D02G4","fp":"SW_Slide_DPDT_SK22D02G4_Angled","mpn":"SK22D02G4","lcsc":"C22435630","refs":["SW44"],"tht":true},{"value":"AO3401A","fp":"SOT-23","mpn":"AO3401A","lcsc":"C15127","refs":["Q1"],"tht":false},{"value":"1uF","fp":"C_0402_1005Metric","mpn":"CL05A105KA5NQNC","lcsc":"C52923","refs":["C30","C53","C67"],"tht":false},{"value":"1M","fp":"R_0402_1005Metric","mpn":"0402WGF1004TCE","lcsc":"C26083","refs":["R28","R31","R32"],"tht":false},{"value":"470k","fp":"R_0402_1005Metric","mpn":"0402WGF4703TCE","lcsc":"C25790","refs":["R29"],"tht":false},{"value":"AO3400A","fp":"SOT-23","mpn":"AO3400A","lcsc":"C20917","refs":["Q2"],"tht":false},{"value":"yellow BOOT","fp":"LED_0603_1608Metric","mpn":"NCD0603Y2","lcsc":"C89811","refs":["D4"],"tht":false},{"value":"ES8388","fp":"QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm","mpn":"ES8388","lcsc":"C365736","refs":["U17"],"tht":false},{"value":"12.288MHz","fp":"Oscillator_SMD_Abracon_ASE-4Pin_3.2x2.5mm","mpn":"OT2EL4C4JI-111OLP-12.288M","lcsc":"C5203546","refs":["X1"],"tht":false},{"value":"2.2k","fp":"R_0402_1005Metric","mpn":"0402WGF2201TCE","lcsc":"C25879","refs":["R45","R46","R52"],"tht":false},{"value":"TPS73633DBVR","fp":"SOT-23-5","mpn":"TPS73633DBVR","lcsc":"C28038","refs":["U16"],"tht":false},{"value":"10nF","fp":"C_0402_1005Metric","mpn":"CL05B103KB5NNNC","lcsc":"C15195","refs":["C54"],"tht":false},{"value":"47k","fp":"R_0402_1005Metric","mpn":"0402WGF4702TCE","lcsc":"C25792","refs":["R49","R50"],"tht":false},{"value":"Headset (CTIA)","fp":"Jack_3.5mm_PJ-327A_5JJ","mpn":"PJ-327A 5JJ","lcsc":"C668605","refs":["J9"],"tht":false},{"value":"Line out","fp":"Jack_3.5mm_PJ-320A-3P_DIP","mpn":"PJ-320A-3P DIP","lcsc":"C17701689","refs":["J10"],"tht":true}],"cpl":[["C2",190.7,-5.9,-90.0],["R1",196.2,3.475,90.0],["C53",95.67,42.05,180.0],["J7",194.85,36.37,180.0],["R43",87.94,28.45,180.0],["R42",85.89,31.55,180.0],["R51",98.4,36.21,90.0],["C55",102.55,41.025,-90.0],["U11",92.5,5.0,0.0],["C18",212.17,22.6,180.0],["R44",101.35,34.24,-90.0],["J6",154.3,38.35,0.0],["C51",98.8,31.125,-90.0],["C57",122.525,33.4,0.0],["C67",93.05,39.68,-90.0],["R27",157.64,30.2,0.0],["L1",195.4,-5.6,0.0],["R49",144.56,30.4,0.0],["C15",184.725,30.6,180.0],["RN8",211.6,19.8,-90.0],["C11",191.3,12.525,-90.0],["C49",88.37,31.45,180.0],["C31",75.87,15.2,180.0],["C66",90.575,39.35,0.0],["C47",98.625,33.85,0.0],["R26",161.16,37.25,0.0],["R10",198.25,20.925,90.0],["C22",165.15,33.9,-90.0],["RN5",98.5,-3.1,0.0],["R25",242.6,20.4,90.0],["Q2",169.4,32.4,0.0],["D2",242.6,29.0,90.0],["C10",193.15,20.33,90.0],["C60",94.97,18.25,180.0],["R29",172.0,31.59,-90.0],["U13",217.5,19.0,0.0],["R48",126.44,30.45,180.0],["J9",133.8,36.55,0.0],["U4",195.8,14.0,180.0],["C25",170.95,36.1,-90.0],["C23",164.35,30.65,0.0],["C17",206.025,25.7,180.0],["R30",171.21,29.95,0.0],["RN2",86.2,14.6,-90.0],["U9",166.0,38.6,0.0],["RN11",223.1,-1.45,0.0],["R31",75.84,13.7,0.0],["U15",217.5,-0.0,0.0],["R47",123.74,35.55,180.0],["RN4",86.5,7.15,180.0],["C61",94.97,8.75,180.0],["R11",191.75,20.46,90.0],["J10",142.8,37.3,0.0],["U7",197.6,25.0,0.0],["RN3",98.8,4.9,90.0],["C50",96.6,36.725,90.0],["C44",96.15,33.83,90.0],["C40",85.02,37.8,180.0],["RN10",211.6,8.85,-90.0],["R61",83.45,4.31,90.0],["Y1",199.6,6.6,90.0],["U5",192.2,25.0,0.0],["RN6",86.2,-0.85,-90.0],["R2",193.39,-2.45,180.0],["C42",88.32,35.25,180.0],["R24",242.6,26.4,90.0],["D3",242.6,23.0,90.0],["C24",170.9,40.05,-90.0],["J5",184.7,38.2,-90.0],["C13",195.575,20.15,0.0],["D1",191.0,-1.6,90.0],["RN7",223.1,16.1,0.0],["R13",191.09,10.3,180.0],["J3",206.5,8.7,90.0],["L2",176.6,36.6,0.0],["C1",193.95,3.6,90.0],["R28",168.29,30.0,0.0],["R32",76.2,16.91,90.0],["R22",157.175,31.6,180.0],["D4",242.6,17.0,90.0],["C56",126.5,33.725,90.0],["C64",219.82,13.0,180.0],["RN12",211.6,0.8,-90.0],["R40",88.3,37.16,-90.0],["U12",92.5,-0.9,0.0],["R12",189.8,13.14,-90.0],["C46",96.53,31.9,0.0],["C3",198.45,1.275,90.0],["R53",147.01,30.45,180.0],["R52",85.99,33.5,180.0],["U16",99.2,40.6,0.0],["C20",161.3,39.725,-90.0],["C43",90.825,37.35,180.0],["C63",219.82,22.5,180.0],["R23",154.55,32.225,-90.0],["C59",147.3,40.325,-90.0],["R21",152.2,34.24,-90.0],["C27",160.92,36.0,180.0],["C52",94.5,37.53,90.0],["U8",215.2,25.0,0.0],["C21",173.575,41.75,180.0],["R50",147.1,37.09,-90.0],["C30",168.32,34.8,0.0],["C26",177.1,41.5,0.0],["C14",191.22,16.1,180.0],["C12",191.22,14.85,180.0],["R46",94.6,40.01,-90.0],["C54",100.0,37.47,-90.0],["R45",85.89,36.3,0.0],["U10",92.5,14.5,0.0],["C45",95.675,29.65,0.0],["C41",88.47,33.65,180.0],["RN9",223.1,8.05,0.0],["C48",90.975,29.6,180.0],["R33",242.6,14.4,90.0],["R60",83.45,6.86,90.0],["C62",97.35,1.88,90.0],["Q1",162.0,33.6,0.0],["X1",86.4,40.6,0.0],["U17",92.5,33.5,0.0],["U3",195.4,-0.0,0.0],["U6",210.6,25.0,0.0],["C29",158.0,33.6,180.0],["U14",217.5,9.5,0.0],["R20",154.24,34.6,180.0],["R41",88.04,29.95,180.0],["C28",160.6,30.65,180.0],["RN1",98.5,12.3,0.0],["C58",141.625,30.35,180.0],["SW44",121.8,40.7,0.0],["C16",193.77,22.6,180.0],["C65",219.82,3.5,180.0],["J8",209.95,36.37,180.0]]};
+// ---------- data: every figure carries a status code ----------
+// V = verified live 2026-11-07 (page or API fetched) · A = repo / AGENTS.md (checked 2026-11-05) · S = search-result snippet, not opened
+// E = estimate (reasoning in the Basis column) · X = not applicable at this tier
+const DATA = {
+  tiers: [1, 10, 100, 1000, 5000],
+  statusText: {
+    V: 'Verified live on 2026-11-07 (page or vendor API fetched)',
+    A: 'From the repo / AGENTS.md, prices checked 2026-11-05',
+    S: 'Search-result snippet only, page not opened: treat as unverified',
+    E: 'Estimate: see the Basis column; not a quote',
+    X: 'Not applicable at this tier'
+  },
+  cats: [
+    { id: 'compute', name: 'PocketBeagle 2 + headers' },
+    { id: 'pcb', name: 'Main board (PCB, PCBA, parts)' },
+    { id: 'display', name: 'Display + battery' },
+    { id: 'keys', name: 'Switches + keycaps' },
+    { id: 'encl', name: 'Enclosure (+ tooling)' },
+    { id: 'ops', name: 'Labour, packing, freight, compliance' }
+  ],
+  lines: [
+    // ---- main board ----
+    { grp: 'Main board', cat: 'pcb', item: 'Bare PCB, 4-layer FR4, 170 × 126 mm, 1.6 mm, HASL', qty: 1,
+      p: [55, 7, 3.5, 2.2, 1.8], s: ['E', 'E', 'E', 'E', 'E'],
+      src: 'JLCPCB area rate $70.6/m² (2024, snippet) × 0.0214 m², plus small-order minimums. 1 unit = the minimum order of 5 boards. Get a live quote.' },
+    { grp: '', cat: 'pcb', item: 'PCBA fees (setup, stencil, extended-part loading, joints, through-hole)', qty: 1,
+      p: [82, 9.4, 2.5, 1.5, 1.3], s: ['V', 'V', 'E', 'E', 'E'],
+      note: '~22 extended parts × $3.07 + $8.18 setup + $1.53 stencil + $3.58 hand-solder + ~530 joints. Above 30 boards: Standard PCBA ($25.56 setup, $8.21 stencil, $1.53/line).',
+      src: 'JLCPCB fee table, live 2026-11-07 (jlcpcb.com/help/article/pcb-assembly-price). The per-unit split at 100+ is an estimate.' },
+    { grp: '', cat: 'pcb', item: 'Assembled SMD/THT parts: 48 lines, 133 placements (ES8388, FE1.1s, IP5306, 6× 74HC165, 2× USB-A, F32Q…)', qty: 1,
+      p: [16.4, 10.5, 8.1, 6.8, 6.2], s: ['V', 'E', 'V', 'V', 'E'],
+      note: 'The 11 costliest lines were priced live from LCSC ($9.92 / $6.27 / $5.39 at 1 / 100 / 1k). The remaining ~37 lines (passives, LEDs, crystal, oscillator, TPS2051B, USBLC6) are estimated at $1.4–3.5, and the 1-unit tier adds ~$3 for minimum-quantity strips.',
+      src: 'LCSC product API, live 2026-11-07. The 2× GCT USB1046 at $2.07 each is the largest single cost.' },
+    // ---- compute ----
+    { grp: 'Compute', cat: 'compute', item: 'PocketBeagle 2 Industrial (BeagleBoard 100003007, AM6254, 1 GB, 64 GB eMMC)', qty: 1,
+      p: [51.03, 51.03, 51.03, 46, 43], s: ['V', 'V', 'V', 'E', 'E'],
+      note: 'DigiKey shows no quantity breaks. 1k/5k assume a direct BeagleBoard/Seeed quote at about −10/−15%.',
+      src: 'DigiKey 28118583: $51.03, 3,442 in stock, 14-week factory lead (live 2026-11-07).' },
+    { grp: '', cat: 'compute', item: '2×18 male header 2.54 mm (the PB2 plugs onto these)', qty: 2,
+      p: [0.40, 0.40, 0.30, 0.20, 0.18], s: ['A', 'A', 'E', 'E', 'E'],
+      src: 'LCSC C41376109 at $0.20 each (AGENTS.md, 2026-11-05).' },
+    // ---- display & power ----
+    { grp: 'Display + power', cat: 'display', item: '4.58" 320×960 IPS bar TFT, ST7701S, 40-pin FPC (BuyDisplay ER-TFT4.58-1, no touch)', qty: 1,
+      p: [14.33, 13.95, 12.82, 10.5, 9], s: ['A', 'S', 'S', 'E', 'E'],
+      note: 'The pinout is from the Maxen datasheet, not this part. One snippet gives a different outline for this part (117.9 × 40.37 × 2.0 mm). 1k+ assumes buying direct from the panel maker at its MOQ.',
+      src: 'BuyDisplay $14.33 (AGENTS.md) and $13.95/10, $12.82/100 (snippet; the site returns 403 to scripts). Adafruit 5805: $19.95 / $17.96 / $15.96, out of stock (live).' },
+    { grp: '', cat: 'display', item: '1S LiPo, ~2.5–3 Ah, with protection board and JST-PH lead (9 × 40 × 70 mm envelope)', qty: 1,
+      p: [14.95, 13.46, 11.96, 5, 4], s: ['V', 'V', 'V', 'E', 'E'],
+      note: 'The prototype cell (Adafruit 328, 50 × 60 × 7.3 mm) does NOT fit the 40 × 70 envelope. Volume needs a custom 904070-class pack with UN38.3 and IEC 62133-2 reports (typical pack-house MOQ 500–1,000).',
+      src: 'Adafruit 328 price breaks (live 2026-11-07). The 1k/5k figures are an estimate for a custom pack.' },
+    // ---- keyboard ----
+    { grp: 'Keyboard', cat: 'keys', item: 'Kailh Choc v1 switches (CPG1350), soldered: 40 keys + 3 mode keys', qty: 43,
+      p: [25, 19.4, 15, 10.75, 8.6], s: ['A', 'E', 'E', 'E', 'E'],
+      note: '1 unit = 5 × 10-packs at about $5. Volume assumes buying direct from Kailh at $0.35 / $0.25 / $0.20 per switch.',
+      src: 'Chosfox "from $4.50", typeractive "from $5.50" (live search listings); Adafruit 5113 $11.95 per 10 (live). No bulk price was found.' },
+    { grp: '', cat: 'keys', item: 'Chocfox CFX keycaps 16.5 × 16.5 mm (custom legends at volume)', qty: 43,
+      p: [17.5, 15.05, 12.9, 8.6, 6.45], s: ['A', 'E', 'E', 'E', 'E'],
+      note: '1 unit = 5 × 10-packs at $3.50 (blank or stock legends). The v3 legends (layers in four corners) need custom dye-sub or UV print, and the 1k+ price assumes that.',
+      src: 'AGENTS.md $3.50 per 10 (2026-11-05). Chosfox "from $0.80" single caps (live listing).' },
+    { grp: '', cat: 'keys', opt: 'hotswap', item: 'OPTION: Kailh Choc hot-swap sockets CPG135001S30 (v3 has none; needs a footprint change)', qty: 43,
+      p: [6.57, 5.6, 3.7, 3.4, 3.2], s: ['A', 'E', 'V', 'V', 'V'],
+      note: 'LCSC C5333465 has 0 in stock. Its tiers are $0.1172 / $0.0864 / $0.0788 / $0.0742 (at 50 / 500 / 2k / 4k).',
+      src: 'LCSC API, live 2026-11-07 (stock 0). splitkb $6.57 per 50 (AGENTS.md).' },
+    // ---- hardware ----
+    { grp: 'Hardware', cat: 'encl', item: 'Fasteners and consumables: 6 × M2 self-tapping (tray bosses), 4 × M2 long (chassis posts), 4 bumpons, 0.5 mm foam pad, panel tape', qty: 1,
+      p: [21, 2.6, 0.9, 0.35, 0.25], s: ['E', 'E', 'E', 'E', 'E'],
+      note: 'v3 has NO standoffs: the old M2×15 F-F risk is retired, but self-tapping into printed or moulded posts is untested. The 1-unit tier buys an M2 kit (~$10) plus a 3M 9495LE roll ($11.28, AGENTS.md).',
+      src: 'M2×4 at about $0.017 per 4,000-carton (snippet). Volume uses a die-cut adhesive in place of the roll.' },
+    // ---- enclosure ----
+    { grp: 'Enclosure', cat: 'encl', item: 'Tray (Tray_slide, 178.2 × 131.2 × 12.5 mm, 40.6 cm³)', qty: 1,
+      p: [14, 13, 10, 2.5, 1.6], s: ['E', 'E', 'E', 'E', 'E'],
+      note: '1–100: MJF PA12 dyed (40.6 cm³ × ~1 g/cm³ × $0.275/g = $11 + dye). 1k+: injection-moulded ABS piece price, with tooling listed separately.',
+      src: 'JLC3DP MJF $0.275/g (live, Aug-2025 price notice). Piece prices from the Protolabs/TEAM tables (live).' },
+    { grp: '', cat: 'encl', item: 'Display chassis (replaces v2 bezel; 127.3 × 47.1 × 15 mm, 12.5 cm³)', qty: 1,
+      p: [5, 4.5, 3.5, 1.2, 0.8], s: ['E', 'E', 'E', 'E', 'E'],
+      src: 'Same basis as the tray (12.52 cm³ from mech/display_chassis.fab.json).' },
+    { grp: '', cat: 'encl', item: 'Translucent slide-on lid / cradle (52.3 cm³, 1.6 mm walls, 2 snap detents)', qty: 1,
+      p: [30, 25, 30, 3.5, 2.2], s: ['E', 'E', 'E', 'E', 'E'],
+      note: '1–10: SLA 8001 transparent, sanded and oiled (~$0.41/cm³ from a small sample) plus polish or clear coat. 100: SLA, dyed and clear-coated; tinted urethane casting would cost ~$55–65 a lid (moulds last ~20 shots). 1k+: clear PC or tinted MABS, moulded.',
+      src: 'JLC3DP 8001 resin page (live); third-party sample $2.32 for ~5.7 cm³ (live blog); HLH vacuum casting $200–1,000 per mould and $10–100 per part (live).' },
+    { grp: '', cat: 'encl', nre: true, item: 'NRE · injection tooling, amortised (aluminium: tray ~$8k, chassis ~$4k, lid ~$14k with lifters and SPI A-2 polish)', qty: '—',
+      p: [0, 0, 0, 26, 6], s: ['X', 'X', 'X', 'E', 'E'],
+      note: '1k: $26k ÷ 1,000. 5k: the same aluminium tools (Protolabs guarantees ≥2k shots on prototype tools; on-demand tools ~10k+), plus one refurbishment and re-polish, ÷ 5,000.',
+      src: 'Protolabs aluminium from $1,500 (live); slide +15–25% and lifter +20–35% (snippet); A-2 polish $600–1,000 per cavity (snippet).' },
+    // ---- ops ----
+    { grp: 'Ops', cat: 'ops', item: 'Final assembly and test labour (solder 43 switches, fit PB2, panel, battery, caps, lid; flash; functional test)', qty: '~45 min',
+      p: [0, 0, 20, 8, 5], s: ['X', 'X', 'E', 'E', 'E'],
+      note: '1 and 10: you build them (budget ~1.5 h for the first unit, ~45 min after). 100: small-batch contract builder at ~$27/h. 1k+: Shenzhen contract manufacturer, including the test fixture time.',
+      src: 'Estimate. JLC can solder the switches as through-hole for ~$1.41 a board (86 joints × $0.0164, live fee table), which cuts this line.' },
+    { grp: '', cat: 'ops', item: 'Retail packaging: printed mailer ~200 × 150 × 40 mm + insert', qty: 1,
+      p: [3.5, 3.5, 3.5, 1.8, 1.3], s: ['S', 'S', 'S', 'S', 'E'],
+      src: '2026 price guides: $2.50–3.50 at 25–100, $0.85–1.40 at 1k, under $1 at 2.5k+ (snippet). Packlane $0.93 at 500 (snippet).' },
+    { grp: '', cat: 'ops', item: 'Inbound freight (JLC DHL, distributor shipping, consolidated air or sea at volume)', qty: '—',
+      p: [30, 6, 3, 1.5, 1], s: ['E', 'E', 'E', 'E', 'E'],
+      note: 'US import duties are NOT in this table. The Material flow page models them by strategy, as researched 2026-11-07 (IEEPA tariffs struck down Feb 2026; Section 301 forced-labor +12.5% on China since Jul 2026).',
+      src: 'Estimate.' },
+    { grp: '', cat: 'ops', item: 'Outbound shipping to a customer, US domestic (UN3481 battery-in-equipment, ~0.5 kg)', qty: 1,
+      p: [0, 0, 9, 7.6, 7], s: ['X', 'X', 'S', 'S', 'E'],
+      note: 'USPS allows ≤2 batteries per package domestically. International: ≤2 packages per consignment and no lithium marks, so at volume ship through a courier battery programme (DHL surcharge $6–42 per shipment, snippet).',
+      src: 'USPS Ground Advantage 1 lb, $7.61 commercial / $9.55–12.90 retail (snippet); USPS Pub 52 battery rules (live).' },
+    { grp: '', cat: 'ops', nre: true, item: 'NRE · compliance: FCC Part 15B (SDoC), CE EMC + GPSR safety (EN 62368-1), UN38.3 if a custom pack, WEEE registration', qty: '—',
+      p: [0, 0, 125, 12.5, 2.5], s: ['X', 'X', 'E', 'E', 'E'],
+      note: '~$12.5k in total, amortised. FCC 15B no-radio: $1.9–5k (live); CE EMC €0.8–8k (snippets); UN38.3 $0.3–1.7k (snippet). Required before the pilot units are sold.',
+      src: 'compliancetesting.com cost FAQ (live); lab ranges (snippets).' }
+  ],
+
+  sources: [
+    { part: 'PocketBeagle 2 Industrial (100003007)', risk: 'The case was checked only against the EVT STEP. Production is Rev A1 (AM6254), and v3 uses the Industrial variant on 3.55 mm sockets: check against the Rev A dimension PDF in the repo.', v: [
+      { name: 'DigiKey 28118583', url: 'https://www.digikey.com/en/products/detail/beagleboard/100003007/28118583', price: '$51.03 at qty 1 (no breaks shown)', stock: '3,442', lead: '14 wk (factory)', s: 'V', when: '2026-11-07' },
+      { name: 'Mouser (India listing)', url: 'https://www.mouser.com/c/?q=100003007', price: '₹7,897 (≈ $90 incl. local duties)', stock: 'n/a (bot wall)', lead: '14 wk', s: 'S' },
+      { name: 'Seeed / BeagleBoard direct (launch coverage)', url: 'https://www.cnx-software.com/2026/02/24/pocketbeagle-2-sbc-gets-industrial-version-with-1gb-ram-64gb-emmc-flash/', price: '~$50 launch price (cnx-software, Feb 2026)', stock: '—', lead: '— (ask Seeed for 1k+)', s: 'S' } ] },
+    { part: 'PocketBeagle 2 (plain, 102110780), fallback', v: [
+      { name: 'DigiKey 25927193', url: 'https://www.digikey.com/en/products/detail/beagleboard/102110780/25927193', price: '$39.53', stock: '10,333', lead: '15 wk', s: 'V', when: '2026-11-07' },
+      { name: 'Mouser', url: 'https://www.mouser.com/ProductDetail/BeagleBoard-by-Seeed-Studio/102110780?qs=%252BXxaIXUDbq3pDS5bF5qfpw%3D%3D', price: '—', stock: 'blocked', lead: '—', s: 'X' } ] },
+    { part: '4.58" 320×960 bar TFT (ST7701S)', risk: 'The panel pinout comes from the Maxen datasheet, not the part in the BOM. One snippet gives a different outline (117.9 × 40.37 × 2.0 mm). FPC contact side and fold length are unverified.', v: [
+      { name: 'BuyDisplay ER-TFT4.58-1', url: 'https://www.buydisplay.com/bar-type-4-58-inch-320x960-ips-tft-lcd-display-spi-rgb-interface', price: '$14.33 (1) · $13.95 (10) · $12.82 (100)', stock: 'unknown (403 to scripts)', lead: 'ships from HK; typically 1–2 wk (unverified)', s: 'S', when: '$14.33 = AGENTS.md' },
+      { name: 'Adafruit 5805', url: 'https://www.adafruit.com/product/5805', price: '$19.95 · $17.96 (10) · $15.96 (100)', stock: 'out of stock', lead: '—', s: 'V', when: '2026-11-07' },
+      { name: 'DigiKey (Adafruit 5805)', url: 'https://www.digikey.com/en/products/detail/adafruit-industries-llc/5805/22165010', price: '$19.95', stock: '8', lead: '18 wk', s: 'V', when: '2026-11-07' } ] },
+    { part: 'Kailh Choc v1 switches', v: [
+      { name: 'Chosfox', url: 'https://www.chosfox.com/products/kailh-chocs', price: 'from $4.50 (pack size not shown)', stock: 'in stock', lead: 'days (CN)', s: 'V', when: 'listing' },
+      { name: 'splitkb', url: 'https://splitkb.com/products/kailh-low-profile-choc-switches', price: 'from 0.82 (likely € each)', stock: 'in stock', lead: 'days (EU)', s: 'V', when: 'listing' },
+      { name: 'Adafruit 5113 (10-pack)', url: 'https://www.adafruit.com/product/5113', price: '$11.95 · $10.76 (10) · $9.56 (100) per pack', stock: '52', lead: '—', s: 'V', when: '2026-11-07' } ] },
+    { part: 'Choc hot-swap sockets (option only)', risk: 'Zero stock at LCSC (C5333465). v3 solders switches, so this matters only for a hot-swap SKU.', v: [
+      { name: 'LCSC C5333465', url: 'https://www.lcsc.com/product-detail/C5333465.html', price: '$0.149 (5) · $0.0864 (500) · $0.0742 (4k)', stock: '0', lead: '—', s: 'V', when: '2026-11-07' },
+      { name: 'Chosfox', url: 'https://www.chosfox.com/products/kailh-choc-switch-1350-hot-swap-sockets', price: 'from $7.20', stock: 'in stock', lead: '—', s: 'V', when: 'listing' },
+      { name: 'splitkb', url: 'https://splitkb.com/products/kailh-hotswap-sockets', price: '$6.57 / 50', stock: 'in stock', lead: '—', s: 'A' } ] },
+    { part: 'Chocfox CFX keycaps', v: [
+      { name: 'Chosfox CFX', url: 'https://www.chosfox.com/products/chocfox-cfx-choc-keycaps', price: 'from $0.80; sets $24–25', stock: 'in stock', lead: '—', s: 'V', when: 'listing' },
+      { name: 'splitkb blank MBK (cost-down, 17.5 mm pitch; check fit)', url: 'https://splitkb.com/products/blank-mbk-choc-low-profile-keycaps', price: 'from 0.82', stock: 'in stock', lead: '—', s: 'V', when: 'listing' },
+      { name: 'lowprokb LDSA blanks', url: 'https://lowprokb.ca/products/ldsa-low-profile-blank-keycaps', price: 'from $1.00 each', stock: 'in stock', lead: '—', s: 'V', when: 'listing' } ] },
+    { part: 'Amphenol F32Q / F32R 40p FPC (J3)', risk: 'F32R (the bottom-contact fallback) has 0 stock at LCSC: if the panel tail needs it, JLC must use consigned parts or buy globally.', v: [
+      { name: 'LCSC C3168061 (F32Q)', url: 'https://www.lcsc.com/product-detail/C3168061.html', price: '$0.986 · $0.599 (100) · $0.528 (1k)', stock: '871', lead: '—', s: 'V', when: '2026-11-07' },
+      { name: 'DigiKey F32Q', url: 'https://www.digikey.com/en/products/detail/amphenol-cs-fci/F32Q-1A7H1-11040/11564739', price: '$2.04 · $1.48 (100) · $1.20 (1800 reel)', stock: '12,613', lead: '13 wk', s: 'V', when: '2026-11-07' },
+      { name: 'LCSC C3169456 (F32R)', url: 'https://www.lcsc.com/product-detail/C3169456.html', price: '$0.925', stock: '0', lead: '—', s: 'V', when: '2026-11-07' },
+      { name: 'Newark / TME (F32R)', url: 'https://www.findchips.com/search/F32R-1A7H1-11040', price: '$1.07–1.87', stock: '5,400 / 3,380', lead: '—', s: 'V', when: 'FindChips' } ] },
+    { part: 'Board ICs at LCSC (live API)', risk: 'GCT USB1046 (2 per board): only 74 in stock, so 100 builds are blocked. Qualify a second-source USB-A with the same land pattern (filter the in-stock through-hole USB-A list) before Proto 2.', v: [
+      { name: 'ES8388 C365736', url: 'https://www.lcsc.com/product-detail/C365736.html', price: '$1.118 · $0.720 · $0.562', stock: '40,099', lead: '—', s: 'V' },
+      { name: 'FE1.1s C9359', url: 'https://www.lcsc.com/product-detail/C9359.html', price: '$0.696 · $0.400 · $0.364', stock: '8,197', lead: '—', s: 'V' },
+      { name: 'IP5306 C181692', url: 'https://www.lcsc.com/product-detail/C181692.html', price: '$0.348 (5) · $0.250 (150) · $0.172 (2.5k)', stock: '23,525', lead: '—', s: 'V' },
+      { name: 'TPS61165 C58756', url: 'https://www.lcsc.com/product-detail/C58756.html', price: '$0.764 · $0.489 · $0.399', stock: '22,140', lead: '—', s: 'V' },
+      { name: '74HC165PW C80696', url: 'https://www.lcsc.com/product-detail/C80696.html', price: '$0.181 (5) · $0.118 (150) · $0.100 (500)', stock: '78,320', lead: '—', s: 'V' },
+      { name: 'GCT USB1046 C6307429', url: 'https://www.lcsc.com/product-detail/C6307429.html', price: '$2.07 · $1.29 (260) · $1.17 (1k)', stock: '74', lead: '—', s: 'V' },
+      { name: 'TPS73633 C28038', url: 'https://www.lcsc.com/product-detail/C28038.html', price: '$0.579 · $0.361 · $0.299', stock: '2,869', lead: '—', s: 'V' },
+      { name: 'SK22D02G4 C22435630 · PJ-327A C668605 · USB-C 6P C456012', url: 'https://www.lcsc.com/product-detail/C22435630.html', price: '$0.045 · $0.106 · $0.039', stock: '1,530 · 10,400 · 991,670', lead: '—', s: 'V' } ] },
+    { part: 'M2 hardware', risk: 'The v2 M2×15 F-F standoff had no verified source. v3 drops standoffs, but Würth 971150244 at DigiKey is male-female, so do not substitute it.', v: [
+      { name: 'Newark Würth 970150244 (v2 only)', url: 'https://www.findchips.com/search/970150244', price: '$0.45–0.77', stock: '1,949', lead: '—', s: 'V', when: 'FindChips' },
+      { name: 'Zoro M2×4 (100-pack)', url: 'https://www.zoro.com/search?q=m2x4%20screw', price: '$4.15 / 100', stock: '—', lead: '—', s: 'S' },
+      { name: 'McMaster-Carr thread-forming screws for plastic (M2)', url: 'https://www.mcmaster.com/thread-forming-screws-for-plastic/', price: 'not retrieved', stock: '—', lead: 'next day (US)', s: 'X' } ] },
+    { part: '1S LiPo (9 × 40 × 70)', risk: 'No in-stock off-the-shelf cell matches the envelope. Lithium shipping needs a UN38.3 report.', v: [
+      { name: 'Adafruit 328, 2500 mAh (proto, wrong size)', url: 'https://www.adafruit.com/product/328', price: '$14.95 · $13.46 (10) · $11.96 (100)', stock: 'in stock', lead: '—', s: 'V', when: '2026-11-07' },
+      { name: 'Olimex 3000 mAh (135 × 45 × 5)', url: 'https://www.olimex.com/Products/Power/Lipo/BATTERY-LIPO3000mAh/', price: '€7.95 · €6.36 (50+)', stock: 'in stock', lead: '—', s: 'V', when: '2026-11-07' },
+      { name: 'Custom 904070 pack (Shenzhen pack house)', url: 'https://www.alibaba.com/trade/search?SearchText=904070+lipo+3000mah', price: '~$4–6 at 1k (estimate)', stock: 'MOQ 500–1k', lead: '4–6 wk + UN38.3', s: 'E' } ] }
+  ],
+
+  // off-board items for distributor carts (qty per unit; per = units per pack)
+  offboard: [
+    { desc: 'PocketBeagle 2 Industrial', mfr: 'BeagleBoard by Seeed', mpn: '100003007', qty: 1, dk: true, mouser: true },
+    { desc: '4.58in 320x960 bar TFT ST7701S (Adafruit 5805)', mfr: 'Adafruit Industries LLC', mpn: '5805', qty: 1, dk: true, mouser: true },
+    { desc: 'LiPo 2500mAh proto cell (wrong size, proto only)', mfr: 'Adafruit Industries LLC', mpn: '328', qty: 1, dk: true, mouser: true },
+    { desc: '2x18 male header 2.54mm (PB2 sockets)', mfr: 'HC', mpn: 'HC-PZ254-11.5L-2x18PZ', qty: 2, lcsc: 'C41376109' },
+    { desc: 'Rubber bumpon 7.9mm', mfr: '3M', mpn: 'SJ5302', qty: 4, dk: true, mouser: true },
+    { desc: 'Panel tape 3M 9495LE 1/2in x 5yd (1 roll per 20 units)', mfr: '3M', mpn: '9495LE-0.5-5', qty: 1, per: 20, dk: true },
+    { desc: 'Spare FPC conn bottom-contact (only if panel tail needs it)', mfr: 'Amphenol ICC (FCI)', mpn: 'F32R-1A7H1-11040', qty: 1, dk: true, mouser: true }
+  ],
+
+  streams: [
+    { id: 'el', name: 'Electronics' }, { id: 'me', name: 'Mechanical' }, { id: 'sw', name: 'Software' },
+    { id: 'su', name: 'Supply' }, { id: 'bt', name: 'Build + test' }, { id: 'co', name: 'Compliance' }
+  ],
+  gantt: {
+    start: '2026-11-01', end: '2027-12-31', today: '2026-11-07',
+    tasks: [
+      { phase: true, name: 'PROTO 0 · display bring-up' },
+      { name: 'Order 3 PB2 Industrial + 2 panels', k: 'su', s: '2026-11-09', e: '2026-11-23', note: 'DigiKey stock; BuyDisplay ships from HK' },
+      { name: 'FPC breakout board (JLC 2-layer)', k: 'el', s: '2026-11-09', e: '2026-11-27' },
+      { name: 'DSS overlay + ST7701S init + backlight PWM', k: 'sw', s: '2026-11-23', e: '2026-12-21', cp: 1, note: 'nothing exists yet' },
+      { name: 'Pinout / contact side / fold verified', k: 'el', s: '2026-12-21', m: 1, cp: 1, lbl: 'gate: board can be ordered' },
+      { phase: true, name: 'PROTO 1 · JLC PCBA + printed case' },
+      { name: 'v3 board: silk, fab outputs, verify list', k: 'el', s: '2026-11-09', e: '2026-12-18' },
+      { name: 'JLC PCBA (5 boards), build + DHL', k: 'su', s: '2026-12-22', e: '2027-01-15', cp: 1 },
+      { name: 'SLA/MJF tray, chassis, lid', k: 'me', s: '2026-12-01', e: '2026-12-22' },
+      { name: 'M4F key-scan fw + RPMsg→uinput', k: 'sw', s: '2026-12-01', e: '2027-01-29' },
+      { name: 'Proto 1 assembly + bring-up', k: 'bt', s: '2027-01-15', e: '2027-02-05', cp: 1 },
+      { name: 'Chinese New Year shutdown', k: 'su', s: '2027-01-30', e: '2027-02-20', note: 'CNY 6 Feb 2027: factories closed about 3 weeks' },
+      { phase: true, name: 'PROTO 2 · fixes + cast colour lids' },
+      { name: 'Rev B board + PCBA (10–20)', k: 'el', s: '2027-02-08', e: '2027-03-15', cp: 1 },
+      { name: 'Urethane-cast lids, 3 colours', k: 'me', s: '2027-02-22', e: '2027-03-19' },
+      { name: 'Proto 2 build ×10 + user testing', k: 'bt', s: '2027-03-15', e: '2027-04-09', cp: 1 },
+      { phase: true, name: 'EVT / DVT / PVT' },
+      { name: 'EVT + pre-compliance EMC scan', k: 'co', s: '2027-04-05', e: '2027-04-30' },
+      { name: 'Tool DFM + kickoff (aluminium ×3)', k: 'me', s: '2027-04-12', e: '2027-04-26', cp: 1 },
+      { name: 'Mould build', k: 'me', s: '2027-04-26', e: '2027-06-07', cp: 1 },
+      { name: 'T1 samples', k: 'me', s: '2027-06-07', m: 1, cp: 1, lbl: 'T1' },
+      { name: 'T1 fixes → T2, texture + polish', k: 'me', s: '2027-06-07', e: '2027-07-02', cp: 1 },
+      { name: 'Panel volume PO (MOQ, ~6–8 wk)', k: 'su', s: '2027-05-03', e: '2027-06-28' },
+      { name: 'PB2 volume PO (14–15 wk factory lead)', k: 'su', s: '2027-04-12', e: '2027-07-23' },
+      { name: 'Custom LiPo pack + UN38.3', k: 'su', s: '2027-05-03', e: '2027-07-09' },
+      { name: 'DVT build ×50 (moulded parts)', k: 'bt', s: '2027-07-05', e: '2027-07-30', cp: 1 },
+      { name: 'FCC 15B + CE EMC / 62368-1 formal test', k: 'co', s: '2027-08-02', e: '2027-09-03', cp: 1 },
+      { name: 'PVT ×50 on production line', k: 'bt', s: '2027-08-09', e: '2027-09-03' },
+      { phase: true, name: 'PILOT + PRODUCTION' },
+      { name: 'Pilot run 100', k: 'bt', s: '2027-09-06', e: '2027-10-01', cp: 1 },
+      { name: 'Production 1,000', k: 'bt', s: '2027-10-18', e: '2027-12-17' }
+    ]
+  }
+};
+
+// ---------- rendering (data lives in DATA, BOMV3) ----------
+const T = DATA.tiers;
+const fmt = (v, d) => v == null ? '—' : '$' + (v >= 1000 ? Math.round(v).toLocaleString('en-US') : v.toFixed(d == null ? (v < 100 ? 2 : 0) : d));
+const tag = s => `<span class="tag t-${s}" title="${DATA.statusText[s]}">${s}</span>`;
+const state = { hotswap: false, nre: true, tier: 2 };
+
+function activeLines() {
+  return DATA.lines.filter(l => (!l.opt || (l.opt === 'hotswap' && state.hotswap)) && (!l.nre || state.nre));
+}
+function totals() {
+  const t = T.map(() => 0);
+  activeLines().forEach(l => l.p.forEach((v, i) => t[i] += v || 0));
+  return t;
+}
+
+function renderCost() {
+  const lines = activeLines();
+  const tot = totals();
+  let h = '<thead><tr><th>Group</th><th>Item</th><th class="n">Qty/unit</th>';
+  T.forEach((n, i) => h += `<th class="n ${i === state.tier ? 'hl' : ''}">${n.toLocaleString('en-US')} unit${n > 1 ? 's' : ''}<br><small>per unit</small></th>`);
+  h += '<th>Basis</th></tr></thead><tbody>';
+  let g = '';
+  lines.forEach(l => {
+    h += `<tr class="${l.opt ? 'opt' : ''}${l.nre ? ' nre' : ''}"><td class="grp">${l.grp !== g ? l.grp : ''}</td><td>${l.item}${l.note ? `<div class="note">${l.note}</div>` : ''}</td><td class="n">${l.qty}</td>`;
+    g = l.grp;
+    l.p.forEach((v, i) => {
+      const prev = i ? l.p[i - 1] : null;
+      const brk = prev && v && prev > 0 && v < prev * 0.8;
+      const st = l.s[i] || l.s[0];
+      h += `<td class="n ${i === state.tier ? 'hl' : ''}${brk ? ' brk' : ''}" ${brk ? `title="price break: −${Math.round((1 - v / prev) * 100)}% vs previous tier"` : ''}>${st === 'X' ? '<span class="note">n/a</span>' : fmt(v)} ${tag(st)}</td>`;
+    });
+    h += `<td class="src">${l.src}</td></tr>`;
+  });
+  h += '</tbody><tfoot><tr><td></td><td><b>Total per unit</b></td><td></td>';
+  tot.forEach((v, i) => h += `<td class="n ${i === state.tier ? 'hl' : ''}"><b>${fmt(v, v < 100 ? 2 : 0)}</b></td>`);
+  h += '<td></td></tr><tr><td></td><td><b>Order total</b></td><td></td>';
+  tot.forEach((v, i) => h += `<td class="n ${i === state.tier ? 'hl' : ''}">${fmt(v * T[i], 0)}</td>`);
+  h += '<td class="src">per-unit × quantity</td></tr></tfoot>';
+  document.getElementById('costTable').innerHTML = h;
+  renderHeadline(tot);
+  renderStack();
+}
+
+function fillInline() {
+  const inc = T.map(() => 0), exc = T.map(() => 0);
+  DATA.lines.filter(l => !l.opt).forEach(l => l.p.forEach((v, i) => { inc[i] += v || 0; if (!l.nre) exc[i] += v || 0; }));
+  document.querySelectorAll('[data-tot]').forEach(e => e.textContent = fmt(inc[+e.dataset.tot], 0));
+  document.querySelectorAll('[data-totx]').forEach(e => e.textContent = fmt(exc[+e.dataset.totx], 0));
+}
+function renderHeadline(tot) {
+  const idx = [1, 2, 3];
+  document.getElementById('headline').innerHTML = `<div class="tile"><div class="tl">1 unit (proto)</div><div class="tv">${fmt(tot[0], 0)}</div><div class="ts">one-off: every minimum order is paid by one unit</div></div>` + idx.map(i => `
+    <div class="tile"><div class="tl">${T[i].toLocaleString('en-US')} units</div>
+    <div class="tv">${fmt(tot[i], 0)}<span>/unit</span></div>
+    <div class="ts">${fmt(tot[i] * T[i], 0)} total · ${state.nre ? 'incl.' : 'excl.'} NRE</div></div>`).join('');
+}
+
+// stacked bar per tier by cost category (6 categorical slots, fixed order)
+function renderStack() {
+  const cats = DATA.cats;
+  const lines = activeLines();
+  const W = 760, H = 250, L = 90, R = 140, B = 30, Tp = 10;
+  const sums = T.map((_, i) => cats.map(c => lines.filter(l => l.cat === c.id).reduce((a, l) => a + (l.p[i] || 0), 0)));
+  const bw = (W - L - R) / T.length;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Per-unit cost by category at each quantity tier, shown as 100% stacked bars">`;
+  [0, 25, 50, 75, 100].forEach(p => {
+    const y = Tp + (H - Tp - B) * (1 - p / 100);
+    s += `<line x1="${L}" x2="${W - R}" y1="${y}" y2="${y}" class="grid"/><text x="${L - 6}" y="${y + 4}" class="ax" text-anchor="end">${p}%</text>`;
+  });
+  sums.forEach((row, i) => {
+    const tot = row.reduce((a, b) => a + b, 0);
+    let y = H - B;
+    const x = L + i * bw + bw * 0.2, w = bw * 0.6;
+    row.forEach((v, k) => {
+      const h = (H - Tp - B) * v / tot;
+      if (h <= 0) return;
+      y -= h;
+      s += `<rect x="${x}" y="${y + 1}" width="${w}" height="${Math.max(h - 2, 0.5)}" rx="2" fill="var(--s${k + 1})"><title>${T[i]} units · ${cats[k].name}: ${fmt(v)} (${Math.round(v / tot * 100)}%)</title></rect>`;
+    });
+    s += `<text x="${x + w / 2}" y="${H - B + 16}" class="ax" text-anchor="middle">${T[i].toLocaleString('en-US')}</text>`;
+    s += `<text x="${x + w / 2}" y="${Tp - 0}" class="ax" text-anchor="middle"></text>`;
+  });
+  cats.forEach((c, k) => s += `<rect x="${W - R + 14}" y="${Tp + 6 + k * 22}" width="12" height="12" rx="2" fill="var(--s${k + 1})"/><text x="${W - R + 32}" y="${Tp + 16 + k * 22}" class="lg">${c.name}</text>`);
+  s += `<text x="${L}" y="${H - 2}" class="ax">quantity tier →  (hover a segment for $)</text></svg>`;
+  document.getElementById('stack').innerHTML = s;
+}
+
+function renderSources() {
+  let h = '<thead><tr><th>Part</th><th>Vendor</th><th>Price</th><th>Stock / MOQ</th><th>Lead time</th><th>Status</th></tr></thead><tbody>';
+  DATA.sources.forEach(p => p.v.forEach((v, i) => {
+    h += `<tr class="${i ? '' : 'first'}">${i ? '<td></td>' : `<td rowspan="1"><b>${p.part}</b>${p.risk ? `<div class="risk">⚠ ${p.risk}</div>` : ''}</td>`}
+      <td><a href="${v.url}" target="_blank" rel="noopener">${v.name}</a></td><td>${v.price}</td><td>${v.stock}</td><td>${v.lead}</td><td>${tag(v.s)} <small>${v.when || ''}</small></td></tr>`;
+  }));
+  document.getElementById('srcTable').innerHTML = h + '</tbody>';
+}
+
+// ---------- carts (CSV via Blob) ----------
+const csvq = v => /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
+const toCSV = rows => rows.map(r => r.map(csvq).join(',')).join('\r\n') + '\r\n';
+function cartRows(kind, units) {
+  const smd = BOMV3.bom;
+  const offb = DATA.offboard;
+  switch (kind) {
+    case 'jlc_bom': return [['Comment', 'Designator', 'Footprint', 'LCSC Part #'], ...smd.map(b => [b.value, b.refs.join(','), b.fp, b.lcsc])];
+    case 'jlc_cpl': return [['Designator', 'Mid X', 'Mid Y', 'Layer', 'Rotation'], ...BOMV3.cpl.map(c => [c[0], c[1].toFixed(4) + 'mm', c[2].toFixed(4) + 'mm', 'Top', c[3].toFixed(6)])];
+    case 'lcsc': return [['Quantity', 'Manufacture Part Number', 'LCSC Part Number', 'Comment', 'Designator', 'Footprint'],
+      ...smd.map(b => [b.refs.length * units, b.mpn, b.lcsc, b.value, b.refs.join(','), b.fp]),
+      ...offb.filter(o => o.lcsc).map(o => [Math.ceil(o.qty * units / (o.per || 1)), o.mpn, o.lcsc, o.desc, '', ''])];
+    case 'digikey': return [['Quantity', 'Manufacturer Part Number', 'Manufacturer', 'Digi-Key Part Number', 'Customer Reference'],
+      ...offb.filter(o => o.dk).map(o => [Math.ceil(o.qty * units / (o.per || 1)), o.mpn, o.mfr, o.dk === true ? '' : o.dk, o.desc])];
+    case 'mouser': return [['Mouser Part Number', 'Manufacturer Part Number', 'Manufacturer', 'Quantity', 'Customer Part Number', 'Description'],
+      ...offb.filter(o => o.mouser).map(o => [o.mouser === true ? '' : o.mouser, o.mpn, o.mfr, Math.ceil(o.qty * units / (o.per || 1)), o.desc.slice(0, 30), o.desc])];
+  }
+}
+function download(kind) {
+  const units = Math.max(1, parseInt(document.getElementById('cartQty').value) || 1);
+  const blob = new Blob([toCSV(cartRows(kind, units))], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `zinemachine_v3_${kind}_${kind.startsWith('jlc') ? '' : units + 'u'}.csv`.replace('_.csv', '.csv');
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+function preview(kind) {
+  const units = Math.max(1, parseInt(document.getElementById('cartQty').value) || 1);
+  const rows = cartRows(kind, units);
+  document.getElementById('cartPrev').dataset.k = kind;
+  document.getElementById('cartPrev').textContent = toCSV(rows.slice(0, 8)) + (rows.length > 8 ? `… (${rows.length - 1} data rows)` : '');
+}
+
+// ---------- Gantt ----------
+function renderGantt() {
+  const G = DATA.gantt, d0 = new Date(G.start), d1 = new Date(G.end);
+  const day = 864e5, span = (d1 - d0) / day;
+  const W = 1100, L = 250, R = 20, rowH = 24, top = 34;
+  const H = top + G.tasks.length * rowH + 20;
+  const X = d => L + (W - L - R) * ((new Date(d) - d0) / day) / span;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Programme timeline from ${G.start} to ${G.end}">`;
+  // month grid
+  for (let m = new Date(d0.getFullYear(), d0.getMonth() + 1, 1); m <= d1; m.setMonth(m.getMonth() + 1)) {
+    const x = X(m);
+    s += `<line x1="${x}" x2="${x}" y1="${top - 6}" y2="${H - 16}" class="grid"/>`;
+    s += `<text x="${x + 3}" y="${top - 12}" class="ax">${m.toLocaleString('en-US', { month: 'short' })}${m.getMonth() === 0 ? ' ' + m.getFullYear() : ''}</text>`;
+  }
+  const tx = X(G.today);
+  G.tasks.forEach((t, i) => {
+    const y = top + i * rowH;
+    if (t.phase) {
+      s += `<rect x="0" y="${y}" width="${W}" height="${rowH}" class="phase"/><text x="8" y="${y + 16}" class="ph">${t.name}</text>`;
+      return;
+    }
+    const x0 = X(t.s), x1 = X(t.e);
+    const k = DATA.streams.findIndex(st => st.id === t.k) + 1;
+    s += `<text x="16" y="${y + 16}" class="tn">${t.name}</text>`;
+    if (t.m) s += `<path d="M${x0} ${y + 5} l7 7 l-7 7 l-7 -7z" fill="var(--s${k})" ${t.cp ? 'stroke="var(--crit)" stroke-width="2"' : ''}><title>${t.name}: ${t.s}${t.note ? ' — ' + t.note : ''}</title></path>`;
+    else s += `<rect x="${x0}" y="${y + 5}" width="${Math.max(x1 - x0, 3)}" height="${rowH - 10}" rx="4" fill="var(--s${k})" ${t.cp ? 'stroke="var(--crit)" stroke-width="2"' : ''}><title>${t.name}: ${t.s} → ${t.e}${t.note ? ' — ' + t.note : ''}${t.cp ? ' (critical path)' : ''}</title></rect>`;
+    if (t.lbl) s += `<text x="${(t.m ? x0 : x1) + 10}" y="${y + 16}" class="ax">${t.lbl}</text>`;
+  });
+  s += `<line x1="${tx}" x2="${tx}" y1="${top - 6}" y2="${H - 16}" class="today"/><text x="${tx + 3}" y="${H - 4}" class="ax">today ${G.today}</text></svg>`;
+  document.getElementById('gantt').innerHTML = s;
+  document.getElementById('ganttLegend').innerHTML = DATA.streams.map((st, k) => `<span><i style="background:var(--s${k + 1})"></i>${st.name}</span>`).join('') + '<span><i class="cp"></i>critical path</span>';
+}
+
+function renderTiers() {
+  const sel = document.getElementById('tierSel');
+  sel.innerHTML = T.map((n, i) => `<button data-i="${i}" class="${i === state.tier ? 'on' : ''}">${n.toLocaleString('en-US')}</button>`).join('');
+  sel.querySelectorAll('button').forEach(b => b.onclick = () => { state.tier = +b.dataset.i; renderTiers(); renderCost(); });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderTiers(); renderCost(); renderSources(); renderGantt(); fillInline();
+  document.getElementById('optHot').onchange = e => { state.hotswap = e.target.checked; renderCost(); };
+  document.getElementById('optNre').onchange = e => { state.nre = e.target.checked; renderCost(); };
+  document.querySelectorAll('[data-dl]').forEach(b => b.onclick = () => download(b.dataset.dl));
+  document.querySelectorAll('[data-pv]').forEach(b => b.onclick = () => preview(b.dataset.pv));
+  document.getElementById('cartQty').oninput = () => { const p = document.getElementById('cartPrev'); if (p.dataset.k) preview(p.dataset.k); };
+  preview('jlc_bom');
+});
+
+</script>
+</body></html>
